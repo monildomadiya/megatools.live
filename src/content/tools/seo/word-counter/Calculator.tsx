@@ -179,7 +179,7 @@ function Stat({
     <div aria-live="polite" className="rounded-xl border border-line bg-ink-50 px-4 py-3">
       <p className="text-xs font-medium text-ink-600">{label}</p>
       <p
-        className={`mt-0.5 tabular-nums ${
+        className={`numeric mt-0.5 ${
           emphasis ? 'text-2xl font-bold text-ink-900' : 'text-2xl font-semibold text-ink-800'
         }`}
       >

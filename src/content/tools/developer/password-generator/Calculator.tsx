@@ -197,7 +197,7 @@ export default function PasswordGenerator() {
       <div className="mt-7">
         <label htmlFor="length" className="flex items-baseline justify-between">
           <span className="text-sm font-medium text-ink-800">Length</span>
-          <span className="text-sm tabular-nums text-ink-600">{length} characters</span>
+          <span className="numeric text-sm text-ink-600">{length} characters</span>
         </label>
         <input
           id="length"

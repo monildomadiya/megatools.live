@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
@@ -11,10 +11,22 @@ import './globals.css';
 
 // Self-hosted by next/font at build time — no request to fonts.googleapis.com on
 // page load, which removes a third-party connection from the critical path.
-const inter = Inter({
+//
+// Both are variable fonts, so the whole weight range arrives in one file rather
+// than one request per weight.
+const geistSans = Geist({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-geist-sans',
+});
+
+// Carries every figure the site outputs. A calculator's result is the one place
+// where digits have to line up column to column and never reflow as they change,
+// which is exactly what a mono's fixed advance width gives you.
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-geist-mono',
 });
 
 export const metadata: Metadata = {
@@ -49,7 +61,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={site.language} className={inter.variable} suppressHydrationWarning>
+    <html
+      lang={site.language}
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Runs before first paint so the stored theme is on <html> by the time
             anything renders. Anything later produces a flash of the wrong

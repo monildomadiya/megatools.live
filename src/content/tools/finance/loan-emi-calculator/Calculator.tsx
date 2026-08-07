@@ -196,13 +196,13 @@ export default function LoanEmiCalculator() {
               <dl className="mt-3 space-y-1.5 text-sm text-emerald-900">
                 <div className="flex justify-between gap-4">
                   <dt>Loan clears in</dt>
-                  <dd className="font-semibold tabular-nums">
+                  <dd className="numeric font-semibold">
                     {result.overpayment.months} months ({result.overpayment.monthsSaved} sooner)
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt>Interest saved</dt>
-                  <dd className="font-semibold tabular-nums">
+                  <dd className="numeric font-semibold">
                     {money(result.overpayment.interestSaved)}
                   </dd>
                 </div>

@@ -269,9 +269,7 @@ export function ResultCard({
     >
       <p className="text-sm font-medium text-ink-600">{label}</p>
       <p className="mt-1 flex items-baseline gap-1.5">
-        <span className="text-4xl font-bold tracking-tight text-ink-900 tabular-nums">
-          {value}
-        </span>
+        <span className="numeric text-4xl font-bold text-ink-900">{value}</span>
         {unit && <span className="text-lg font-medium text-ink-500">{unit}</span>}
       </p>
       {verdict && <p className={`mt-2 font-semibold ${verdictClass}`}>{verdict}</p>}
@@ -292,7 +290,7 @@ export function ResultRows({
         <div key={row.label} className="flex items-center justify-between gap-4 px-5 py-3">
           <dt className="text-sm text-ink-600">{row.label}</dt>
           <dd
-            className={`text-sm tabular-nums ${
+            className={`numeric text-sm ${
               row.emphasis ? 'font-bold text-ink-900' : 'font-medium text-ink-800'
             }`}
           >

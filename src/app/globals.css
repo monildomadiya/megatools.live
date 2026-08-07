@@ -24,8 +24,17 @@
    redeclares them by hand.
 --------------------------------------------------------------------------- */
 @theme static {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
+
+  /* Tighter than Tailwind's defaults (-0.025em / -0.05em).
+     Tracking that looks correct at 16px reads loose at 60px, and Geist is drawn
+     with enough sidebearing to take the reduction. Overriding the theme value
+     rather than adding a rule keyed on font size matters: every heading already
+     carries `tracking-tight`, and a utility always beats a base-layer rule, so a
+     size-based override would simply never apply. */
+  --tracking-tight: -0.03em;
+  --tracking-tighter: -0.045em;
 
   --color-brand-50: oklch(0.97 0.02 254);
   --color-brand-100: oklch(0.93 0.04 254);
@@ -215,6 +224,36 @@
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Balanced headings. A two-line heading whose second line holds one word is
+     the most visible typographic flaw on a page with large display type, and
+     `balance` fixes it without hand-inserted line breaks that would be wrong at
+     the next breakpoint. Limited to headings — the algorithm is capped at a few
+     lines and is not meant for body copy. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  /* `pretty` is the body-copy counterpart: it only prevents orphans, so it
+     stays cheap over long paragraphs. */
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  /* Anything that reports a computed figure. Fixed advance widths stop the
+     layout shifting as digits change under the reader, which on a calculator
+     happens on every keystroke. */
+  .numeric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
   }
 
   /* Anchor links from the in-page table of contents must not land under the

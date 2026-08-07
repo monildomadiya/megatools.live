@@ -16,13 +16,8 @@
     "/tools/finance/salary-calculator": "/tools/finance",
     "/tools/math/average-calculator": "/tools/math",
     "/tools/math/ratio-calculator": "/tools/math",
-    "/tools/conversion/length-converter": "/tools",
     "/tools/conversion/weight-converter": "/tools",
     "/tools/conversion/temperature-converter": "/tools",
-    "/tools/date-time/age-calculator": "/tools",
-    "/tools/lifestyle/tip-calculator": "/tools",
-    "/tools/developer/password-generator": "/tools",
-    "/tools/seo/word-counter": "/tools",
     "/tools/seo/character-counter": "/tools",
     "/tools/seo/slug-generator": "/tools",
     "/blog": "/tools"

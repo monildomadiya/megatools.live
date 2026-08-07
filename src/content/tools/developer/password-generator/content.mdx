@@ -1,0 +1,86 @@
+## Where the randomness comes from
+
+The single thing that determines whether a generated password is any good is the quality of the random source behind it. Everything else — length, symbols, clever rules — is secondary to that.
+
+This generator uses `crypto.getRandomValues`, the Web Crypto API's interface to your operating system's cryptographically secure random number generator. On Linux that is ultimately the kernel's `getrandom` facility, on Windows it is the system CSPRNG, and on macOS and iOS it is the equivalent secure source. These are the same generators used to produce TLS session keys.
+
+It does **not** use `Math.random`, and the distinction is not academic. `Math.random` is designed to be fast and statistically well-distributed, not unpredictable. Its internal state can be recovered by an attacker who observes a modest number of its outputs, and from that state every subsequent value it will produce can be computed exactly. A password generator built on it produces output that looks random and is not. This is the most common serious flaw in generators found on the web, and it is invisible from the outside — the passwords look identical either way.
+
+Everything runs in your browser. No password is transmitted, logged, or stored, and the page continues to work with the network disconnected. That is verifiable rather than a promise: open your browser's network tools and watch that generating a password produces no request.
+
+## Modulo bias, and why this tool rejects and redraws
+
+Having a good random source is necessary but not sufficient. You also have to convert random numbers into characters without introducing skew.
+
+The obvious way to pick one character from an alphabet of 70 is to take a random 32-bit integer and use the remainder after dividing by 70. This is subtly wrong. 2³² is not divisible by 70, so the range does not partition evenly: the first few index values are reachable by one more input than the rest, and those characters come up slightly more often than they should.
+
+The bias here is tiny — parts in a hundred million — and for many purposes it would not matter. But it is a real reduction in the search space an attacker faces, it is entirely avoidable, and avoiding it costs almost nothing. This generator uses rejection sampling: it computes the largest multiple of the alphabet size that fits within the 32-bit range, discards any draw landing above it, and redraws. Every character is then exactly equally likely.
+
+The same unbiased draw is used for the final shuffle, which is a Fisher–Yates shuffle rather than the sort-with-a-random-comparator trick that appears in a lot of code and does not produce a uniform permutation.
+
+## How entropy is calculated
+
+Entropy is the honest measure of password strength, and it replaces the coloured strength bars that most sites show, which are typically scoring heuristics rather than measurements.
+
+For a password of *L* characters drawn uniformly from an alphabet of *N* possibilities:
+
+```
+entropy (bits) = L × log₂(N)
+```
+
+Each bit doubles the average number of guesses required. Twenty characters drawn from an alphabet of 70 gives 20 × log₂(70) ≈ 20 × 6.13 = **122.6 bits**.
+
+### Worked example
+
+A 16-character password using lowercase, uppercase and digits, with lookalikes excluded, draws from an alphabet of about 59 characters.
+
+- log₂(59) ≈ 5.88 bits per character
+- 16 × 5.88 = **94.1 bits**
+
+Compare that with a 10-character password using all four types, alphabet of about 71:
+
+- log₂(71) ≈ 6.15 bits per character
+- 10 × 6.15 = **61.5 bits**
+
+The longer password with the *smaller* alphabet is more than thirty bits stronger, which is a factor of over a billion in guessing effort. This is the central lesson: length buys more than variety does.
+
+### Rough guidance on what is enough
+
+| Entropy | Practical reading |
+| --- | --- |
+| Under 60 bits | Weak against an offline attack on a stolen password database |
+| 60 – 75 bits | Adequate for low-value accounts |
+| 75 – 100 bits | Comfortable for essentially all normal use |
+| Over 100 bits | Beyond any foreseeable brute-force capability |
+
+These are about *offline* attacks, where an attacker has stolen a database of password hashes and can guess at high speed against their own hardware. Online guessing against a live login is bounded by rate limiting and lockouts, so far less entropy would do — but you rarely get to choose which kind of attack your password will face.
+
+## The honest caveat about "at least one of each type"
+
+When the "at least one of each type" option is enabled, the entropy figure shown above the fold is a slight **overestimate**, and it is worth understanding why rather than papering over it.
+
+Guaranteeing that every result contains at least one digit removes from the pool of possible outputs every password that contains no digit. Fewer possible outputs means less entropy. The constraint that makes a password acceptable to a fussy website also, very slightly, makes it weaker.
+
+The size of the effect is small — typically a fraction of a bit at the lengths this tool defaults to, because at twenty characters the chance of a purely random draw missing an entire character class is already remote. It grows as the password gets shorter and the number of required classes goes up.
+
+The reason to leave the option on anyway is practical: a great many sites still enforce composition rules and will reject a password that happens to contain no symbol. Losing half a bit to avoid that is a good trade. The reason to say so on the page is that a tool that quietly reports a number slightly better than the truth is not one you should trust about anything else.
+
+## What NIST actually recommends
+
+The guidance in NIST Special Publication 800-63B is worth knowing because it overturned advice that many organisations still enforce.
+
+It recommends **against** mandatory composition rules — the requirement that a password contain an uppercase letter, a digit, and a symbol. The reasoning is behavioural: when forced, people apply predictable transformations. `password` becomes `Password1!`, and attackers' guessing lists model those transformations directly, so the rule adds far less strength than it appears to.
+
+It also recommends **against** routine forced password expiry. Making people change passwords every ninety days pushes them toward incremental variants — `Spring2026`, then `Summer2026` — which are trivially guessable from one another. Expiry is advised only when there is evidence of compromise.
+
+What it recommends instead is allowing long passwords (at least 64 characters), permitting all printable characters including spaces, and screening chosen passwords against lists of known-breached values. In other words: get out of the user's way on composition, and check against what attackers actually try.
+
+## What this tool cannot do for you
+
+It cannot stop you reusing a password. Reuse is the failure that causes most real account compromises — one breached site hands an attacker credentials that work elsewhere — and no generator can prevent it. Use a password manager so that every site gets its own generated password and you never have to remember any of them.
+
+It cannot help if the password is captured after generation, by malware on your machine or a phishing page that convincingly asks for it. Entropy protects against guessing, and against nothing else.
+
+It cannot tell you whether the site you are about to use it on stores passwords properly. A 122-bit password stored as an unsalted MD5 hash is still a 122-bit password and still safe against guessing, but a site doing that is likely doing other things badly too.
+
+And it cannot substitute for a second factor. Any password can be phished. Where a site offers multi-factor authentication — ideally a hardware key or an authenticator app rather than SMS — turning it on does more for the security of that account than adding another ten characters here ever will.

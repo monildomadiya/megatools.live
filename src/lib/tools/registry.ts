@@ -11,6 +11,9 @@ import type { CategorySlug, ToolMeta, ToolWithHref } from './types';
 // components (nav, search), and pulling calculator code in here would drag
 // every tool into the first-load bundle.
 
+import lengthConverter from '@/content/tools/conversion/length-converter/meta';
+import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
+import passwordGenerator from '@/content/tools/developer/password-generator/meta';
 import compoundInterestCalculator from '@/content/tools/finance/compound-interest-calculator/meta';
 import loanEmiCalculator from '@/content/tools/finance/loan-emi-calculator/meta';
 import mortgageCalculator from '@/content/tools/finance/mortgage-calculator/meta';
@@ -18,6 +21,8 @@ import bmiCalculator from '@/content/tools/health/bmi-calculator/meta';
 import bmrCalculator from '@/content/tools/health/bmr-calculator/meta';
 import tdeeCalculator from '@/content/tools/health/tdee-calculator/meta';
 import percentageCalculator from '@/content/tools/math/percentage-calculator/meta';
+import tipCalculator from '@/content/tools/lifestyle/tip-calculator/meta';
+import wordCounter from '@/content/tools/seo/word-counter/meta';
 
 const toolMetas: ToolMeta[] = [
   compoundInterestCalculator,
@@ -27,6 +32,11 @@ const toolMetas: ToolMeta[] = [
   bmrCalculator,
   tdeeCalculator,
   percentageCalculator,
+  lengthConverter,
+  ageCalculator,
+  passwordGenerator,
+  tipCalculator,
+  wordCounter,
 ];
 
 // --- Derived structures ----------------------------------------------------

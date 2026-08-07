@@ -1,0 +1,86 @@
+## Conversions that are exact, not approximate
+
+Most length conversions people need are not measurements at all. They are definitions, and they are exact.
+
+An inch is exactly 25.4 millimetres. Not approximately, not to a good enough tolerance — exactly, because that is what the number was defined to be. In 1959 the national standards bodies of the United States, the United Kingdom, Canada, Australia, New Zealand and South Africa signed the international yard and pound agreement, which fixed the international yard at exactly 0.9144 metres. Every imperial length unit follows from that single definition: divide by three for the foot, by thirty-six for the inch, multiply by 1,760 for the mile.
+
+This matters more than it sounds. It means there is no such thing as a more accurate inch-to-centimetre conversion. Any converter that gives you a different answer is either rounding its output or using an obsolete definition, and this page explains how to tell which.
+
+## The factors this converter uses
+
+Everything is defined against the metre, including the imperial units. That is the direction the definitions actually run — the inch is defined in terms of the millimetre, not the reverse.
+
+| Unit | Exact value in metres |
+| --- | --- |
+| Millimetre | 0.001 |
+| Centimetre | 0.01 |
+| Metre | 1 |
+| Kilometre | 1,000 |
+| Inch | 0.0254 |
+| Foot | 0.3048 |
+| Yard | 0.9144 |
+| Mile | 1,609.344 |
+| Nautical mile | 1,852 |
+
+Every value in that column is exact by definition rather than measured. The metre itself is the one link in the chain that connects to physical reality: since 1983 it has been defined as the distance light travels in a vacuum in 1/299,792,458 of a second.
+
+The converter works by taking your value to metres first, then out to the target unit. Converting through a single base unit rather than storing a factor for every possible pair means a chain like inches to nautical miles carries no more rounding error than inches to metres does.
+
+## How to convert length by hand
+
+The arithmetic is one multiplication and one division. Convert the input to metres, then divide by the metre value of the unit you want.
+
+### Worked example — centimetres to inches
+
+Convert 30 cm to inches.
+
+- To metres: 30 × 0.01 = 0.3 m
+- To inches: 0.3 ÷ 0.0254 = **11.811 in**
+
+The shortcut most people learn is to divide by 2.54, which is the same operation with the metre step folded in.
+
+### Worked example — miles to kilometres
+
+Convert 26.2 miles, roughly a marathon, to kilometres.
+
+- To metres: 26.2 × 1,609.344 = 42,164.8 m
+- To kilometres: 42,164.8 ÷ 1,000 = **42.165 km**
+
+The official marathon distance is 42.195 km, which is 26.219 miles — a reminder that the rounded figure everyone quotes is not the defined one.
+
+### Worked example — feet and inches to metres
+
+Heights are the case where people most often go wrong, because feet and inches is a mixed unit and you cannot convert the two parts independently.
+
+Convert 5 ft 9 in to metres.
+
+- Put it all in inches first: (5 × 12) + 9 = 69 in
+- To metres: 69 × 0.0254 = **1.7526 m**
+
+Converting the 5 and the 9 separately and adding the results gives the same answer here, but only because addition is being applied consistently. The habit worth keeping is to reduce a mixed unit to a single unit before doing anything else.
+
+## Where the traps are
+
+**The US survey foot.** For most of the twentieth century the United States maintained two slightly different feet. The international foot is exactly 0.3048 metres. The US survey foot was exactly 1200/3937 metres, or about 0.30480061 metres — longer by roughly two parts per million. That difference is invisible on a tape measure and completely irrelevant to a room measurement. Across a state plane coordinate system it amounts to metres of displacement, which is why land surveying kept the old unit long after everyone else abandoned it. NIST retired the US survey foot at the end of 2022. New work uses the international foot, and so does this converter.
+
+**Nautical miles.** A nautical mile is 1,852 metres, about 15% longer than a statute mile. It is not a nautical-flavoured version of the same unit; it was defined to approximate one minute of latitude, so that a distance on a chart could be read directly off the latitude scale at the edge. Confusing the two is how a distance at sea ends up understated by an eighth.
+
+**Rounded intermediate steps.** The most common source of disagreement between two converters is not the definitions but the display. If a tool converts your input to an intermediate unit, rounds it for display, and then converts that rounded figure onward, the error compounds. This converter keeps full precision through the calculation and rounds once, at the end, which is why the row for the unit you selected and the rows for every other unit are all mutually consistent.
+
+**Significant figures.** A conversion cannot add precision that the input did not have. If you measured a wall as 3 metres to the nearest metre, converting to 118.11 inches implies a precision of a hundredth of an inch that you do not have. The converter shows a sensible number of decimals for each unit, but the meaningful precision is set by your measurement, not by the arithmetic.
+
+## When this tool is the wrong one
+
+This converts lengths and distances only. Area and volume are not the same problem, and this is the mistake that costs people real money.
+
+Converting square metres to square feet is not a matter of applying the length factor. Because area scales with the square of the linear dimension, the factor is 0.3048² = 0.09290304, not 0.3048. A room of 20 square metres is about 215 square feet, not 66. Volume scales with the cube, so cubic metres to cubic feet uses 0.3048³ = 0.028316846.
+
+Applying a length factor to an area is one of the most common unit errors there is, and it produces answers wrong by a factor of three or more — large enough that the result usually looks obviously wrong, which is the only saving grace.
+
+Temperature is different again, because Celsius and Fahrenheit have different zero points as well as different step sizes, so no single multiplication will do it. Weight and mass conversions have their own subtleties around the distinction between the two.
+
+## A note on precision and trust
+
+The reason this page lists its factors in a table rather than hiding them is that a converter is only as trustworthy as the numbers inside it, and those numbers are checkable. Every value above traces to the SI Brochure published by the Bureau International des Poids et Mesures, or to the NIST publications that implement it in the United States. Both are linked in the sources below.
+
+If you are doing work where the difference between an international foot and a survey foot matters, or where you need to defend a conversion to someone else, go to those documents directly. This tool is built to give the same answer they would, but a primary source is a primary source.

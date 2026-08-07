@@ -1,0 +1,69 @@
+## There is no universal definition of a word
+
+If you have ever pasted the same paragraph into two counters and got two different numbers, nothing was broken. Counting words is a matter of convention, and the conventions genuinely differ.
+
+The disagreements cluster in a few places:
+
+**Hyphenated compounds.** Is "state-of-the-art" one word or four? This tool counts it as one, because it counts runs of non-whitespace. Microsoft Word agrees. Several online counters split on the hyphen and report four.
+
+**Numbers and dates.** Is "1,250" one word? Is "21 March 2026" three? Most tools including this one say yes to both, but some strip numerals entirely on the grounds that they are not words at all.
+
+**Em dashes without spaces.** "He left—she stayed" is two words to a whitespace-splitting counter and three to one that treats punctuation as a boundary.
+
+**Contractions and possessives.** "Don't" is universally one word. "The dog's" is two nearly everywhere, but a tokeniser following the Unicode text segmentation rules may treat the possessive differently.
+
+The rule this tool uses is stated plainly so you can predict its answer: **a word is a run of characters separated by whitespace.** Differences of one or two per cent against another tool are normal, and neither of you is wrong. If you are writing to a contractual word count, ask which tool the count will be checked with.
+
+## Counting characters is harder than counting words
+
+Character counts look like they should be unambiguous. They are not, and the reason is that a "character" means at least three different things.
+
+Take the string "café". Depending on how it was typed or where it was copied from, the accented "e" may be stored as a single code point, or as a plain "e" followed by a separate combining accent. Both display identically. A naive count returns 4 in one case and 5 in the other.
+
+Emoji make it worse. A single flag or a family emoji is one thing a reader would call a character, but it can be composed of half a dozen code points joined together, and JavaScript's `.length` — which counts UTF-16 code units — will report a number bearing no relation to what anyone sees.
+
+This tool counts **grapheme clusters**: the units a reader would point at and call characters, as defined by Unicode Standard Annex #29. That makes "café" four characters however it was encoded, and one emoji one character.
+
+Two figures are given because two are used in practice. **With spaces** is the standard for publishing and translation work, where character counts often drive pricing. **Without spaces** removes all whitespace including line breaks. If you are working to a hard limit — a form field, a legacy SMS gateway, a database column — find out which convention that limit uses before trusting either figure, because the two can differ by nearly twenty per cent on ordinary prose.
+
+## How reading and speaking time are estimated
+
+**Reading time** divides the word count by 238 words per minute. That figure is not invented and it is not the 200 or 250 that most sites use without attribution: it comes from a 2019 meta-analysis by Marc Brysbaert covering 190 studies, which found a mean silent reading rate of 238 words per minute for English non-fiction prose.
+
+**Speaking time** uses 130 words per minute, a typical measured pace for prepared speech delivered to an audience.
+
+Both are averages across large populations, and the spread around them is wide. The same meta-analysis found reading rates ranging roughly from 175 to 300 words per minute among competent adult readers. Material matters too: dense technical writing, anything with equations, and text in a second language are all read substantially more slowly than narrative prose. Text that a reader skims rather than reads is consumed several times faster.
+
+If you are timing a conference talk, the useful method is to read a page of your own script aloud at the pace you actually intend to deliver it, count the words, and calibrate. A generic figure will get you within about twenty per cent, which is the difference between finishing on time and being cut off.
+
+## Sentence and paragraph counts, and where they fail
+
+A sentence here is a run of text ending in a full stop, question mark or exclamation mark. This is a heuristic and it is worth knowing its failure modes.
+
+It over-counts on abbreviations. "Dr. Smith arrived at 9 a.m. sharp." reads as three sentences rather than one, because each full stop looks like a terminator. Text dense with abbreviations, initials, or decimal numbers written with full stops will report a sentence count noticeably higher than the real one.
+
+It can under-count too. A sentence that ends with an ellipsis, or one that ends inside a quotation mark, may not match cleanly.
+
+Proper sentence segmentation requires either a trained model or a substantial list of known abbreviations, and both bring their own errors on unfamiliar text. For ordinary prose the simple rule is close enough to be useful; on a legal document or a scientific paper, treat the number as indicative.
+
+Paragraphs are counted as blocks separated by a blank line, which matches how plain text and markdown are usually written. Text using single line breaks for paragraphs — as some editors produce — will report as one paragraph.
+
+**Average sentence length** is the figure worth watching. It is the crudest possible readability signal, but it is a real one: prose averaging over 25 words per sentence is hard work for most readers, and a run of very short sentences reads as choppy. It is more informative than any single readability score because it points at something you can actually fix.
+
+## Keyword frequency, and what it is good for now
+
+The frequency list shows your most-used terms with common words filtered out, alongside each one's share of the total.
+
+It is worth being clear about what this is *not* for. Keyword density was once treated as a direct search ranking signal, and writing to hit a target percentage was a real tactic. That has not been true for many years. Modern search systems evaluate what a page means rather than how often it repeats a phrase, and text visibly written to hit a density number reads badly to humans and risks being treated as spam.
+
+What the list is genuinely useful for is diagnostic. It tells you what your writing is actually about, which is frequently not what you set out to write about. A page you intended to be about mortgage overpayments that shows "lender" and "monthly" at the top has drifted. A page where your main subject does not appear in the top few terms at all probably never states its subject plainly — which is a writing problem before it is ever a search problem.
+
+Terms shorter than three characters and a short list of common function words are excluded. The stopword list is deliberately small, because aggressive filtering starts discarding words that carry real meaning in a specific field.
+
+## Nothing you type is sent anywhere
+
+Every figure on this page is computed in your browser as you type. No text is transmitted, logged or stored, and the page works with the network disconnected.
+
+This is worth stating because a word counter is a tool people paste unpublished manuscripts, client work, cover letters and confidential drafts into. Many free counters post that text to a server to do the counting. There is rarely anything sinister in it, but the text does leave your machine, and if you would not email the document to a stranger you should not paste it into a page that does.
+
+You can verify the claim rather than take it: open your browser's developer tools, switch to the network tab, and type. No request is made.

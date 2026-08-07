@@ -1,0 +1,82 @@
+## The arithmetic, and the two decisions inside it
+
+Working out a tip is one multiplication. Working out the *right* tip involves two decisions that the multiplication hides, and those are where people disagree.
+
+The calculation itself:
+
+```
+tip   = base × (percentage ÷ 100)
+total = bill + tip
+each  = total ÷ number of people
+```
+
+The two decisions are what the base should be, and what the percentage should be. Neither has a single correct answer, and both are covered below.
+
+### Worked example
+
+A restaurant bill of $60.00, tipping 20%, split between two people.
+
+- Tip: 60 × 0.20 = **$12.00**
+- Total: 60 + 12 = **$72.00**
+- Each person: 72 ÷ 2 = **$36.00**
+
+Now the same bill where the $60.00 already includes 9% sales tax, and you choose to tip on the pre-tax subtotal.
+
+- Pre-tax subtotal: 60 ÷ 1.09 = **$55.05**
+- Tip: 55.05 × 0.20 = **$11.01**
+- Total: 60 + 11.01 = **$71.01**
+- Each person: **$35.50**
+
+The difference is about a dollar on a sixty-dollar bill — roughly 1.6%. Small enough that it is not worth an argument at the table, large enough that it is worth knowing which one you are doing.
+
+That last line is worth a second look, because it is a rounding trap rather than a typo. Halving the rounded total of $71.01 gives $35.505, which rounds up to $35.51. The calculator carries full precision instead: the unrounded subtotal is $55.0459, the tip is $11.0092, and the total is $71.0092, so each share is $35.5046 and rounds *down* to $35.50. Rounding once at the end rather than at every step is the difference, and it is a cent here for the same reason it can be a great deal more on a large bill split many ways.
+
+Note the division in that second calculation. To get back to a pre-tax subtotal from a total that already includes tax, you divide by 1 plus the tax rate. Subtracting 9% of the total is the intuitive move and it is wrong: it gives $54.60, which is sixty cents adrift, because the 9% was charged on the subtotal, not on the total.
+
+## Pre-tax or post-tax?
+
+The etiquette answer in the United States is pre-tax. The reasoning is that sales tax is money collected for the state and has nothing to do with the service you received, so it should not form part of the base on which you reward that service.
+
+The practical answer is that most people tip on the total at the bottom of the receipt, and card terminals encourage it — the suggested amounts printed on a receipt or offered on a payment screen are almost always calculated on the post-tax figure.
+
+The gap between the two is bounded and small. It equals the tip rate multiplied by the tax rate: a 20% tip and a 9% sales tax means tipping post-tax costs about 1.8% of the subtotal more. On most restaurant bills that is one or two units of currency.
+
+This calculator supports both and shows the base it used, so whichever convention you follow you can see what the other would have come to.
+
+## How much to tip
+
+Norms vary enormously by country and by kind of service, and anyone who tells you there is one right number is describing their own habits.
+
+For sit-down table service in the United States, the commonly cited range is 15% to 20%, with 20% widely treated as standard for service that was fine. It is worth knowing that stated norms and actual behaviour diverge: Pew Research Center found in 2023 that 57% of American adults would tip 15% or less for an average sit-down restaurant meal, which is below what most etiquette guidance suggests.
+
+Counter service is a genuinely different case. Where you have ordered at a till, collected your own food, and cleared your own table, there was no table service to reward. Tipping prompts on counter-service payment screens have become common and are widely resented; Pew found a majority of Americans opposed to the spread of tipping into these settings. There is no obligation attached to a suggested amount on a screen.
+
+Outside the United States the picture changes completely. Many European countries include service in the price and treat rounding up as generous. Japan has a strong norm against tipping, where offering one can cause genuine awkwardness. Australia and New Zealand pay full minimum wages and treat tips as unusual. If you are travelling, the local norm is the one that applies, and it is usually much lower than the American one.
+
+## Why the United States is different
+
+Tipping in the US is not a cultural quirk layered on top of normal wages. It is part of the wage.
+
+Under the federal Fair Labor Standards Act, an employer may take a "tip credit" — counting a portion of an employee's tips toward their minimum wage obligation. The federal cash wage for a tipped employee can be as low as $2.13 an hour, provided tips bring the total to at least the full federal minimum. If they do not, the employer must make up the difference, though enforcement of that requirement is imperfect.
+
+That is the mechanism behind the sense of obligation that surrounds tipping in American restaurants and behind why undertipping there has a consequence it does not have in a country paying full wages. Many states set higher tipped minimum wages than the federal floor, and several have eliminated the tip credit altogether so that tipped workers receive the full state minimum before tips.
+
+Tips are also taxable income. The IRS treats all tips as income — cash, card, and amounts received through a tip pool — and employees receiving $20 or more in tips in a month are required to report them to their employer for withholding.
+
+## Service charges are not tips
+
+If a service charge or an automatic gratuity already appears on your bill — common for parties above six or eight — read it carefully before adding anything further.
+
+A mandatory service charge is legally the business's revenue, not a tip. The employer decides how it is distributed and is not obliged to pass it to the staff who served you. A tip is voluntary and belongs to the worker.
+
+This has two practical consequences. First, check whether the charge is already there before tipping again, because paying twice is common and entirely avoidable. Second, if what you care about is that the money reaches the person who served you, cash handed over directly is the most reliable route.
+
+## Splitting the bill
+
+An even split is the right approach when everyone ordered roughly comparably. It stops being fair fast when they did not.
+
+If one person had three courses and a bottle of wine while another had a soup and tap water, an even split moves real money between friends, and doing it silently because the arithmetic is easier is a way of quietly overcharging the person who ate least. In that case the fair method is to total each person's items, then apply the same tip percentage to each subtotal. The tip stays proportional to what each person consumed and nobody subsidises anybody.
+
+This calculator handles the even split, which is the common case. The itemised case is arithmetic best done per person rather than by a tool.
+
+**On rounding:** rounding each person's share up to a whole unit of currency is genuinely useful when several people are paying in cash, because it removes the problem of nobody having the right change. The calculator shows both the exact and the rounded share, and reports the surplus that rounding generates — that money goes to the tip, and the effective tip percentage shown accounts for it. On a small bill split many ways, rounding can push the effective tip several points above what you selected, which is worth seeing rather than discovering later.

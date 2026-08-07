@@ -1,0 +1,103 @@
+## Why age arithmetic is harder than it looks
+
+Working out someone's age sounds like subtraction, and for the year part it is. The difficulty is everything after the year, because the calendar is not a regular grid. Months are 28, 29, 30 or 31 days long. Some years have an extra day. The rule for which years get that extra day has an exception, and the exception has an exception.
+
+The result is that two perfectly reasonable ways of calculating the same age give different answers, and neither is doing anything obviously wrong. This page explains the method this calculator uses and why it produces the number a person would actually say out loud.
+
+## The method: count calendar units, do not divide days
+
+The tempting approach is to take the total number of days between two dates and divide. Divide by 365.25 for years, by 30.44 for months. It is one line of code and it is wrong in a way that is small enough to escape notice and large enough to matter.
+
+This calculator counts calendar units instead, by anchoring on an anniversary:
+
+1. Work out the largest whole number of months from the date of birth that still lands on or before the target date.
+2. Add that many months to the date of birth. If the resulting day does not exist in that month, clamp it to the last day that does.
+3. The remainder is the real number of days from that anchor to the target date.
+4. Divide the month count by twelve to get years and months.
+
+Step two is where the difficulty actually lives, and it is the reason this method is used rather than the more obvious one.
+
+### Worked example
+
+Someone born on 31 January 2000, with an age taken on 1 March 2024.
+
+- Whole months elapsed: 289
+- 31 January 2000 plus 289 months is February 2024 — but there is no 31 February, so it clamps to **29 February 2024**, the last day that exists in that month
+- Remainder: 29 February to 1 March is 1 day
+- 289 months is 24 years and 1 month
+
+The answer is **24 years, 1 month and 1 day**.
+
+Run the same dates through 2023 instead, where February has 28 days, and the anchor clamps to 28 February — still 1 day short of 1 March, so the answer is 23 years, 1 month and 1 day. The rule adapts to the calendar without needing a special case for leap years.
+
+### Why not just subtract and borrow?
+
+The method most implementations use is to subtract the day numbers and, if the result goes negative, borrow the length of the preceding month. It works for most dates and it breaks at month ends.
+
+Take the same example. Subtracting gives a day difference of 1 − 31 = −30. Borrowing February's 29 days leaves you at −1: still negative, because the shortfall was larger than the month you borrowed from. The output is a nonsensical "1 month and −1 days", and a calculator that does this will show it.
+
+The anchor method cannot produce a negative remainder, because the anchor is by construction never after the target date. That property is worth more than the slightly simpler arithmetic.
+
+### What the divide-by-average approach would have said
+
+The span above is 8,796 days. Divided by 365.25 that is 24.08 years; taking the remainder as months at 30.44 days each gives roughly 24 years and 1 month, with the day count lost entirely. Close, in this instance — but the error is unbounded and silent, and it grows with the length of the span.
+
+## Leap years, precisely
+
+A year is a leap year if it is divisible by 4, except that century years are not leap years unless they are also divisible by 400.
+
+So 2024 was a leap year. 1900 was not, despite being divisible by 4, because it is a century year not divisible by 400. 2000 was, because it is divisible by 400. The next century year to be skipped is 2100.
+
+This rule exists because the tropical year is about 365.2422 days, not 365.25. Adding a leap day every four years overcorrects by roughly 11 minutes a year, which accumulates to about three days every four centuries — hence dropping three leap days per four hundred years. That refinement is the whole substance of the Gregorian reform of 1582.
+
+Because this calculator works from real calendar dates rather than an assumed year length, leap days are counted wherever they actually fall. You never need to think about how many of them your lifetime contains.
+
+## The 29 February problem
+
+If you were born on 29 February, three years in four your birthday does not exist.
+
+This is not a computational problem so much as a definitional one, and different systems answer it differently. This calculator applies the same clamping rule it uses everywhere else, so a 29 February birthday falls on **28 February** in common years. You turn a year older on the last day of February, and the countdown to your next birthday always lands on a date that exists.
+
+Using one rule throughout matters more than which rule it is. A tool that clamped the age arithmetic to 28 February but resolved the next birthday to 1 March would, on 28 February in a common year, simultaneously tell you that you had just turned twenty-six and that your birthday was tomorrow. Both statements would follow from its own logic, and it would still be broken.
+
+That said, the convention is not universal. Some jurisdictions treat the legal birthday as 1 March in common years, which would make a person born on 29 February reach the age of majority a day later than this tool suggests. If the exact day matters legally — for a licence, a contract, or a benefit entitlement — check the rule that applies where you are rather than relying on any calculator.
+
+## Month ends are genuinely ambiguous
+
+The clamping rule has a consequence worth stating plainly, because it is the one place where two reasonable tools will disagree and neither is wrong.
+
+From 31 August to 30 September, this calculator reports exactly **one month**. The anniversary of 31 August in September is clamped to 30 September, which is the target date, so the remainder is zero.
+
+A tool using the subtract-and-borrow method reports **30 days** instead — zero months and thirty days — because it never forms the clamped anniversary at all.
+
+Both answers describe the same span of time. They differ because "one month after 31 August" has no single correct meaning, and any calculator has to pick one. Clamping is the convention used by essentially every mainstream date library, which is why it is the one used here.
+
+The practical upshot: for dates in the middle of a month, every method agrees. If your date of birth is on the 29th, 30th or 31st, expect small disagreements between tools in the months-and-days remainder. The total day count, which is unambiguous, will always match.
+
+## Time zones and why this works in UTC
+
+Age is a question about calendar dates, not about clock time. Someone born on 3 May is a year older on 3 May regardless of what hour it happened.
+
+Under the surface, though, date arithmetic done in local time is clock arithmetic, and clocks are not uniform. A span that crosses a daylight saving transition is 23 or 25 hours long rather than 24. When a total is divided by 24 hours and rounded down, that missing hour is occasionally enough to report a day fewer than actually elapsed.
+
+This calculator parses both dates to UTC midnight and does everything from there, which removes the clock from the problem. The practical consequence is that results do not change depending on where you are or what time of year you run it.
+
+The one thing it cannot do for you is decide which calendar date your birth belongs to if you were born close to midnight and want it reckoned in a different time zone. That is a question about the input, not the arithmetic — adjust the date you enter.
+
+## Total days, weeks and months
+
+Alongside the calendar age, the calculator gives running totals, and these answer a genuinely different question.
+
+**Total days** is the exact count of days elapsed, leap days included. It is the figure to use for anything where each day counts equally — waiting periods, day-based interest, or simply curiosity about a round number approaching.
+
+**Total weeks** is the total days divided by seven and rounded down. Weeks are the one unit in the calendar that never varies in length, so this is the least ambiguous figure on the page.
+
+**Total months** is the number of complete calendar months, taken from the years-and-months result rather than from a division. Thirty-six years and two months is 434 months, which is not what dividing 13,240 days by any fixed month length would give you.
+
+The weekday you were born on is computed from the calendar itself, so it is correct for any Gregorian date.
+
+## Where this tool stops
+
+It reckons age in the proleptic Gregorian calendar — that is, it applies the modern rules to dates before the reform was adopted, which happened at different times in different countries. Britain and its colonies did not switch until 1752, when eleven days were dropped from September. For historical dates before a country's changeover, a date recorded at the time is a Julian calendar date and does not mean what this calculator will assume it means.
+
+It also has nothing to say about how age is legally defined, which varies more than people expect. Most of the world reckons age from the day after birth or from the birthday itself; the traditional East Asian systems count differently again, and a few legal contexts define someone as reaching an age at the start of the day before their birthday. This calculator gives you the plain calendar answer, which is the one nearly everyone means.

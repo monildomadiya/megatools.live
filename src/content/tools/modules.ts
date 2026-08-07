@@ -1,5 +1,11 @@
 import type { ComponentType } from 'react';
 
+import LengthConverter from './conversion/length-converter/Calculator';
+import LengthConverterContent from './conversion/length-converter/content.mdx';
+import AgeCalculator from './date-time/age-calculator/Calculator';
+import AgeCalculatorContent from './date-time/age-calculator/content.mdx';
+import PasswordGenerator from './developer/password-generator/Calculator';
+import PasswordGeneratorContent from './developer/password-generator/content.mdx';
 import CompoundInterestCalculator from './finance/compound-interest-calculator/Calculator';
 import CompoundInterestContent from './finance/compound-interest-calculator/content.mdx';
 import LoanEmiCalculator from './finance/loan-emi-calculator/Calculator';
@@ -14,6 +20,10 @@ import TdeeCalculator from './health/tdee-calculator/Calculator';
 import TdeeContent from './health/tdee-calculator/content.mdx';
 import PercentageCalculator from './math/percentage-calculator/Calculator';
 import PercentageContent from './math/percentage-calculator/content.mdx';
+import TipCalculator from './lifestyle/tip-calculator/Calculator';
+import TipCalculatorContent from './lifestyle/tip-calculator/content.mdx';
+import WordCounter from './seo/word-counter/Calculator';
+import WordCounterContent from './seo/word-counter/content.mdx';
 
 interface ToolModule {
   /** Client island: the interactive calculator. */
@@ -44,6 +54,17 @@ export const toolModules: Record<string, ToolModule> = {
     Calculator: PercentageCalculator,
     Content: PercentageContent,
   },
+  'conversion/length-converter': {
+    Calculator: LengthConverter,
+    Content: LengthConverterContent,
+  },
+  'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
+  'developer/password-generator': {
+    Calculator: PasswordGenerator,
+    Content: PasswordGeneratorContent,
+  },
+  'lifestyle/tip-calculator': { Calculator: TipCalculator, Content: TipCalculatorContent },
+  'seo/word-counter': { Calculator: WordCounter, Content: WordCounterContent },
 };
 
 export function getToolModule(category: string, slug: string): ToolModule | undefined {

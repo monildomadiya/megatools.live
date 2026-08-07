@@ -1,0 +1,121 @@
+## What a slug is
+
+The slug is the human-readable part of a URL that identifies one specific page:
+
+```
+https://example.com/tools/seo/slug-generator
+                             └──────┬──────┘
+                                  slug
+```
+
+It is the only part of a URL you fully control and the only part a reader might actually read. A good one describes the page in a few words, survives being copied into an email, and does not change.
+
+## What is actually legal
+
+RFC 3986, the specification that defines URI syntax, splits characters into groups. The **unreserved** set can appear anywhere without encoding:
+
+```
+unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
+```
+
+Letters, digits, hyphen, period, underscore, tilde. That is the complete list.
+
+Other characters fall into two camps. Some are **reserved** because they have structural meaning — `/` separates path segments, `?` starts the query string, `#` starts the fragment. Using them in a slug does not fail; it changes what the URL means.
+
+Everything else must be **percent-encoded**: converted to its UTF-8 bytes and written as `%` followed by hex. A space becomes `%20`. An `é` becomes `%C3%A9`. An emoji becomes four percent-escapes.
+
+Browsers hide this. They display the decoded form in the address bar, which is why a URL can look clean on screen and arrive as an unreadable string when pasted into a plain-text email.
+
+The practical conclusion: restrict slugs to **lowercase letters, digits and hyphens**. That is a subset of the unreserved set, so nothing is ever encoded, nothing is ever ambiguous, and the URL looks the same everywhere.
+
+## Hyphens, not underscores
+
+Both are legal and unreserved. Google's URL structure documentation recommends hyphens, on the grounds that they help users and search engines identify the separate concepts in a URL, while underscores have a long history of *joining* words in programming identifiers — `format_date` is one name, not two words.
+
+This is a convention rather than a technical requirement, but it is the convention search engines were built around, and there is no offsetting benefit to underscores. Use hyphens.
+
+## Lowercase, always
+
+This one prevents a real class of bug rather than being a style preference.
+
+Domain names are case-insensitive. **Paths are not** — on most servers, `/About-Us` and `/about-us` are two different URLs.
+
+If both resolve, you have duplicate content: two addresses serving one page, splitting inbound links and ranking signals between them. If only one resolves, every link that gets the case wrong is a 404, and people typing URLs get the case wrong constantly.
+
+Standardising on lowercase removes the whole problem. Most content systems do this automatically; it is worth confirming yours does.
+
+## Accents and other scripts
+
+Accented Latin characters are straightforward: transliterate to the base letter. `café` becomes `cafe`, `Zürich` becomes `zurich`, `straße` becomes `strasse`.
+
+The tool does this by Unicode NFD normalisation, which splits an accented letter into a base letter plus a combining mark, then discarding the marks. A few letters need explicit handling because they are genuinely distinct letters rather than decorated ones — `ß`, `ø`, `æ`, `ł` and `đ` do not decompose, so they are mapped by hand.
+
+Non-Latin scripts are a genuine decision rather than a technical problem.
+
+**Keeping the script** works. `https://example.com/日本語` is valid and modern browsers display it correctly. The cost is that the moment it leaves the browser it becomes `%E6%97%A5%E6%9C%AC%E8%AA%9E` — unreadable in an email, awkward in a printed document, and easy to corrupt when copied through systems that do not handle encoding well.
+
+**Transliterating** produces an ASCII slug that travels anywhere, at the cost of being less readable to the audience it was written for.
+
+For a site whose readers all share the script, keeping it is defensible. For anything likely to be shared as plain text, transliteration is safer. Whichever you choose, be consistent — a site with both is worse than a site with either.
+
+Note that the domain is a separate matter. Non-ASCII domains are converted to punycode rather than percent-encoded, which is why `☕.example` becomes `xn--53h.example`.
+
+## Stop words
+
+Removing `the`, `of`, `and` and similar shortens a slug and raises the proportion of meaningful words. It is offered here as an option because sometimes that is right and sometimes it destroys the title.
+
+```
+"The Complete Guide to the History of Coffee"
+  keep:   the-complete-guide-to-the-history-of-coffee
+  strip:  complete-guide-history-coffee
+```
+
+That one improves. This one does not:
+
+```
+"The Who"        →  who
+"War of the Worlds"  →  war-worlds
+"To Kill a Mockingbird"  →  kill-mockingbird
+```
+
+The rule that works: strip stop words on long descriptive titles where they carry no information, and keep them wherever they are part of a name or change the meaning. The tool never returns an empty slug — if every word is a stop word, it keeps them all.
+
+## Length
+
+There is no search penalty for a long slug. There are three practical costs.
+
+Long URLs get truncated in search results and social previews, so the end of a long slug is often invisible where it matters most. They are harder to read aloud, to type, and to paste into contexts that wrap lines. And an over-long slug is usually a sign the title is trying to do too much.
+
+Three to five meaningful words is a good target. Front-load the distinctive ones: `slug-generator-free-online-tool` says the important part first, and `free-online-tool-slug-generator` buries it.
+
+When the tool trims, it cuts at a word boundary rather than mid-word — `complete-guide-coff` is worse than nothing.
+
+## Numbers and dates
+
+**Numbers are fine** and often useful: `10-best-cafes-in-zurich`. They survive unencoded and they set expectations accurately.
+
+**Dates are a trap.** `/2024/03/how-to-bake-bread` looks tidy and quietly commits you. The moment you update that article in 2026, either the URL contradicts the content or you change the URL and need a redirect. Unless the content is genuinely time-bound — news, an annual report, an event — leave the date out of the path and put it in the page.
+
+The same logic applies to anything that might change: a year in the slug, a version number, a price. The slug should describe what the page is *about*, not what it currently says.
+
+## Changing a slug after publishing
+
+Expensive. Every inbound link, every bookmark, every ranking signal points at the old address.
+
+If you must change it, put a **301 permanent redirect** from the old slug to the new one, and do it at the same moment as the change rather than afterwards. A 301 passes ranking signals to the new URL; a 404 discards them, and a few weeks of 404s is usually enough for the page to fall out of the index.
+
+The practical implication is to get the slug right at publication and then leave it alone. It is worth thirty seconds of thought at the point where it is free.
+
+## What the tool does
+
+In order:
+
+1. **Expand special letters** — `ß` to `ss`, `æ` to `ae`, `&` to `and`, `%` to `percent`, before anything else can strip them.
+2. **Normalise and strip marks** — NFD decomposition, then remove the combining diacriticals block, turning `é` into `e`.
+3. **Lowercase** everything.
+4. **Split on anything that is not a letter or digit**, which discards punctuation, spaces and symbols in one step.
+5. **Optionally drop stop words**, never to the point of emptiness.
+6. **Join with the separator**, so repeated punctuation cannot produce a double hyphen.
+7. **Trim to length at a word boundary** if a cap is set.
+
+The result is checked against the pattern `^[a-z0-9]+([-_][a-z0-9]+)*$` — letters, digits and single separators only, no leading or trailing separator. If it passes, the slug needs no percent-encoding anywhere.

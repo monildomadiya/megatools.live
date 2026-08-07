@@ -1,0 +1,130 @@
+## "How many characters" has three answers
+
+Type a family emoji into three different character counters and you can get 1, 7, or 11. None of them is broken. They are answering three different questions, and knowing which one a platform asks is the difference between a post that publishes and a post that gets rejected.
+
+### Grapheme clusters — what you see
+
+A grapheme cluster is what Unicode calls a *user-perceived character*: the thing you would remove with one press of backspace. Unicode Standard Annex #29 defines the rules for finding the boundaries.
+
+An accented `é`, a flag, a skin-toned thumbs up, a Devanagari syllable with its vowel marks — each is one grapheme cluster, however many pieces it is assembled from.
+
+This is the count that matches human intuition, and it is almost never the count a platform enforces.
+
+### Code points — what Unicode stores
+
+A code point is one entry in the Unicode catalogue. Most graphemes are one code point; many are several.
+
+```
+é  as U+00E9                    1 code point
+é  as e + U+0301 (combining)    2 code points
+🇬🇧 as two regional indicators   2 code points
+👨‍👩‍👧‍👦 as 4 people + 3 joiners      7 code points
+```
+
+Both spellings of `é` look identical on screen and are a single grapheme. One is twice the length of the other.
+
+Most platform limits count code points. This is why an emoji-heavy tweet runs out of room faster than it looks like it should.
+
+### UTF-16 code units — what JavaScript counts
+
+JavaScript's `.length` reports UTF-16 code units. Anything outside the Basic Multilingual Plane — which includes essentially every emoji — takes two units instead of one.
+
+That family emoji is 11 code units: four people at two units each, plus three joiners at one each.
+
+If a form's client-side validation and its server disagree about your text length, this is usually why.
+
+## Bytes: the fourth answer
+
+Storage and transmission limits are frequently specified in bytes, and UTF-8 uses a variable number per character:
+
+| Content | Bytes per character |
+| --- | --- |
+| Basic Latin (ASCII) | 1 |
+| Accented Latin, Greek, Cyrillic, Hebrew, Arabic | 2 |
+| Chinese, Japanese, Korean | 3 |
+| Emoji, rare scripts | 4 |
+
+This is behind a genuinely confusing class of bug: a database column declared as 255 bytes accepts 255 English characters, about 127 Greek ones, 85 Chinese ones, and roughly 63 emoji. The field "works" in testing and rejects real user input in production.
+
+## The SEO limits are not limits
+
+The 60-character title and 155-character meta description are the most repeated numbers in SEO, and neither is a rule.
+
+Google's own documentation is explicit: **there is no limit on how long a title element can be**, and the title link is truncated in search results as needed, *typically to fit the device width*. The same applies to meta descriptions — no limit, truncated to fit.
+
+The real constraint is **pixels, not characters**. A title in narrow lowercase letters survives considerably longer than one in capitals:
+
+```
+"illicit minimalism in libraries"    31 characters, narrow
+"WORLDWIDE SHIPPING AVAILABLE"       28 characters, much wider
+```
+
+The shorter one gets cut first.
+
+Two further things the character count cannot tell you. Google rewrites title links when it judges the supplied one unhelpful, boilerplate, or mismatched with the page — so your title is an input to a decision, not the decision. And Google generates its own snippet from page content whenever it thinks that better matches the query, which it does for a large share of results.
+
+So: treat 60 and 155 as sighting shots. Front-load the important words so they survive truncation, and check how the result actually renders rather than optimising a number.
+
+## Social platform limits
+
+Character limits on social platforms are almost always counted in code points, which is where emoji get expensive.
+
+The practical rule: **an emoji costs at least one, and often several.** A plain smiley is one code point. A skin-toned one is two. A flag is two. A profession emoji with a skin tone is four or five. A family is seven.
+
+Near a limit, replacing three combined emoji with three simple ones can free a dozen characters without changing the tone of the post.
+
+Note also that links are frequently counted as a fixed length regardless of the actual URL, and that some platforms count a newline as two characters. Those rules are platform-specific and change; the counts on this page are the raw text, which is the input to whatever the platform then does with it.
+
+## SMS: 160 or 70
+
+This one has direct financial consequences for anyone sending in bulk.
+
+Standard SMS encodes text using the GSM 7-bit alphabet, which packs **160 characters** into a single message. That alphabet covers unaccented Latin letters, digits, common punctuation, and a small set of extras.
+
+The moment a message contains one character outside it, the entire message switches to 16-bit UCS-2 encoding and the limit drops to **70**.
+
+The characters that trigger this are exactly the ones a word processor inserts silently:
+
+```
+'  →  ’    curly apostrophe
+"  →  “    smart quotes
+-  →  —    em dash
+…          ellipsis character
+any emoji
+```
+
+A 155-character message written in a word processor and pasted into a bulk send can become three parts instead of one, tripling the cost, because of a single apostrophe.
+
+There is a second subtlety. Messages longer than one part are *concatenated*, and each segment gives up space to a header identifying the sequence. So multipart messages hold 153 septets per part, not 160 — or 67 UCS-2 characters, not 70. A 161-character GSM message costs two parts and can carry 306 characters total, not 320.
+
+## Characters excluding spaces
+
+Academic and editorial limits are frequently specified as "characters excluding spaces", which is a genuinely different number — English prose runs roughly 15 to 18 percent whitespace.
+
+A 2,000-character limit excluding spaces is around 2,400 characters including them. Submitting against the wrong one is a common way to have an abstract rejected by a form.
+
+The counter reports both. Note that "excluding spaces" conventionally means excluding all whitespace — spaces, tabs and line breaks — which is what this page does.
+
+## Why some languages count characters instead of words
+
+English writing limits are almost always given in words. Chinese and Japanese limits are almost always given in characters, and the reason is structural rather than cultural.
+
+Neither language puts spaces between words. Splitting a Chinese sentence into words requires knowing where the word boundaries are, which requires a dictionary and a segmentation algorithm — and two reasonable algorithms will disagree about the same sentence. A word count is therefore an estimate that depends on which tool produced it.
+
+Characters have no such ambiguity. Every character is unmistakable, and because each one carries roughly a morpheme's worth of meaning, a character count is a far better proxy for how much has been said than it is in English.
+
+This produces a lopsided rule of thumb worth knowing when commissioning or estimating translation: a passage of English typically becomes noticeably fewer characters in Chinese, while the same English passage typically becomes *more* characters in German, where compounds run long and words are not shortened.
+
+If you are working across scripts, count characters and treat any cross-language word count as approximate.
+
+## Which count do you actually need
+
+**Writing for people**: grapheme clusters. It is what they will perceive.
+
+**Hitting a social or SMS limit**: code points, and check the SMS encoding separately.
+
+**Fitting a database column or an API payload**: bytes.
+
+**Debugging why a length check disagrees with itself**: compare code units against code points. A gap means surrogate pairs, which means emoji or rare scripts.
+
+**SEO**: none of them precisely. Use the character count as a rough guide, front-load what matters, and judge the result by how it renders rather than by the number.

@@ -8,18 +8,6 @@
   },
   "pendingRedirectsNote": "Legacy URLs whose replacement tool has not been built yet. The new site went live before these existed, so without this they return a hard 404 and Google drops them from the index within weeks. These are emitted as TEMPORARY (307) redirects, never permanent: the intent is to restore each URL with its own page, and a 301 would tell Google the address is gone for good. Targets point at the category hub where that hub already has tools on it, and at /tools otherwise. Delete an entry the moment its tool ships. A redirect is matched before a page is served, so a stale entry would make the new page unreachable; check-legacy-urls.mts fails the build if that happens.",
   "pendingRedirects": {
-    "/tools/health/body-fat-calculator": "/tools/health",
-    "/tools/health/ideal-weight-calculator": "/tools/health",
-    "/tools/health/calorie-calculator": "/tools/health",
-    "/tools/finance/sip-calculator": "/tools/finance",
-    "/tools/finance/simple-interest-calculator": "/tools/finance",
-    "/tools/finance/salary-calculator": "/tools/finance",
-    "/tools/math/average-calculator": "/tools/math",
-    "/tools/math/ratio-calculator": "/tools/math",
-    "/tools/conversion/weight-converter": "/tools",
-    "/tools/conversion/temperature-converter": "/tools",
-    "/tools/seo/character-counter": "/tools",
-    "/tools/seo/slug-generator": "/tools",
     "/blog": "/tools"
   },
   "urls": [

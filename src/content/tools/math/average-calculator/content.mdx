@@ -1,0 +1,144 @@
+## "Average" is not one thing
+
+Ask for the average of a set of numbers and you will usually get the arithmetic mean. But mean, median and mode are all averages, and so are the geometric and harmonic means — and on the same data they can give answers that are not remotely close to each other.
+
+Picking the wrong one is not a rounding problem. It produces confident, well-formatted numbers that describe something other than what you asked about, which is considerably worse than an obvious error.
+
+## The three classic averages
+
+### Mean
+
+Add everything, divide by how many there are.
+
+```
+mean = Σx ÷ n
+12, 15, 15, 18, 24, 31, 47  →  162 ÷ 7 = 23.14
+```
+
+The mean uses every value, which is its strength and its weakness. Change any single number and the mean moves. Change one number a lot and the mean moves a lot.
+
+### Median
+
+Sort the data and take the middle value. With an even count, take the midpoint of the two middle values.
+
+```
+12, 15, 15, 18, 24, 31, 47  →  median = 18
+```
+
+The median only cares about position, not magnitude. You could change 47 to 4,700 and it would still be 18.
+
+### Mode
+
+The value that appears most often — 15 in the set above. Data can have several modes, or none at all if every value appears once, which is common with continuous measurements.
+
+The mode is the only average that works on non-numeric data. The most common eye colour in a room has a mode and no mean.
+
+## When mean and median disagree
+
+The gap between them is a diagnostic, and it is the most useful thing this page reports.
+
+On symmetric data, mean and median sit almost on top of each other. When they separate, the data is skewed, and the direction tells you which end it is stretched toward.
+
+Income is the canonical example. In most countries the mean income sits well above the median, because there is no upper limit on what one person can earn but a hard floor at zero. A few very high earners drag the mean up; the median stays where most people actually are.
+
+This is why "average salary" figures deserve suspicion until you know which average was used. The mean is a larger, more flattering number, and it describes fewer people.
+
+**The rule of thumb:** if moving a single extreme value would noticeably change your answer, use the median.
+
+## Weighted mean
+
+A plain mean treats every value as equally important. Frequently they are not.
+
+```
+weighted mean = Σ(value × weight) ÷ Σweight
+```
+
+Course grades are the standard case. Three courses with grades of 90, 80 and 70, carrying 1, 2 and 5 credit hours:
+
+```
+plain mean:    (90 + 80 + 70) ÷ 3 = 80.0
+weighted mean: (90×1 + 80×2 + 70×5) ÷ 8 = 600 ÷ 8 = 75.0
+```
+
+Five points lower, and 75 is the correct answer. The five-credit course is most of the degree and the plain mean gave it the same say as the one-credit elective.
+
+Use weights whenever the values summarise groups of different sizes: portfolio returns by amount invested, regional figures by population, survey results by sample size.
+
+## The percentage trap
+
+This deserves its own warning because the mistake looks exactly like the correct thing to do.
+
+A shop converts 10 percent of visitors on Saturday and 20 percent on Sunday. The weekend rate is not 15 percent.
+
+```
+Saturday: 10% of 1,000 visitors = 100 conversions
+Sunday:   20% of   100 visitors =  20 conversions
+Weekend:  120 from 1,100        = 10.9%
+```
+
+Nowhere near 15. Each percentage describes a different-sized group, and averaging them silently treats a hundred visitors as equal in weight to a thousand.
+
+The fix is either to go back to the underlying counts and recompute from the totals, or to use a weighted mean with the group sizes as weights. If you have the percentages but not the group sizes, the combination is not available at all — that is missing information, not an obstacle to work around.
+
+## Geometric mean
+
+Use it for things that multiply rather than add: growth rates, investment returns, index numbers.
+
+```
+geometric mean = (x₁ × x₂ × … × xₙ)^(1/n)
+```
+
+Why it matters: gain 50 percent, then lose 50 percent.
+
+```
+100 → 150 → 75
+```
+
+You are down 25 percent. The arithmetic mean of +50% and −50% is zero, which says you broke even. It is wrong, and it is wrong in the direction that flatters the investment.
+
+Working with growth factors instead — 1.5 and 0.5 — the geometric mean is √(1.5 × 0.5) = 0.866, or −13.4 percent per period. Applied twice to 100 that gives 75. Correct.
+
+The arithmetic mean of returns always overstates, and the gap widens with volatility. This is why a fund's advertised "average annual return" needs checking: the geometric mean, sometimes called the compound annual growth rate, is the one that reflects what an investor actually ended up with.
+
+The geometric mean requires every value to be positive.
+
+## Harmonic mean
+
+For averaging rates where the *other* quantity is what stays constant.
+
+```
+harmonic mean = n ÷ Σ(1/x)
+```
+
+Drive 60 km at 60 km/h, then the same 60 km back at 30 km/h. Average speed?
+
+Not 45. You spent one hour going out and two hours coming back — three hours for 120 km, which is 40 km/h. That is the harmonic mean:
+
+```
+2 ÷ (1/60 + 1/30) = 2 ÷ 0.05 = 40
+```
+
+The arithmetic mean gets this wrong because you spend more time at the slower speed, so it weighs more heavily. The harmonic mean is also the correct average for price-to-earnings ratios across a portfolio, and for any rate expressed as "per unit of something fixed".
+
+## Standard deviation
+
+The averages tell you where the data sits. Standard deviation tells you how spread out it is, which is often the more important question.
+
+```
+population (÷n):    every member measured
+sample (÷n−1):      a sample standing in for a larger group
+```
+
+The `n − 1` is Bessel's correction. A sample's mean sits closer to its own data than the true population mean does, so the deviations you can measure are systematically a little small. Dividing by a smaller number compensates.
+
+Use the sample version unless your numbers genuinely are the whole population. On any reasonable sample size the difference is small, but it is the conventionally correct choice and it errs toward honesty.
+
+## Range
+
+Highest minus lowest. It is the simplest measure of spread and the most fragile: it depends entirely on two values, so a single mistyped figure changes it completely while the median does not move at all.
+
+It is genuinely useful for one thing — a sanity check. If your range is far wider than the phenomenon allows, something in the data is in the wrong units or has an extra digit. As a serious summary of spread, standard deviation or the interquartile range are far more stable.
+
+## Choosing, in one paragraph
+
+Use the **median** for skewed data or anything with outliers. Use the **weighted mean** whenever the values represent groups of different sizes. Use the **geometric mean** for growth rates and returns. Use the **harmonic mean** for rates over a fixed distance or quantity. Use the plain **arithmetic mean** when the data is roughly symmetric, the groups are comparable, and nothing is multiplying — which, to be fair, covers a lot of ordinary situations. Report the spread alongside whichever you pick, because an average without a measure of variation hides the thing it was summarising.

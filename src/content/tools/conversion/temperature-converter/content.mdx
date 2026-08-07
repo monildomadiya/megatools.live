@@ -1,0 +1,135 @@
+## The one conversion that needs an offset
+
+Every other converter on this site is a single multiplication. Metres to feet, kilograms to pounds — one factor, done.
+
+Temperature is not, and the reason is worth understanding because it explains several things that otherwise look arbitrary.
+
+Length and mass sit on **ratio scales**. Zero metres means no length; zero kilograms means no mass. Those zeros mean the same thing in every unit, so converting is pure scaling.
+
+Celsius and Fahrenheit are **interval scales**. Their zeros are historical choices, not an absence of temperature. Zero Celsius is where water freezes; zero Fahrenheit is roughly where a particular brine solution freezes. Neither marks a physically special point, and they mark *different* points, so converting between them needs a shift as well as a scaling.
+
+## The formulas
+
+```
+°F = °C × 9/5 + 32
+°C = (°F − 32) × 5/9
+
+K  = °C + 273.15
+°R = °F + 459.67
+```
+
+Two ordering traps live in these.
+
+Going from Fahrenheit to Celsius, **subtract 32 first, then divide**. Dividing first gives an answer that is wrong by about 18 degrees, and it looks plausible enough to survive a glance.
+
+Going from Celsius to Fahrenheit, **multiply first, then add**. Same trap in reverse.
+
+## What "twice as hot" cannot mean
+
+Because the zeros are arbitrary, ratios on Celsius and Fahrenheit are meaningless.
+
+Twenty degrees Celsius is not twice as warm as ten. The identical pair of temperatures in Fahrenheit is 50 °F and 68 °F, which is not a doubling. Both statements cannot be right, and in fact neither is — the question does not have an answer on those scales.
+
+On Kelvin it does, because Kelvin starts at absolute zero:
+
+```
+10 °C = 283.15 K
+20 °C = 293.15 K      about 3.5% warmer
+```
+
+That 3.5 percent is the honest answer to "how much hotter", and it is a good illustration of how much room-temperature variation actually represents in physical terms.
+
+## Absolute zero
+
+0 K. Equivalently −273.15 °C, −459.67 °F, or 0 °R.
+
+It is the point at which a system holds the least energy quantum mechanics permits — not the absence of energy, since zero-point motion remains. It cannot be reached, only approached; laboratories have got within billionths of a kelvin.
+
+The calculator refuses inputs below it. This is deliberate: the arithmetic would happily convert −300 °C into a Fahrenheit number, and the result would be a well-formatted description of something that does not exist. A converter that silently answers impossible questions is not being helpful.
+
+## Temperature against temperature interval
+
+This is the distinction that causes real errors in engineering, and it is invisible if you only ever convert single readings.
+
+A **temperature** is a point on a scale. Converting it needs both the scaling and the offset.
+
+A **temperature interval** is a difference between two points. The offsets cancel in the subtraction, so only the scaling applies.
+
+```
+A temperature of 5 °C   =  278.15 K
+An interval  of 5 °C   =    5 K   =  9 °F
+```
+
+Because Celsius and Kelvin use identical degree sizes, an interval in Celsius and the same interval in kelvin are numerically equal. This is why thermal coefficients are quoted in "per kelvin" and "per °C" interchangeably — for intervals they are the same unit.
+
+Mixing the two produces errors of 273, which are at least obvious. The subtler failure is the reverse: treating an interval as a temperature in a formula that wanted an absolute value, where the answer stays plausible and is wrong.
+
+## The reference points
+
+| | Celsius | Fahrenheit | Kelvin | Rankine |
+| --- | --- | --- | --- | --- |
+| Absolute zero | −273.15 | −459.67 | 0 | 0 |
+| Water freezes | 0 | 32 | 273.15 | 491.67 |
+| Room temperature | 20 | 68 | 293.15 | 527.67 |
+| Body temperature | 37 | 98.6 | 310.15 | 558.27 |
+| Water boils | 100 | 212 | 373.15 | 671.67 |
+
+*Water's freezing and boiling points are at standard atmospheric pressure.*
+
+## Where −40 comes from
+
+The two scales cross exactly once. Setting them equal:
+
+```
+x = 1.8x + 32
+−0.8x = 32
+x = −40
+```
+
+−40 °C is −40 °F. It is the only temperature where the unit does not need stating, and it is a genuinely useful check — if you convert something by hand and the answer does not sit on the correct side of −40, the arithmetic went wrong.
+
+## Why Fahrenheit is shaped like that
+
+Daniel Fahrenheit built his scale around 1724 using reference points that were reproducible with the equipment of the day rather than around water. Zero was set by the freezing point of a brine solution — the coldest temperature he could reliably reproduce — and the upper anchor was approximate human body temperature, originally marked at 96 so the interval divided neatly by halving.
+
+Water's freezing and boiling points landed at 32 and 212 as consequences rather than as design goals. Later refinements moved body temperature to the 98.6 that the definition now implies rather than the 96 he set.
+
+Celsius has a stranger history: Anders Celsius's original 1742 scale ran the other way, with 0 for boiling and 100 for freezing. It was inverted after his death, and the version everyone uses is not the one he published.
+
+## How the scales are defined now
+
+Neither Celsius nor Fahrenheit is defined by water any more.
+
+From 1954 the kelvin was fixed by the triple point of water — the single temperature and pressure at which ice, liquid and vapour coexist — defined as exactly 273.16 K. That was more reproducible than a boiling point, which varies with pressure, but it still depended on the isotopic composition and purity of the water sample.
+
+Since May 2019 the kelvin is defined by fixing the **Boltzmann constant** at exactly 1.380649 × 10⁻²³ joules per kelvin. Temperature is now tied directly to energy, with no reference to any substance.
+
+Celsius is defined from the kelvin by the exact offset of 273.15, and Fahrenheit is defined from Celsius. So water freezing at 0 °C is now a measured consequence of the definitions rather than the definition itself — and it is very slightly not exactly zero.
+
+## Rankine
+
+The absolute scale with Fahrenheit-sized degrees: 0 °R is absolute zero, and water freezes at 491.67 °R.
+
+It stands to Fahrenheit exactly as Kelvin stands to Celsius. It survives in parts of US thermodynamics and aerospace engineering, where the gas laws need an absolute temperature but the surrounding calculation is already in pounds, feet and BTU. Converting the whole problem to SI just to run one equation is more error-prone than keeping a customary absolute scale, so Rankine persists.
+
+## Wind chill and heat index are not temperatures
+
+Weather forecasts routinely quote a "feels like" figure alongside the real one, and it is worth knowing that the two are different kinds of number.
+
+The measured air temperature is a physical property of the air. Wind chill and heat index are **model outputs** — the result of an equation that takes temperature plus wind speed, or temperature plus humidity, and reports the temperature at which still or dry air would produce a comparable sensation on human skin.
+
+That has two consequences.
+
+They are not interchangeable with real temperatures in any calculation. Water does not freeze faster because the wind chill is −10 °C; the water is at the air temperature, and wind chill describes heat loss from skin, which water does not have. Pipes freeze at the air temperature. So do car radiators.
+
+And the models differ by country. The formula used in North America was revised in 2001 and differs from those used elsewhere, so the same conditions produce different "feels like" figures depending on which meteorological service is reporting.
+
+If you convert a feels-like figure with this page, the arithmetic is correct — you are converting the number the model produced. Just do not treat the result as something a thermometer would read.
+
+## Converting in your head
+
+**Celsius to Fahrenheit: double it and add 30.** 20 °C → 70 (true 68). 25 °C → 80 (true 77). 30 °C → 90 (true 86). It runs a few degrees high and gets worse as the temperature climbs, but for deciding what to wear it is entirely sufficient.
+
+**Fahrenheit to Celsius: subtract 30 and halve.** 70 °F → 20 (true 21). 90 °F → 30 (true 32).
+
+**The anchors worth memorising:** 0 °C = 32 °F, 10 = 50, 20 = 68, 30 = 86, 37 = 98.6, 100 = 212. And −40 = −40, which is the one that catches errors.

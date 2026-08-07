@@ -2,6 +2,10 @@ import type { ComponentType } from 'react';
 
 import LengthConverter from './conversion/length-converter/Calculator';
 import LengthConverterContent from './conversion/length-converter/content.mdx';
+import TemperatureConverter from './conversion/temperature-converter/Calculator';
+import TemperatureConverterContent from './conversion/temperature-converter/content.mdx';
+import WeightConverter from './conversion/weight-converter/Calculator';
+import WeightConverterContent from './conversion/weight-converter/content.mdx';
 import AgeCalculator from './date-time/age-calculator/Calculator';
 import AgeCalculatorContent from './date-time/age-calculator/content.mdx';
 import PasswordGenerator from './developer/password-generator/Calculator';
@@ -12,16 +16,36 @@ import LoanEmiCalculator from './finance/loan-emi-calculator/Calculator';
 import LoanEmiContent from './finance/loan-emi-calculator/content.mdx';
 import MortgageCalculator from './finance/mortgage-calculator/Calculator';
 import MortgageContent from './finance/mortgage-calculator/content.mdx';
+import SalaryCalculator from './finance/salary-calculator/Calculator';
+import SalaryContent from './finance/salary-calculator/content.mdx';
+import SimpleInterestCalculator from './finance/simple-interest-calculator/Calculator';
+import SimpleInterestContent from './finance/simple-interest-calculator/content.mdx';
+import SipCalculator from './finance/sip-calculator/Calculator';
+import SipContent from './finance/sip-calculator/content.mdx';
 import BmiCalculator from './health/bmi-calculator/Calculator';
 import BmiContent from './health/bmi-calculator/content.mdx';
 import BmrCalculator from './health/bmr-calculator/Calculator';
 import BmrContent from './health/bmr-calculator/content.mdx';
+import BodyFatCalculator from './health/body-fat-calculator/Calculator';
+import BodyFatContent from './health/body-fat-calculator/content.mdx';
+import CalorieCalculator from './health/calorie-calculator/Calculator';
+import CalorieContent from './health/calorie-calculator/content.mdx';
+import IdealWeightCalculator from './health/ideal-weight-calculator/Calculator';
+import IdealWeightContent from './health/ideal-weight-calculator/content.mdx';
 import TdeeCalculator from './health/tdee-calculator/Calculator';
 import TdeeContent from './health/tdee-calculator/content.mdx';
+import AverageCalculator from './math/average-calculator/Calculator';
+import AverageContent from './math/average-calculator/content.mdx';
 import PercentageCalculator from './math/percentage-calculator/Calculator';
 import PercentageContent from './math/percentage-calculator/content.mdx';
+import RatioCalculator from './math/ratio-calculator/Calculator';
+import RatioContent from './math/ratio-calculator/content.mdx';
 import TipCalculator from './lifestyle/tip-calculator/Calculator';
 import TipCalculatorContent from './lifestyle/tip-calculator/content.mdx';
+import CharacterCounter from './seo/character-counter/Calculator';
+import CharacterCounterContent from './seo/character-counter/content.mdx';
+import SlugGenerator from './seo/slug-generator/Calculator';
+import SlugGeneratorContent from './seo/slug-generator/content.mdx';
 import WordCounter from './seo/word-counter/Calculator';
 import WordCounterContent from './seo/word-counter/content.mdx';
 
@@ -47,16 +71,38 @@ export const toolModules: Record<string, ToolModule> = {
   },
   'finance/loan-emi-calculator': { Calculator: LoanEmiCalculator, Content: LoanEmiContent },
   'finance/mortgage-calculator': { Calculator: MortgageCalculator, Content: MortgageContent },
+  'finance/salary-calculator': { Calculator: SalaryCalculator, Content: SalaryContent },
+  'finance/simple-interest-calculator': {
+    Calculator: SimpleInterestCalculator,
+    Content: SimpleInterestContent,
+  },
+  'finance/sip-calculator': { Calculator: SipCalculator, Content: SipContent },
   'health/bmi-calculator': { Calculator: BmiCalculator, Content: BmiContent },
   'health/bmr-calculator': { Calculator: BmrCalculator, Content: BmrContent },
+  'health/body-fat-calculator': { Calculator: BodyFatCalculator, Content: BodyFatContent },
+  'health/calorie-calculator': { Calculator: CalorieCalculator, Content: CalorieContent },
+  'health/ideal-weight-calculator': {
+    Calculator: IdealWeightCalculator,
+    Content: IdealWeightContent,
+  },
   'health/tdee-calculator': { Calculator: TdeeCalculator, Content: TdeeContent },
+  'math/average-calculator': { Calculator: AverageCalculator, Content: AverageContent },
   'math/percentage-calculator': {
     Calculator: PercentageCalculator,
     Content: PercentageContent,
   },
+  'math/ratio-calculator': { Calculator: RatioCalculator, Content: RatioContent },
   'conversion/length-converter': {
     Calculator: LengthConverter,
     Content: LengthConverterContent,
+  },
+  'conversion/temperature-converter': {
+    Calculator: TemperatureConverter,
+    Content: TemperatureConverterContent,
+  },
+  'conversion/weight-converter': {
+    Calculator: WeightConverter,
+    Content: WeightConverterContent,
   },
   'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
   'developer/password-generator': {
@@ -64,6 +110,11 @@ export const toolModules: Record<string, ToolModule> = {
     Content: PasswordGeneratorContent,
   },
   'lifestyle/tip-calculator': { Calculator: TipCalculator, Content: TipCalculatorContent },
+  'seo/character-counter': {
+    Calculator: CharacterCounter,
+    Content: CharacterCounterContent,
+  },
+  'seo/slug-generator': { Calculator: SlugGenerator, Content: SlugGeneratorContent },
   'seo/word-counter': { Calculator: WordCounter, Content: WordCounterContent },
 };
 

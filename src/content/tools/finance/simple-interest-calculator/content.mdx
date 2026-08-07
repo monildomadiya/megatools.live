@@ -1,0 +1,144 @@
+## The formula
+
+Simple interest is charged on the original principal and nothing else. What you borrowed in month one is what interest is calculated on in month sixty.
+
+```
+I = P × r × t
+```
+
+`P` is the principal, `r` is the interest rate as a decimal, and `t` is the time in the same unit the rate is quoted in. The total repayable is `P + I`, which factors neatly to `P(1 + rt)`.
+
+That is the entire method. There is no series, no exponent, and no compounding frequency to argue about — which is exactly why it survives in contracts where both sides need to agree on a number without a spreadsheet.
+
+## The mistake almost everyone makes
+
+The rate and the term have to be in the same unit, and they usually are not.
+
+A rate of 6 percent means 6 percent **per year**. If your term is 18 months, you cannot put 18 into the formula:
+
+```
+10,000 × 0.06 × 18   = 10,800   wrong — that is 18 years
+10,000 × 0.06 × 1.5  = 900      correct
+```
+
+Convert the term to years and leave the rate annual. Six months is 0.5. Ninety days is 90 ÷ 365. Eighteen months is 1.5.
+
+The alternative — converting the rate to a monthly figure and leaving the term in months — gives the same answer and is more error-prone, because a monthly rate of 0.5 percent looks close enough to an annual 6 percent to survive a quick glance in the wrong slot.
+
+## Worked examples
+
+**Five years on £10,000 at 6 percent**
+
+```
+I = 10,000 × 0.06 × 5 = £3,000
+Total repayable = £13,000
+```
+
+**Ninety days on £10,000 at 6 percent**
+
+```
+t = 90 ÷ 365 = 0.246575
+I = 10,000 × 0.06 × 0.246575 = £147.95
+```
+
+**Working backwards from a quoted deal**
+
+A lender offers £5,000 repayable as £5,900 over two years. What rate is that?
+
+```
+I = 900
+r = I ÷ (P × t) = 900 ÷ (5,000 × 2) = 0.09 = 9%
+```
+
+This rearrangement is the most practically useful thing on the page. Finance offers are frequently advertised by their total cost rather than their rate, and dividing the interest by the principal and the term recovers the annual rate in one step — often a considerably larger number than the one on the poster.
+
+## Simple against compound
+
+Compound interest charges on the principal plus everything accrued so far. Same principal, same rate, same term:
+
+| Term | Simple interest | Compounded annually | Difference |
+| --- | --- | --- | --- |
+| 1 year | £600 | £600 | £0 |
+| 5 years | £3,000 | £3,382 | £382 |
+| 10 years | £6,000 | £7,908 | £1,908 |
+| 20 years | £12,000 | £22,071 | £10,071 |
+| 30 years | £18,000 | £47,435 | £29,435 |
+
+*£10,000 at 6 percent.*
+
+Two things are worth reading off that table.
+
+**At one year they are identical.** With annual compounding there has been nothing to compound yet. This is why the distinction is close to irrelevant for short-term borrowing and decisive for long-term.
+
+**The gap is not linear.** Between year 1 and year 10 compounding adds about £1,900. Between year 20 and year 30 it adds another £25,000. The difference between the two methods grows exponentially, because compound interest is an exponential function and simple interest is a straight line.
+
+For a borrower, simple interest is better at the same rate. For a saver, compound is better. Neither statement is surprising; what surprises people is the magnitude at long horizons.
+
+## Where simple interest actually appears
+
+**Car loans and many personal loans** in the US accrue simple interest on the outstanding balance, recalculated at each payment date.
+
+**Statutory late-payment interest.** The US Treasury's Prompt Payment rule charges simple daily interest on overdue government payments to vendors.
+
+**Short-term commercial paper and treasury instruments**, where the term is short enough that compounding would be noise.
+
+**Bond coupons** are quoted as a simple percentage of face value, even though the bond's yield to maturity involves compounding.
+
+Mortgages, credit cards, and savings accounts do not use it. Those all compound, usually monthly or daily.
+
+## Simple interest loans and precomputed interest
+
+This is the distinction that costs real money, and the terminology hides it.
+
+A **simple interest loan** calculates interest on the balance you actually owe on the day the payment is due. Pay extra, and the balance drops, and every subsequent interest calculation is smaller. Pay the loan off two years early and you genuinely stop paying interest for those two years.
+
+A **precomputed interest loan** fixes the total finance charge at signing, based on the full scheduled term. The interest is baked in before you make your first payment. Paying early may earn you a partial rebate under whatever formula the contract specifies, and often that rebate is worth considerably less than the interest you thought you were avoiding.
+
+The Consumer Financial Protection Bureau's guidance on auto loans is explicit about the practical consequence: with precomputed interest, early payoff saves you much less. If you expect to overpay or settle early — and most people who ask do — this is the single term in the agreement worth checking.
+
+## Day-count conventions
+
+Once your term is measured in days, you have to decide what a year is, and there is more than one answer.
+
+```
+Actual/365:  I = 10,000 × 0.06 × 365/365 = £600.00
+Actual/360:  I = 10,000 × 0.06 × 365/360 = £608.33
+```
+
+Charging actual calendar days while dividing the annual rate by 360 means a full year costs 365/360 of the quoted rate — about **1.4 percent more interest** than the headline figure implies.
+
+This is not a trick, and it is not an error. Actual/360 is the standard convention on most US commercial lending, inherited from an era when a 360-day year made hand calculation tractable. But it does mean the effective rate on such a loan is slightly above the stated rate, and a borrower comparing two offers on their nominal rates alone is not comparing like with like.
+
+Loan agreements state the basis. If yours does not, that is a question worth asking before signing.
+
+## An amortising loan is not this calculation
+
+This trips people up constantly, because a car loan is described as a simple interest loan and yet the total interest does not match what this page reports.
+
+Both statements are true, and the reconciliation is the balance.
+
+This calculator holds the principal fixed for the whole term. That is correct for a loan repaid as a single lump at the end — a bullet loan, a short-term note, a friend paying you back in one go next year.
+
+An amortising loan repays principal with every instalment. Interest is still calculated simply, on the balance, but the balance falls every month:
+
+```
+Month 1:  interest on the full £10,000
+Month 30: interest on whatever is left, perhaps £5,400
+Month 60: interest on almost nothing
+```
+
+Because the average outstanding balance across the term is roughly half the original principal, the total interest on an amortising loan comes to **roughly half** what this page would report for the same principal, rate and term.
+
+So the two answers differ by a factor of about two, and neither is wrong — they describe different repayment structures. If your loan has monthly instalments that include principal, you want an amortisation calculation rather than this one. If the whole principal sits outstanding until a single final payment, this is the right page.
+
+The word "simple" in "simple interest loan" describes how interest is computed on the balance, not whether the balance changes.
+
+## When "simple" does not mean cheaper
+
+The comparison table assumes both options carry the same rate. In the market they rarely do.
+
+A lender offering simple interest knows it earns less than compounding over the same term, and prices accordingly. A simple-interest loan at 9 percent and a compounding loan at 7 percent are a genuine choice with a real answer, and the answer is not "whichever says simple".
+
+The reliable test is the total amount you hand over across the whole term. Compute it both ways, compare the totals, and treat the interest method as an input to that comparison rather than as a conclusion in itself.
+
+Where the method genuinely matters on its own is in flexibility. If there is any chance you will overpay or settle early, simple interest on the outstanding balance rewards that and precomputed interest largely does not — and that difference can outweigh a point of headline rate.

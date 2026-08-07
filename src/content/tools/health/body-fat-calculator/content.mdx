@@ -1,0 +1,95 @@
+## What body fat percentage actually tells you
+
+Body fat percentage is the share of your total mass that is fat. Everything else — muscle, bone, organs, blood, water — is grouped together as lean body mass. Two people can weigh exactly the same and sit at 12 percent and 32 percent body fat, and no scale in the world can tell them apart.
+
+That is the whole reason the measure exists. Weight answers "how much of you is there". Body fat answers "what is it made of", which is the question that actually relates to health outcomes and to whether a diet is working.
+
+The catch is that measuring it properly requires equipment. Hydrostatic weighing, air displacement, and DEXA scanning are the reference methods, and none of them fit in a bathroom. Everything else — including this page — is an equation fitted to something easier to measure, reproducing the reference result with a known amount of error.
+
+## The two equations on this page
+
+### The US Navy circumference method
+
+Developed by Hodgdon and Beckett at the Naval Health Research Center in 1984, and still used by the US Navy to assess personnel. It reads body fat from the relationship between your girth measurements and your height.
+
+```
+Men:   %BF = 495 / (1.0324 − 0.19077·log₁₀(waist − neck) + 0.15456·log₁₀(height)) − 450
+Women: %BF = 495 / (1.29579 − 0.35004·log₁₀(waist + hip − neck) + 0.22100·log₁₀(height)) − 450
+```
+
+The inner expression estimates body density. The outer `495 / D − 450` is the Siri equation, which converts a density into a fat percentage on the assumption that fat and lean tissue have fixed, known densities.
+
+The logic of the men's equation is that the waist is where fat accumulates and the neck is where it does not, so the gap between them is a fat signal with body frame divided out. Height is included because the same waist means something different on someone who is 1.6 m and someone who is 1.9 m.
+
+One implementation note that matters: the constants are fitted to logarithms of lengths **in inches**. Because the girth and height terms carry different coefficients, feeding centimetres in does not cancel out — it shifts every answer by a fixed amount. Several metric restatements of this formula circulate with the original constants left untouched, and they are wrong by roughly one and a half percentage points. This page converts your input to inches first and runs the equation the Navy actually published.
+
+### The BMI-based estimate
+
+The second figure comes from Deurenberg, Weststrate and Seidell's 1991 paper in the *British Journal of Nutrition*, fitted to 1,229 people aged 7 to 83:
+
+```
+%BF = 1.20 × BMI + 0.23 × age − 10.8 × sex − 5.4     (sex: male = 1, female = 0)
+```
+
+It is on this page for one purpose: to disagree with the tape. It knows nothing about your shape, so everyone of a given height, weight, age and sex receives an identical answer. When it lands far from the circumference result, the gap is telling you something real about how your weight is distributed.
+
+The age term is not cosmetic. Adults lose muscle and gain fat with age at a steady enough rate that BMI systematically understates fat in older people, and the coefficient corrects for it.
+
+## Measuring so the number means something
+
+The equation is only as good as the tape work, and tape work is where nearly all the avoidable error lives.
+
+- **Neck** — just below the larynx, with the tape sloping slightly downward at the front. Do not flex.
+- **Waist, men** — level with the navel.
+- **Waist, women** — at the narrowest point of the torso, which is usually above the navel.
+- **Hips, women** — at the widest point of the buttocks, feet together.
+
+Take every reading against bare skin. The tape should be snug enough not to slide but not tight enough to compress. Read at the end of a normal exhale, without holding your breath or pulling your stomach in — the temptation to do both is strong and it is the fastest way to produce a number that flatters you and tells you nothing.
+
+Measure at the same time of day each time, ideally in the morning before eating. Waist circumference varies by a centimetre or more across a day on food and water alone.
+
+## What counts as healthy
+
+The American Council on Exercise publishes the categories most widely used:
+
+| Category | Men | Women |
+| --- | --- | --- |
+| Essential fat | 2–5% | 10–13% |
+| Athletes | 6–13% | 14–20% |
+| Fitness | 14–17% | 21–24% |
+| Acceptable | 18–24% | 25–31% |
+| Obese | 25%+ | 32%+ |
+
+Essential fat is not a goal. It is the minimum required for normal physiology — fat is structural in the brain, nerves, bone marrow and cell membranes, and it is the medium several vitamins are transported in. Sustained periods below the essential range are associated with hormonal disruption, immune suppression and bone loss, and in women with loss of menstrual function.
+
+## Why the women's ranges sit higher
+
+Every band is 8 to 10 percentage points higher for women, and this is biology rather than a concession. Women carry sex-specific fat in the breasts, pelvis and thighs that supports reproductive function, which puts the essential floor at 10 to 13 percent against 2 to 5 for men.
+
+A practical consequence: a woman at 12 percent body fat and a man at 12 percent are in completely different physiological situations. He is lean; she is below the level her body requires. Comparing the raw numbers across sexes is meaningless.
+
+## Lean mass is the number to watch
+
+The calculator reports fat mass and lean body mass alongside the percentage, and during any period of weight change those two are more informative than the percentage itself.
+
+Losing 5 kg of which 4 kg is fat is a good outcome. Losing 5 kg of which 2 kg is muscle is a bad one that looks identical on a scale, and it leaves you with a lower resting metabolic rate than you started with — which is a large part of why aggressive diets tend to be followed by regain.
+
+If your weight falls and your estimated lean mass falls with it, the response is more protein and resistance training, not a deeper deficit.
+
+## Where this stops being reliable
+
+**The error bar is about four points.** Hodgdon and Beckett reported a standard error of estimate near 4 percentage points against hydrostatic weighing, and Deurenberg's formula reports 4.1. A reading of 20 percent means "probably between 16 and 24". Debating a 0.4 point change is debating noise.
+
+**Unusual builds break both equations.** Someone with a very muscular torso and a thick neck can have the tape underestimate their fat, because the equation treats a large neck as a marker of frame size rather than of muscle. Bodybuilders and heavy strength athletes are the clearest case.
+
+**Fat distribution varies by ancestry.** Both equations were fitted to specific populations — the Navy's on US service personnel, Deurenberg's on a Dutch sample — and the relationship between girth and total fat differs across ethnic groups. The follow-up literature on Deurenberg's formula found systematic offsets when it was applied to other populations.
+
+**Neither works for children or during pregnancy.** Children's body composition is assessed against age-and-sex percentile charts. Pregnancy invalidates the girth measurements entirely.
+
+**Very high body fat degrades accuracy.** The equations were fitted mostly on people in the normal-to-overweight range, and predictive error grows at the extremes in both directions.
+
+## Use it as a trend
+
+The right way to use this page is to measure every four to six weeks under identical conditions and watch the direction of travel. The measurement error stays roughly constant between readings, so it largely cancels out of the comparison even though it dominates any single number.
+
+A tape, used consistently, will tell you whether the last two months worked. That is a genuinely useful thing to know, and no single reading — from this page or from a scan — can tell you it.

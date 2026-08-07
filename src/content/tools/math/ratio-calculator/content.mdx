@@ -1,0 +1,174 @@
+## What a ratio actually is
+
+A ratio compares quantities of the same kind. Written `3 : 4`, it says that for every three of the first thing there are four of the second.
+
+The critical property is that a ratio describes **relative** size and carries no information about absolute size. 3:4 and 30:40 and 300:400 are the same ratio. That is the whole point — it lets you talk about the shape of something without committing to how big it is.
+
+Because both sides are the same kind of quantity, the units cancel and a ratio is dimensionless. NIST's guide to the SI describes exactly this: a quantity formed as the ratio of two mutually comparable quantities is of dimension one, and its unit is the number 1.
+
+## Simplifying
+
+Divide every term by the greatest common divisor of all of them.
+
+```
+18 : 24     GCD = 6     →  3 : 4
+```
+
+Decimals get scaled to whole numbers first, using the same power of ten on every term:
+
+```
+1.5 : 2  →  15 : 20  →  3 : 4
+```
+
+Multiplying every term by the same number never changes a ratio, which is what makes this safe. It is also why you cannot simplify by subtracting — taking 1 off each side of 3:4 gives 2:3, which is a different ratio entirely.
+
+## Part-to-part against part-to-whole
+
+This is the error that produces most wrong answers, and it happens because both readings use the same numbers.
+
+A class has girls and boys in the ratio **2:3**.
+
+```
+Part to part:   2 girls for every 3 boys
+Part to whole:  2 girls out of every 5 children  = 40%
+                3 boys  out of every 5 children  = 60%
+```
+
+Girls are **two-fifths** of the class, not two-thirds. The denominator of the fraction is the sum of the terms, not the other term.
+
+The calculator shows the percentages alongside the ratio for exactly this reason. If a ratio ever needs to become a fraction or a percentage, add the terms first.
+
+## Ratios, fractions and rates
+
+Three related ideas that get used interchangeably and should not be.
+
+A **fraction** compares a part to a whole: 2/5 of the class are girls.
+
+A **ratio** usually compares parts to each other: 2:3 girls to boys.
+
+A **rate** compares quantities of *different* kinds, so the units do not cancel: 60 kilometres per hour, £12 per kilogram. Rates keep their units; ratios lose theirs.
+
+A **proportion** is a statement that two ratios are equal: 3:4 = 15:20.
+
+## Solving a proportion
+
+Cross-multiply. Given `a : b = c : d` with one term unknown:
+
+```
+a × d = b × c
+d = (b × c) ÷ a
+```
+
+For 3 : 4 = 15 : ?
+
+```
+d = (4 × 15) ÷ 3 = 20
+```
+
+This one operation covers a large share of everyday arithmetic:
+
+- **Scaling a recipe.** A recipe for four needs 300 g of flour; for seven people, 4 : 300 = 7 : x gives 525 g.
+- **Map distances.** At 1:25,000, four centimetres on the map is 100,000 cm — one kilometre.
+- **Resizing images.** A 16:9 frame that is 1,000 pixels wide is 1,000 × 9 ÷ 16 = 562.5 pixels tall.
+- **Unit pricing.** 350 g for £2.10 against 500 g for £2.85 becomes a comparison once both are per 100 g: 60p against 57p.
+
+## Dividing a quantity in a ratio
+
+Three steps, and the third one is a check.
+
+Split £1,200 in the ratio 2:3:7.
+
+```
+1. Shares:      2 + 3 + 7 = 12
+2. One share:   1,200 ÷ 12 = £100
+3. Parts:       2×100 = £200
+                3×100 = £300
+                7×100 = £700
+```
+
+Then verify: 200 + 300 + 700 = 1,200. If the parts do not add back to the total, the ratio was misread — usually by treating one of the terms as the whole.
+
+This is the arithmetic behind splitting profits between partners, dividing an inheritance, allocating a budget across departments, and sharing a bill unevenly.
+
+## Both sides must be in the same units
+
+A ratio of two quantities of the same kind is dimensionless only because the units cancel — which requires them to be the same units in the first place.
+
+```
+50 cm to 2 m
+  wrong:    50 : 2
+  correct:  50 : 200  =  1 : 4
+```
+
+The wrong version is out by a factor of a hundred and looks perfectly reasonable on the page. Convert both quantities to a common unit **before** forming the ratio, every time. This is the most common source of silent errors in mixing, scaling and dosing.
+
+## Aspect ratios
+
+An aspect ratio is width to height, and it describes a shape rather than a size.
+
+```
+16 : 9    1920×1080, 2560×1440, 3840×2160 — all the same shape
+4 : 3     the old television and monitor standard
+1 : 1     square
+```
+
+To find a missing dimension, solve it as a proportion. For 16:9 at 1,366 pixels wide:
+
+```
+height = 1,366 × 9 ÷ 16 = 768.4  →  768
+```
+
+Rounding matters here in a way it usually does not. A 1,366×768 display is not exactly 16:9 — it is 16:8.99 — which is why some content on that resolution is very slightly stretched or letterboxed. Most real hardware carries small compromises like this.
+
+## 1:4 and "1 in 4" are different
+
+This ambiguity has practical consequences in dilution, and both readings are in common use.
+
+```
+1 : 4       1 part concentrate to 4 parts water  →  5 parts total, 20% concentrate
+1 in 4      1 part out of 4 in total             →  3 parts water, 25% concentrate
+```
+
+The same two numbers, and a mixture 25 percent stronger under one reading than the other. For garden chemicals that is the difference between working and scorching; for two-stroke fuel it is the difference between correct lubrication and a seized engine.
+
+Manufacturer instructions usually specify which they mean — "dilute 1:4" versus "one part in four". When the label is ambiguous, the safer assumption for a ratio written with a colon is parts-to-parts.
+
+## More than two terms
+
+Ratios extend to any number of terms and behave identically.
+
+```
+Concrete:   1 : 2 : 4     cement : sand : aggregate
+Fertiliser: 10 : 10 : 10  nitrogen : phosphorus : potassium
+```
+
+They simplify by dividing every term by the GCD of all of them. They divide a total by summing every term to get the share count. The only thing that changes is that there are more numbers to keep in order.
+
+One caution: with three or more terms you cannot recover the full ratio from pairwise comparisons alone unless the pairs share a common term. Knowing a:b and c:d tells you nothing about how the two pairs relate; knowing a:b and b:c does, and that is how you chain them.
+
+## Odds are ratios, and they are not probabilities
+
+Betting odds are a part-to-part ratio, and reading them as a probability is the part-to-whole mistake in its most expensive form.
+
+Odds of **4:1 against** mean four losing outcomes for every one winning outcome — five outcomes in total, so the implied probability is one in five, or 20 percent. Not one in four.
+
+```
+odds a : b against    →    probability = b ÷ (a + b)
+4 : 1                 →    1 ÷ 5 = 20%
+3 : 2                 →    2 ÷ 5 = 40%
+1 : 1  ("evens")      →    1 ÷ 2 = 50%
+```
+
+Running it the other way, a probability converts to odds by comparing the two outcomes rather than the outcome to the total: a 25 percent chance is 1 winning outcome to 3 losing ones, quoted as 3:1.
+
+The same distinction runs through medical statistics, where an odds ratio and a relative risk are routinely reported as though they were the same measure. They converge when the outcome is rare and diverge sharply when it is common — an odds ratio of 2 on a condition affecting half the population is a much smaller real effect than it sounds.
+
+Decimal odds, used across most of Europe, sidestep the ambiguity by quoting the total return per unit staked instead: 4:1 against becomes 5.0, and the implied probability is simply its reciprocal, 1 ÷ 5.0 = 20 percent. That is the same arithmetic with the confusing step removed.
+
+## Where ratios mislead
+
+A ratio deliberately discards absolute size, which is useful right up to the moment size is what matters.
+
+"Our conversion ratio improved from 1:20 to 1:10" sounds decisive. It is also what happens when you go from 1 sale in 20 visits to 1 sale in 10 — which could be a genuine doubling, or it could be two sales from twenty visitors on a quiet Tuesday.
+
+Ratios summarise; they do not carry their sample size with them. Whenever one is quoted as evidence, the useful follow-up question is what the underlying counts were.

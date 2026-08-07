@@ -12,30 +12,54 @@ import type { CategorySlug, ToolMeta, ToolWithHref } from './types';
 // every tool into the first-load bundle.
 
 import lengthConverter from '@/content/tools/conversion/length-converter/meta';
+import temperatureConverter from '@/content/tools/conversion/temperature-converter/meta';
+import weightConverter from '@/content/tools/conversion/weight-converter/meta';
 import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
 import passwordGenerator from '@/content/tools/developer/password-generator/meta';
 import compoundInterestCalculator from '@/content/tools/finance/compound-interest-calculator/meta';
 import loanEmiCalculator from '@/content/tools/finance/loan-emi-calculator/meta';
 import mortgageCalculator from '@/content/tools/finance/mortgage-calculator/meta';
+import salaryCalculator from '@/content/tools/finance/salary-calculator/meta';
+import simpleInterestCalculator from '@/content/tools/finance/simple-interest-calculator/meta';
+import sipCalculator from '@/content/tools/finance/sip-calculator/meta';
 import bmiCalculator from '@/content/tools/health/bmi-calculator/meta';
 import bmrCalculator from '@/content/tools/health/bmr-calculator/meta';
+import bodyFatCalculator from '@/content/tools/health/body-fat-calculator/meta';
+import calorieCalculator from '@/content/tools/health/calorie-calculator/meta';
+import idealWeightCalculator from '@/content/tools/health/ideal-weight-calculator/meta';
 import tdeeCalculator from '@/content/tools/health/tdee-calculator/meta';
+import averageCalculator from '@/content/tools/math/average-calculator/meta';
 import percentageCalculator from '@/content/tools/math/percentage-calculator/meta';
+import ratioCalculator from '@/content/tools/math/ratio-calculator/meta';
 import tipCalculator from '@/content/tools/lifestyle/tip-calculator/meta';
+import characterCounter from '@/content/tools/seo/character-counter/meta';
+import slugGenerator from '@/content/tools/seo/slug-generator/meta';
 import wordCounter from '@/content/tools/seo/word-counter/meta';
 
 const toolMetas: ToolMeta[] = [
   compoundInterestCalculator,
   loanEmiCalculator,
   mortgageCalculator,
+  salaryCalculator,
+  simpleInterestCalculator,
+  sipCalculator,
   bmiCalculator,
   bmrCalculator,
+  bodyFatCalculator,
+  calorieCalculator,
+  idealWeightCalculator,
   tdeeCalculator,
+  averageCalculator,
   percentageCalculator,
+  ratioCalculator,
   lengthConverter,
+  temperatureConverter,
+  weightConverter,
   ageCalculator,
   passwordGenerator,
   tipCalculator,
+  characterCounter,
+  slugGenerator,
   wordCounter,
 ];
 

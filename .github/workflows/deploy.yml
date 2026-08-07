@@ -1,0 +1,104 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches:
+      - main
+  # Lets you re-run a deploy from the Actions tab without pushing an empty commit.
+  workflow_dispatch:
+
+# Two deploys running at once would have one overwrite the other's build
+# halfway through. Queue them instead, and never cancel one mid-flight — a
+# cancelled deploy leaves the droplet in whatever half-built state it reached.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  # Runs on a clean runner before the droplet is touched at all, so a commit
+  # that fails typecheck, the content gate, or the build never reaches
+  # production. This is also where `npm ci` belongs: it installs strictly from
+  # package-lock.json, which is what makes the build reproducible.
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Content gate
+        run: npm run check:content
+
+      - name: Build
+        run: npm run build
+
+      # Fails if any URL from the old sitemap would 404, or if a redirect is
+      # still holding an address whose real page now exists — which would make
+      # that page unreachable while the build output still showed it as
+      # generated.
+      - name: Legacy URL coverage
+        run: npm run check:urls
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          port: ${{ secrets.DROPLET_PORT || 22 }}
+          # Without this the script keeps going after a failed step, so a broken
+          # build would still be followed by `pm2 restart` — taking the site
+          # down instead of leaving the previous build serving.
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd /var/www/megatools.live
+
+            # --ff-only rather than a plain pull: if the droplet has commits or
+            # edits of its own, this stops with an error instead of opening a
+            # merge or silently conflicting. Fix it on the box, then re-run.
+            git fetch origin main
+            git merge --ff-only origin/main
+
+            # `npm install` here, not `npm ci`. `npm ci` deletes node_modules
+            # before reinstalling, and the running `next start` process resolves
+            # modules lazily at runtime — wiping them under a live server takes
+            # the site down for the length of the install. The verify job above
+            # already proved the lockfile builds cleanly on a clean machine.
+            npm install --no-audit --no-fund
+
+            npm run build
+            pm2 restart megatools --update-env
+            pm2 save
+
+      # Confirms the deploy actually produced a working site rather than a
+      # process that restarted and then crashed. A green deploy that took the
+      # site down is worse than a red one.
+      - name: Smoke test
+        run: |
+          set -e
+          sleep 5
+          for path in / /tools /tools/health/bmi-calculator /sitemap.xml; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "https://megatools.live$path")
+            echo "$code  $path"
+            [ "$code" = "200" ] || exit 1
+          done
+
+          # A held legacy URL must still redirect rather than 404.
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "https://megatools.live/tools/seo/word-counter")
+          echo "$code  /tools/seo/word-counter (expect 307)"
+          [ "$code" = "307" ] || exit 1

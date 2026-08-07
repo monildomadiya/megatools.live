@@ -1,0 +1,18 @@
+{
+  "name": "MegaTools",
+  "short_name": "MegaTools",
+  "description": "Free online calculators that show their work.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

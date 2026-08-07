@@ -1,0 +1,153 @@
+## What a percentage actually is
+
+"Per cent" means per hundred. The symbol is not really an operator at all — in the International System of Units it is defined simply as the number 0.01. When you write 15 percent you are writing 15 × 0.01, which is 0.15.
+
+That definition makes several things fall out at once. Percentages above 100 are perfectly ordinary: 250 percent is 2.5. Percentages of percentages are just multiplication. And a percentage on its own means nothing until you say what it is a percentage *of* — which is where almost every percentage mistake originates.
+
+## The four calculations
+
+### A percentage of a number
+
+Divide by 100 and multiply.
+
+```
+15% of 240 = (15 ÷ 100) × 240 = 36
+```
+
+A shortcut worth knowing: percentages commute. Fifteen percent of 240 is the same as 240 percent of 15, because both are 0.15 × 240. One of the two is usually much easier to do in your head. Eighteen percent of 50 looks awkward; 50 percent of 18 is nine.
+
+### One number as a percentage of another
+
+Divide, then multiply by 100.
+
+```
+36 as a percentage of 240 = (36 ÷ 240) × 100 = 15%
+```
+
+### Percentage change
+
+Subtract, divide by the **starting** value, multiply by 100.
+
+```
+80 → 100 = ((100 − 80) ÷ 80) × 100 = +25%
+100 → 80 = ((80 − 100) ÷ 100) × 100 = −20%
+```
+
+The same absolute movement of 20 gives 25 percent in one direction and 20 percent in the other. Nothing is wrong there: the denominator changed. This asymmetry is behind more misread statistics than any other feature of percentages.
+
+### Adding or removing a percentage
+
+Multiply by 1 plus or minus the rate.
+
+```
+240 + 15% = 240 × 1.15 = 276
+240 − 15% = 240 × 0.85 = 204
+```
+
+## Where percentages go wrong
+
+### A rise and an equal fall do not cancel
+
+Take 100, add 10 percent, then take 10 percent away.
+
+- 100 + 10% = 110
+- 110 − 10% = 99
+
+Not 100. The rise was 10 percent of 100; the fall was 10 percent of 110, which is 11.
+
+To undo an increase of X percent exactly, you need a decrease of X ÷ (100 + X) percent:
+
+| Increase | Decrease needed to reverse it |
+| --- | --- |
+| 10% | 9.09% |
+| 25% | 20% |
+| 50% | 33.33% |
+| 100% | 50% |
+
+This is why an investment that falls 50 percent needs a 100 percent gain to break even, not another 50 percent. The loss came off the larger number.
+
+### Removing a tax means dividing, not subtracting
+
+An invoice for 120 including 20 percent tax. The pre-tax amount is not 120 − 24.
+
+```
+120 ÷ 1.20 = 100     correct
+120 − 24   = 96      wrong
+```
+
+The 20 percent was applied to 100, not to 120, so removing it means undoing a multiplication. This mistake is common enough in invoicing and expense claims that it is worth checking any figure derived by subtraction.
+
+### Successive discounts multiply
+
+"Twenty percent off, then a further ten percent off" is not thirty percent off.
+
+```
+0.80 × 0.90 = 0.72  →  a 28% reduction
+```
+
+The second discount applies to the already-reduced price. The order makes no difference — 0.90 × 0.80 is the same number — and the combined total is always less than the sum of the parts.
+
+The same logic runs in reverse for stacked increases. Two consecutive 10 percent rises are a 21 percent rise, not 20.
+
+## Percent and percentage point
+
+These are different units, and conflating them is the single most consequential percentage error in reporting.
+
+An interest rate moves from 5 percent to 6 percent. That is:
+
+- a rise of **one percentage point**
+- a rise of **20 percent**
+
+Both statements are accurate. They measure different things: the percentage point describes the absolute movement of the rate, the percentage describes the movement relative to where it started.
+
+The scope for distortion is large. A political party going from 2 percent to 3 percent in a poll has gained one percentage point — or "increased its support by 50 percent", which is true and considerably more dramatic. A mortgage rate rising from 2 percent to 4 percent is two percentage points, or a doubling.
+
+The convention followed by statistical agencies, including the UK Office for National Statistics, is to use percentage points for changes in something already measured as a percentage, and to say plainly which is meant.
+
+Applied to yourself: when someone quotes a percentage change in a rate, ask which of the two they mean before reacting to the size of it.
+
+## Percentage change and percentage difference
+
+Related, frequently confused, and answering different questions.
+
+**Percentage change** is directional. One value is the starting point and forms the denominator, so swapping the inputs gives a different answer — as the 80-to-100 example above shows.
+
+**Percentage difference** compares two values where neither is a starting point. It divides by the mean of the two, so the answer is the same whichever order you enter them:
+
+```
+|a − b| ÷ ((a + b) ÷ 2) × 100
+```
+
+For 80 and 100 that gives 22.2 percent — sitting between the 25 percent and 20 percent that percentage change produces in either direction.
+
+Use change for before-and-after: a price last month against this month. Use difference for comparing two measurements of the same thing where neither has priority — two instruments, two labs, two estimates.
+
+## You cannot average percentages
+
+This one catches people who are otherwise comfortable with the arithmetic, because the mistake looks like the obviously correct thing to do.
+
+A shop converts 10 percent of visitors on Saturday and 20 percent on Sunday. What is the weekend conversion rate? It is not 15 percent, unless the two days happened to have identical traffic.
+
+Suppose Saturday had 1,000 visitors and Sunday had 100:
+
+- Saturday: 10% of 1,000 = 100 conversions
+- Sunday: 20% of 100 = 20 conversions
+- Weekend: 120 conversions from 1,100 visitors = **10.9 percent**
+
+Nowhere near 15. The percentages describe different-sized groups, and averaging them silently treats a hundred visitors as equal in weight to a thousand.
+
+The fix is to go back to the underlying counts, add those, and recalculate the percentage from the totals. If you only have the percentages and not the group sizes, you cannot combine them at all — that is missing information, not an arithmetic obstacle to work around.
+
+This is the mechanism behind a family of statistical surprises where a rate improves in every subgroup while the overall rate falls, purely because the subgroup sizes shifted. Any time you see an average of percentages, the first question is what was being averaged and how big each part was.
+
+## Mental shortcuts
+
+**Ten percent** is a decimal point moved one place left. From there, 5 percent is half of that, 20 percent is double, 15 percent is ten plus five.
+
+**One percent** is two places left. Three percent is that tripled.
+
+**Reverse awkward ones.** 4 percent of 75 becomes 75 percent of 4, which is three.
+
+**Percentages of percentages just multiply.** A 30 percent share of a group that is itself 40 percent of the total is 0.3 × 0.4 = 12 percent of the total.
+
+These matter more than they look. Most percentage errors people actually make are not arithmetic failures but base failures — the calculation was right and applied to the wrong number. Being able to sanity-check the size of an answer in your head is the best defence against that.

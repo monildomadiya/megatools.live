@@ -1,0 +1,131 @@
+## What compounding actually does
+
+Simple interest pays you on what you put in. Compound interest pays you on what you put in *and* on the interest you have already been paid, which then earns interest of its own.
+
+That distinction sounds small over a year and is enormous over thirty. It is also the reason the shape of a compound growth chart is so unintuitive: almost nothing appears to happen for a long time, and then the curve turns sharply upward. Nothing changes at that turn. The rate is the same throughout — it is just that a percentage of a large number is a large number.
+
+The practical consequence is that time in the calculation is worth more than almost anything else you can change. Adding five years at the beginning of a projection moves the final figure far more than adding five percent to your contribution.
+
+## The formula
+
+### A lump sum
+
+```
+A = P(1 + r/n)^(nt)
+```
+
+**P** is the starting amount, **r** the annual rate as a decimal, **n** how many times a year interest is compounded, and **t** the number of years.
+
+### With regular contributions
+
+Contributions need a second term, because each one has a different amount of time left to grow. This is the future value of an ordinary annuity:
+
+```
+FV = P(1 + i)^N  +  PMT × [((1 + i)^N − 1) ÷ i]
+```
+
+where **i** is the periodic rate (r ÷ n) and **N** the total number of periods (n × t).
+
+The calculator above runs the balance forward period by period rather than using this closed form. That is deliberate: the closed form assumes your contribution schedule and your compounding schedule line up, and they very often do not — weekly transfers into an account that compounds monthly is an ordinary arrangement, and the formula quietly gets it slightly wrong.
+
+## Worked example
+
+Ten thousand to start, 7 percent a year compounded monthly, 200 a month added, over 20 years.
+
+- Periodic rate: 0.07 ÷ 12 = 0.00583333
+- Periods: 12 × 20 = 240
+- (1 + i)ᴺ = 1.00583333²⁴⁰ = 4.0387
+
+The starting sum: 10,000 × 4.0387 = **40,387.39**
+
+The contributions: 200 × (4.0387 − 1) ÷ 0.00583333 = **104,185.33**
+
+Final balance: **144,572.72**
+
+Now the part worth pausing on. You put in 10,000 at the start and 48,000 in contributions — **58,000 of your own money**. The other **86,572.72** is interest. Roughly 60 percent of the final balance was never yours to begin with.
+
+Run the same numbers over 30 years instead and the interest share climbs past 70 percent. The compounding does progressively more of the work the longer it runs, which is the entire argument for starting early rather than contributing more.
+
+## Compounding frequency matters less than you think
+
+This is where a lot of savings-account marketing points, and it is close to noise. Ten thousand at 7 percent for ten years, varying only the compounding frequency:
+
+| Compounded | Balance after 10 years |
+| --- | --- |
+| Annually | 19,671.51 |
+| Quarterly | 20,015.97 |
+| Monthly | 20,096.61 |
+| Daily | 20,136.18 |
+| Continuously | 20,137.53 |
+
+The entire distance from yearly to continuous — the theoretical maximum — is about 466, or 2.4 percent of the balance. Moving from daily to continuous compounding gains you 1.35.
+
+Compare that to changing the rate from 7 percent to 7.5 percent, which adds about 1,024 over the same period. Or adding a single extra year, which adds about 1,453. When you are comparing accounts, the rate and the fees are the things worth reading. The compounding schedule is a detail.
+
+## Nominal rate and APY
+
+Because compounding within the year does add something, a 7 percent nominal rate compounded monthly does not earn 7 percent. It earns:
+
+```
+(1 + 0.07/12)¹² − 1 = 0.0723
+```
+
+**7.23 percent** — the annual percentage yield, also called the effective annual rate.
+
+This is why APY is the figure to compare between savings accounts. Two accounts advertising the same nominal rate with different compounding schedules pay differently, and APY is the number that puts them on the same footing. The calculator shows both.
+
+## The rule of 72
+
+Divide 72 by the annual percentage rate to estimate how many years money takes to double. It is a mental-arithmetic shortcut, and a good one:
+
+| Rate | Rule of 72 | Actual |
+| --- | --- | --- |
+| 2% | 36.0 years | 35.0 years |
+| 7% | 10.3 years | 10.2 years |
+| 15% | 4.8 years | 5.0 years |
+
+It is most accurate around 8 percent and drifts either side — optimistic at low rates, pessimistic at high ones. Within the range of returns most people are actually projecting, it is accurate to within a few months, which is more than adequate for a figure you are working out in your head.
+
+The "actual" column above assumes annual compounding. The doubling time the calculator reports uses whatever compounding frequency you selected, so at 7 percent compounded monthly it shows 9.9 years rather than 10.2 — the same effect described in the APY section, applied to time instead of balance.
+
+## Inflation is not in these numbers
+
+Every figure this calculator produces is nominal — currency of the day, not purchasing power.
+
+The adjustment is a ratio rather than a subtraction. At 7 percent nominal with 3 percent inflation, the real return is:
+
+```
+(1.07 ÷ 1.03) − 1 = 3.88%
+```
+
+Not 4 percent, though the difference is small at these levels. It matters more when both numbers are large.
+
+Over long horizons the gap between nominal and real becomes the dominant fact about the projection. That 144,572 after 20 years, at 3 percent inflation, has the purchasing power of about 80,000 today. The projection is not wrong; it is just answering a different question from the one you probably care about.
+
+If you want the answer in today's money, enter your real rate of return — nominal minus inflation, roughly — instead of the nominal one.
+
+## The same maths works against you
+
+Everything above describes compounding as something that happens in your favour. Debt compounds identically, and the arithmetic does not care which direction it points.
+
+Credit card interest is the clearest case, because it compounds daily on a balance that is often rising. A card at 22 percent APR compounded daily has an effective annual rate of about 24.6 percent — the same nominal-versus-APY gap described earlier, just applied to money you owe.
+
+Carry 5,000 on that card and pay only the interest, and it costs roughly 1,230 a year to stand still. Pay nothing at all and the balance passes 6,200 within twelve months.
+
+This is why the standard advice to clear high-interest debt before investing is not really a judgement about risk appetite. Paying off a 22 percent balance is a guaranteed 22 percent return, tax-free, with no market exposure. Nothing in the investing column reliably beats that.
+
+The same applies, more slowly, to any loan where the payment does not cover the accruing interest — student loans on income-driven plans and deferred-interest offers both behave this way. The balance grows even while you are paying.
+
+## Tax is not in them either
+
+Interest and investment gains are taxable in most jurisdictions, and how much depends on the account, your income, and where you live. Money compounding inside a tax-sheltered retirement account will track these figures closely. Money in an ordinary savings account being taxed annually will not.
+
+Treat the output as a pre-tax ceiling.
+
+## What a constant rate hides
+
+The formula requires a single fixed rate. Real investment returns arrive as a sequence — some years up, some down — and averaging them into one number loses something important.
+
+Specifically, it loses **sequence risk**. If you are contributing regularly, poor early returns followed by good ones actually work in your favour, because your contributions bought in cheap. If you are drawing down, the same sequence is damaging for exactly the mirrored reason. A fixed-rate projection cannot show either effect.
+
+Use this to compare scenarios against each other — what does five more years do, what does doubling the contribution do — where the fixed-rate assumption cancels out on both sides. Do not read the final figure as a prediction of any particular outcome.

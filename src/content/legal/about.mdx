@@ -1,0 +1,53 @@
+## Why this site exists
+
+Search for almost any calculation and you will find a hundred pages that give you a number and nothing else. No formula. No indication of which standard the thresholds came from. No mention of the cases where the answer is simply wrong. You are asked to trust an output with no way to check it.
+
+That is a bad deal, and it is worst precisely where it matters most — a mortgage payment, a body-fat estimate, a dose of anything. MegaTools is built on the opposite bet: that people who look up a calculation would rather understand it than just be handed a figure.
+
+So every tool here does four things.
+
+**It shows the formula.** The equation the calculator runs is printed on the page, in both metric and US units where that applies. You can reproduce any result with a pocket calculator.
+
+**It works a real example.** Not a placeholder — actual numbers, carried through each step, with the intermediate values visible. If our result and your hand calculation disagree, the example tells you where.
+
+**It cites its sources.** Reference ranges and standard formulas link to the bodies that publish them: the World Health Organization, the National Institutes of Health, NICE, national tax and standards authorities. Not to another calculator site that copied it from somewhere else.
+
+**It says where it breaks.** Every tool has a section on its own limitations. BMI cannot tell muscle from fat. An amortisation schedule assumes a fixed rate and no extra payments. A calorie estimate is a population average applied to one person. These caveats are not fine print at the bottom — they are part of the answer.
+
+## How the tools are built
+
+Each calculator starts from the primary source. We find the body that actually defines the formula, read what they published, and implement that — not a version copied from another site, which is how small errors propagate across the whole web until nobody can trace the original.
+
+The arithmetic then gets checked by hand against worked examples from the source document where one exists. Where a formula has competing versions — and several of the common health equations do — the page says which one it uses and why.
+
+Nothing is published until the explanatory content is written. A calculator without an explanation is the thing we are trying to avoid building.
+
+## What we do not do
+
+We do not collect what you type. Every calculation on this site runs in your browser using JavaScript. Your weight, your salary, your loan balance — none of it is sent to a server, because there is no server-side calculation to send it to. You can confirm this by opening your browser's network tab and watching nothing happen when you press calculate.
+
+There are no accounts, because there is nothing to store. There is no newsletter gate, no "unlock the full result" step, and no export that costs money.
+
+We also do not give advice. These are calculators. They tell you what a formula produces given your inputs. Whether you should act on that is a question for a doctor, an accountant, or a financial adviser who knows your situation.
+
+## How this is paid for
+
+MegaTools is funded by display advertising. That has an obvious tension with everything above, so it is worth being direct about how we handle it: ads never sit between you and the calculator, results are never gated behind an ad, and no advertiser has any input into what a tool says. If a mortgage calculator's honest answer is that the product being advertised beside it is a poor deal, the calculator says so.
+
+## Who runs MegaTools
+
+MegaTools is built and maintained by Darshan Gondaliya, working from Gujarat, India.
+
+This site started from irritation with a specific kind of page — the calculator that hands you a figure and refuses to say where it came from. Look for the formula and it is not there. Look for a source and you find a link to another calculator that copied it from somewhere else. Somewhere at the end of that chain is a real document, and nobody will tell you which one.
+
+I want to be straightforward about what I am and am not. I am not a doctor, a dietitian, an accountant, or a financial adviser, and nothing on this site is offered as advice from one. What I do is narrower and, I think, more useful for this particular job: find the body that actually defines a formula, implement it exactly as its authors wrote it, check the arithmetic by hand against the worked examples in the original paper, and then write down plainly what the formula cannot see.
+
+That last part is the reason this site exists. A BMI figure without the sentence explaining that it cannot distinguish muscle from fat is not a shorter answer — it is a worse one. Where two accepted equations disagree, as they do for basal metabolic rate, the page names both, shows the gap between them, and says which the evidence favours instead of quietly picking one.
+
+Every tool here is researched, built, and checked by one person. That is far slower than generating pages in bulk, and it is why there are dozens of tools on this site rather than thousands. If you find something wrong, it reaches the person who wrote it.
+
+## Corrections
+
+If a formula here is wrong, we want to know, and we will fix it and note the change. That includes rounding behaviour, edge cases, and citations that have gone stale because a standards body revised its guidance.
+
+Reach us through the [contact page](/contact). Read the [editorial policy](/editorial-policy) for how we handle sourcing, updates, and corrections in more detail.

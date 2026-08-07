@@ -1,0 +1,225 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Deliberately small: one neutral ramp, one accent, one warning.
+   A calculator site earns trust through legibility and consistency, not colour.
+--------------------------------------------------------------------------- */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', monospace;
+
+  --color-brand-50: oklch(0.97 0.02 254);
+  --color-brand-100: oklch(0.93 0.04 254);
+  --color-brand-200: oklch(0.87 0.07 254);
+  --color-brand-300: oklch(0.78 0.11 254);
+  --color-brand-400: oklch(0.68 0.15 254);
+  --color-brand-500: oklch(0.6 0.18 254);
+  --color-brand-600: oklch(0.52 0.19 254);
+  --color-brand-700: oklch(0.44 0.17 254);
+  --color-brand-800: oklch(0.37 0.14 254);
+  --color-brand-900: oklch(0.31 0.11 254);
+
+  --color-ink-50: oklch(0.985 0.002 250);
+  --color-ink-100: oklch(0.96 0.003 250);
+  --color-ink-200: oklch(0.92 0.004 250);
+  --color-ink-300: oklch(0.85 0.006 250);
+  --color-ink-400: oklch(0.68 0.008 250);
+  --color-ink-500: oklch(0.55 0.01 250);
+  --color-ink-600: oklch(0.44 0.012 250);
+  --color-ink-700: oklch(0.36 0.012 250);
+  --color-ink-800: oklch(0.26 0.012 250);
+  --color-ink-900: oklch(0.19 0.012 250);
+  --color-ink-950: oklch(0.13 0.012 250);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-ink-800);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Anchor links from the in-page table of contents must not land under the
+     sticky header. */
+  :target {
+    scroll-margin-top: 5.5rem;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+
+  /* Number inputs: the spinner arrows are a hit-target hazard on the narrow
+     numeric fields these calculators use. */
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Long-form article styling. Applied to the MDX body of tool and blog pages.
+   Written as plain CSS rather than the typography plugin so the exact vertical
+   rhythm and table treatment stay under our control.
+--------------------------------------------------------------------------- */
+@layer components {
+  .prose-content {
+    color: var(--color-ink-700);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  .prose-content > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose-content h2 {
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-ink-900);
+    scroll-margin-top: 5.5rem;
+  }
+
+  .prose-content h3 {
+    margin-top: 2em;
+    margin-bottom: 0.6em;
+    font-size: 1.1875rem;
+    font-weight: 650;
+    line-height: 1.4;
+    color: var(--color-ink-900);
+    scroll-margin-top: 5.5rem;
+  }
+
+  .prose-content p {
+    margin-top: 1.25em;
+  }
+
+  .prose-content a {
+    color: var(--color-brand-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  .prose-content a:hover {
+    color: var(--color-brand-800);
+  }
+
+  .prose-content strong {
+    font-weight: 650;
+    color: var(--color-ink-900);
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    margin-top: 1.25em;
+    padding-left: 1.5em;
+  }
+
+  .prose-content ul {
+    list-style-type: disc;
+  }
+
+  .prose-content ol {
+    list-style-type: decimal;
+  }
+
+  .prose-content li + li {
+    margin-top: 0.5em;
+  }
+
+  .prose-content li::marker {
+    color: var(--color-ink-400);
+  }
+
+  /* Tables are load-bearing on these pages (BMI ranges, amortisation splits,
+     tax brackets) so they get real treatment, including horizontal scroll on
+     narrow screens instead of breaking the page layout. */
+  .prose-content .table-wrap {
+    margin-top: 1.75em;
+    overflow-x: auto;
+    border: 1px solid var(--color-ink-200);
+    border-radius: 0.5rem;
+  }
+
+  .prose-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .prose-content thead {
+    background-color: var(--color-ink-50);
+  }
+
+  .prose-content th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 650;
+    color: var(--color-ink-900);
+    white-space: nowrap;
+  }
+
+  .prose-content td {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-ink-200);
+    vertical-align: top;
+  }
+
+  .prose-content blockquote {
+    margin-top: 1.75em;
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    border-left: 3px solid var(--color-brand-300);
+    color: var(--color-ink-600);
+  }
+
+  .prose-content code {
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    background-color: var(--color-ink-100);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-ink-900);
+  }
+
+  .prose-content pre {
+    margin-top: 1.5em;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-100);
+  }
+
+  .prose-content pre code {
+    padding: 0;
+    background: none;
+    color: inherit;
+  }
+
+  .prose-content hr {
+    margin-top: 2.5em;
+    border-color: var(--color-ink-200);
+  }
+}

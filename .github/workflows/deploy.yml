@@ -85,6 +85,10 @@ jobs:
             pm2 restart megatools --update-env
             pm2 save
 
+      # The held-redirect assertion below reads the manifest, so the deploy job
+      # needs the repo. Nothing else here uses the checkout.
+      - uses: actions/checkout@v4
+
       # Confirms the deploy actually produced a working site rather than a
       # process that restarted and then crashed. A green deploy that took the
       # site down is worse than a red one.
@@ -99,6 +103,18 @@ jobs:
           done
 
           # A held legacy URL must still redirect rather than 404.
-          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "https://megatools.live/tools/seo/word-counter")
-          echo "$code  /tools/seo/word-counter (expect 307)"
-          [ "$code" = "307" ] || exit 1
+          #
+          # Read from the manifest rather than hardcoded. The previous version
+          # named /tools/seo/word-counter, and then that tool shipped: the URL
+          # started correctly answering 200, the assertion demanded 307, and a
+          # perfectly good deploy was reported as failed. Any URL written here
+          # by hand is a URL that breaks the build on the day it gets its page.
+          held=$(python3 -c "import json;d=json.load(open('scripts/legacy-urls.json'))['pendingRedirects'];print(next(iter(d),''))")
+
+          if [ -z "$held" ]; then
+            echo "No held URLs left in the manifest — nothing to assert."
+          else
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "https://megatools.live$held")
+            echo "$code  $held (expect 307)"
+            [ "$code" = "307" ] || exit 1
+          fi

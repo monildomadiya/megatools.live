@@ -88,6 +88,10 @@ NEXT_PUBLIC_ADS_ENABLED=false       # flip to true only after AdSense approval
 NEXT_PUBLIC_ADSENSE_CLIENT_ID=      # ca-pub-XXXXXXXXXXXXXXXX
 ```
 
+`NEXT_PUBLIC_*` values are inlined into the bundle at build time, and the production build runs on the droplet during deploy. So a value set only on the box is outside version control and disappears the moment the droplet is rebuilt — which is why the non-secret production values are committed in `.env.production` instead. That file is read by `next build` and `next start` but never by `next dev`, so local development stays out of the GA reporting without any extra setup. Copy `.env.example` to `.env.local` to override anything locally.
+
+Nothing secret goes in `.env.production`. A GA4 measurement ID is public — it is in the gtag URL on every page — and an AdSense client ID is the same. Credentials belong in repository secrets.
+
 ## Deploying
 
 Pushing to `main` deploys. `.github/workflows/deploy.yml` runs two jobs, and the split is the whole point of it: **verify** runs `npm ci`, typecheck, the content gate, the build, and the legacy URL check on a clean runner, and the droplet is not touched until all of that is green. A commit that fails any gate never reaches production. **deploy** then SSHes in, fast-forwards the checkout, rebuilds, and restarts PM2.

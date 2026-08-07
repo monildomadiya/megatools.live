@@ -18,14 +18,14 @@ const siteLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-ink-200 bg-ink-50">
+    <footer className="mt-20 border-t border-line bg-panel-2">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 text-base font-bold text-ink-900">
               <span
                 aria-hidden
-                className="grid h-7 w-7 place-items-center rounded-lg bg-brand-600 text-xs font-bold text-white"
+                className="grid h-7 w-7 place-items-center rounded-[9px] bg-gradient-to-br from-mark-from to-mark-to text-xs font-bold text-white"
               >
                 M
               </span>
@@ -86,7 +86,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-ink-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-ink-500">
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>

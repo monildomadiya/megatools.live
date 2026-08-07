@@ -15,7 +15,7 @@ export function RelatedTools({ tools }: { tools: ToolWithHref[] }) {
           <li key={tool.href}>
             <Link
               href={tool.href}
-              className="group block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-300 hover:bg-brand-50/50"
+              className="card-lift group block h-full rounded-2xl border border-line bg-panel p-5 hover:border-ink-300"
             >
               <span className="font-semibold text-ink-900 group-hover:text-brand-700">
                 {tool.name}

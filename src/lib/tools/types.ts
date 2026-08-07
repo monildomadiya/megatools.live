@@ -70,3 +70,19 @@ export interface ToolMeta {
 export interface ToolWithHref extends ToolMeta {
   href: string;
 }
+
+/**
+ * The subset a card or a search result actually renders.
+ *
+ * `ToolWithHref` carries FAQs, sources, and keywords — several KB per tool once
+ * there are a hundred of them. Anything crossing into a client component takes
+ * this instead, so the RSC payload stays proportional to what is on screen
+ * rather than to the whole registry. `ToolWithHref` is structurally assignable
+ * to it, so server components can keep passing what they already have.
+ */
+export interface ToolCardData {
+  href: string;
+  name: string;
+  shortDescription: string;
+  category: CategorySlug;
+}

@@ -107,7 +107,7 @@ export default function PercentageCalculator() {
               onClick={() => setMode(m.value)}
               className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
                 mode === m.value
-                  ? 'bg-brand-600 text-white'
+                  ? 'bg-brand-solid text-on-brand'
                   : 'bg-ink-100 text-ink-700 hover:bg-ink-200'
               }`}
             >
@@ -132,7 +132,7 @@ export default function PercentageCalculator() {
         <div className="mt-7 space-y-4">
           <ResultCard label={result.label} value={result.value} />
 
-          <div className="rounded-xl border border-ink-200 bg-ink-50/60 p-5">
+          <div className="rounded-xl border border-line bg-ink-50/60 p-5">
             <p className="text-sm font-semibold text-ink-900">The working</p>
             <p className="mt-2 font-mono text-sm leading-relaxed text-ink-700">
               {result.working}

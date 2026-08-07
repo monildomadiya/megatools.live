@@ -4,6 +4,7 @@ import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { themeInitScript } from '@/components/ui/ThemeToggle';
 import { jsonLdGraph, organizationSchema, websiteSchema } from '@/lib/seo/schema';
 import { site } from '@/lib/site';
 import './globals.css';
@@ -38,16 +39,27 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ffffff',
+  // Two entries rather than one: the browser chrome should match the theme the
+  // page actually renders in, not always the light one.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b0d12' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={site.language} className={inter.variable}>
+    <html lang={site.language} className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* Runs before first paint so the stored theme is on <html> by the time
+            anything renders. Anything later produces a flash of the wrong
+            theme, which is more jarring than having no dark mode at all. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink-900 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-lg focus:bg-invert focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-on-invert"
         >
           Skip to content
         </a>

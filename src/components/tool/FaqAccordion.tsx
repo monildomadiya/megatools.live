@@ -14,7 +14,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
         Frequently asked questions
       </h2>
 
-      <div className="mt-6 divide-y divide-ink-200 border-y border-ink-200">
+      <div className="mt-6 divide-y divide-line border-y border-line">
         {faqs.map((faq) => (
           <details key={faq.question} className="group py-4">
             <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left font-semibold text-ink-900 [&::-webkit-details-marker]:hidden">

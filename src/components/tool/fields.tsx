@@ -9,7 +9,10 @@ import { useId } from 'react';
 --------------------------------------------------------------------------- */
 
 const fieldBase =
-  'w-full rounded-lg border bg-white px-3.5 py-2.5 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30';
+  // `panel-2` rather than `panel`: the field sits inside a panel-coloured card,
+  // so matching it leaves the border doing all the work of showing where the
+  // input is. A half-step recess reads as a field in both themes.
+  'w-full rounded-lg border bg-panel-2 px-3.5 py-2.5 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30';
 
 interface NumberFieldProps {
   label: string;
@@ -76,6 +79,65 @@ export function NumberField({
           </span>
         )}
       </div>
+      {error ? (
+        <p id={errorId} role="alert" className="mt-1.5 text-sm text-red-600">
+          {error}
+        </p>
+      ) : hint ? (
+        <p id={hintId} className="mt-1.5 text-sm text-ink-500">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Native date input. Added as a shared primitive rather than kept local to one
+ * calculator because Date & Time is a whole category — every tool in it needs
+ * the same control, and the native picker is the one input where rolling our
+ * own would lose the platform keyboard and locale handling.
+ */
+export function DateField({
+  label,
+  value,
+  onChange,
+  hint,
+  error,
+  min,
+  max,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  hint?: string;
+  error?: string;
+  /** ISO `YYYY-MM-DD`. */
+  min?: string;
+  max?: string;
+}) {
+  const id = useId();
+  const hintId = `${id}-hint`;
+  const errorId = `${id}-error`;
+
+  return (
+    <div>
+      <label htmlFor={id} className="block text-sm font-medium text-ink-800">
+        {label}
+      </label>
+      <input
+        id={id}
+        type="date"
+        value={value}
+        min={min}
+        max={max}
+        onChange={(event) => onChange(event.target.value)}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : hint ? hintId : undefined}
+        className={`${fieldBase} mt-1.5 ${
+          error ? 'border-red-400 focus:ring-red-500/30' : 'border-ink-300 focus:border-brand-500'
+        }`}
+      />
       {error ? (
         <p id={errorId} role="alert" className="mt-1.5 text-sm text-red-600">
           {error}
@@ -157,7 +219,7 @@ export function UnitToggle<T extends string>({
           onClick={() => onChange(option.value)}
           className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
             value === option.value
-              ? 'bg-white text-ink-900 shadow-sm'
+              ? 'bg-panel text-ink-900 shadow-panel'
               : 'text-ink-600 hover:text-ink-900'
           }`}
         >
@@ -185,17 +247,17 @@ export function ResultCard({
   children?: React.ReactNode;
 }) {
   const toneClass = {
-    neutral: 'bg-ink-50 border-ink-200',
-    good: 'bg-emerald-50 border-emerald-200',
-    warn: 'bg-amber-50 border-amber-200',
-    bad: 'bg-red-50 border-red-200',
+    neutral: 'bg-ink-50 border-line',
+    good: 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-900',
+    warn: 'bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-900',
+    bad: 'bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-900',
   }[tone];
 
   const verdictClass = {
     neutral: 'text-ink-700',
-    good: 'text-emerald-800',
-    warn: 'text-amber-800',
-    bad: 'text-red-800',
+    good: 'text-emerald-800 dark:text-emerald-300',
+    warn: 'text-amber-800 dark:text-amber-300',
+    bad: 'text-red-800 dark:text-red-300',
   }[tone];
 
   return (
@@ -225,7 +287,7 @@ export function ResultRows({
   rows: readonly { label: string; value: string; emphasis?: boolean }[];
 }) {
   return (
-    <dl className="divide-y divide-ink-200 rounded-xl border border-ink-200">
+    <dl className="divide-y divide-line rounded-xl border border-line">
       {rows.map((row) => (
         <div key={row.label} className="flex items-center justify-between gap-4 px-5 py-3">
           <dt className="text-sm text-ink-600">{row.label}</dt>
@@ -247,7 +309,7 @@ export function ResetButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="rounded-lg border border-ink-300 px-4 py-2.5 text-sm font-semibold text-ink-700 transition-colors hover:bg-ink-50"
+      className="rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-ink-700 transition-colors hover:bg-panel-2"
     >
       Reset
     </button>

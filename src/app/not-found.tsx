@@ -19,13 +19,13 @@ export default function NotFound() {
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/tools"
-          className="rounded-lg bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink-800"
+          className="rounded-lg bg-invert px-5 py-2.5 text-sm font-semibold text-on-invert transition-colors hover:bg-invert-hover"
         >
           Browse all tools
         </Link>
         <Link
           href="/contact"
-          className="rounded-lg border border-ink-300 px-5 py-2.5 text-sm font-semibold text-ink-800 hover:bg-ink-50"
+          className="rounded-lg border border-line px-5 py-2.5 text-sm font-semibold text-ink-800 transition-colors hover:bg-panel-2"
         >
           Request a tool
         </Link>

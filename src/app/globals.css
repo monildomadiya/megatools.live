@@ -1,10 +1,29 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode. The toggle writes `.dark` onto <html>; an inline
+   script in the root layout applies it before first paint so there is no flash
+   of the wrong theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ---------------------------------------------------------------------------
-   Design tokens. Deliberately small: one neutral ramp, one accent, one warning.
-   A calculator site earns trust through legibility and consistency, not colour.
+   Design tokens.
+
+   Two ramps carry the whole site: `ink` for neutrals and `brand` for accent.
+   `accent` exists only to give gradients a second stop — it is never used for
+   text or borders on its own.
+
+   Semantic tokens (surface / panel / line / invert) sit on top of the ramps.
+   Components reference those rather than raw colours, which is what makes dark
+   mode a variable swap in one place instead of a `dark:` class on every node.
+
+   `static` is required, not stylistic: Tailwind only emits theme variables that
+   some utility class references, and the category accents are read through
+   var() in inline styles rather than through a utility. Without it they are
+   pruned from the stylesheet and every accent silently falls back to inherited
+   colour — which is invisible in dark mode, where the .dark block below
+   redeclares them by hand.
 --------------------------------------------------------------------------- */
-@theme {
+@theme static {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', monospace;
 
@@ -19,34 +38,180 @@
   --color-brand-800: oklch(0.37 0.14 254);
   --color-brand-900: oklch(0.31 0.11 254);
 
+  /* Second gradient stop only. */
+  --color-accent-400: oklch(0.7 0.16 300);
+  --color-accent-500: oklch(0.62 0.19 300);
+  --color-accent-600: oklch(0.54 0.2 300);
+
   --color-ink-50: oklch(0.985 0.002 250);
   --color-ink-100: oklch(0.96 0.003 250);
   --color-ink-200: oklch(0.92 0.004 250);
   --color-ink-300: oklch(0.85 0.006 250);
-  --color-ink-400: oklch(0.68 0.008 250);
+  --color-ink-400: oklch(0.62 0.009 250);
   --color-ink-500: oklch(0.55 0.01 250);
   --color-ink-600: oklch(0.44 0.012 250);
   --color-ink-700: oklch(0.36 0.012 250);
   --color-ink-800: oklch(0.26 0.012 250);
   --color-ink-900: oklch(0.19 0.012 250);
   --color-ink-950: oklch(0.13 0.012 250);
+
+  /* Semantic surfaces. */
+  --color-surface: oklch(1 0 0);
+  --color-panel: oklch(1 0 0);
+  --color-panel-2: oklch(0.985 0.002 250);
+  --color-line: oklch(0.92 0.004 250);
+  --color-line-soft: oklch(0.96 0.003 250);
+  /* High-contrast button: dark chip on light theme, light chip on dark. */
+  --color-invert: oklch(0.19 0.012 250);
+  --color-invert-hover: oklch(0.26 0.012 250);
+  --color-on-invert: oklch(1 0 0);
+
+  /* Filled brand button. Deliberately NOT `brand-600`: that token lightens in
+     dark mode so the ramp stays legible as text, which would leave white label
+     text sitting on a pale blue fill. This pair holds a mid tone in both themes
+     so `on-brand` is always readable against it. */
+  --color-brand-solid: oklch(0.52 0.19 254);
+  --color-brand-solid-hover: oklch(0.46 0.18 254);
+  --color-on-brand: oklch(1 0 0);
+
+  /* The logo mark. Fixed in both themes on purpose — a brand mark that changes
+     colour with the theme stops being a constant. */
+  --color-mark-from: oklch(0.6 0.18 254);
+  --color-mark-to: oklch(0.62 0.19 300);
+
+  /* Category accents. Each hub and card gets its own hue so a wall of tools
+     stays scannable once there are far more than a screenful.
+
+     Darker than they look like they need to be: these tint the icon chips, but
+     they are also the colour of the category label on mixed grids, which is
+     11px text and therefore needs 4.5:1 against the panel. The brighter,
+     candy-ish versions of these hues failed that badly on white. */
+  --color-cat-finance: oklch(0.51 0.13 155);
+  --color-cat-health: oklch(0.52 0.19 15);
+  --color-cat-math: oklch(0.52 0.19 254);
+  --color-cat-conversion: oklch(0.51 0.11 195);
+  --color-cat-date-time: oklch(0.5 0.2 300);
+  --color-cat-developer: oklch(0.51 0.17 265);
+  --color-cat-seo: oklch(0.52 0.13 70);
+  --color-cat-lifestyle: oklch(0.52 0.17 30);
+
+  /* Layered rather than single-blur: a tight contact shadow plus a wide ambient
+     one reads as a physical card instead of a grey halo. */
+  --shadow-panel: 0 1px 2px oklch(0.19 0.012 250 / 0.05), 0 4px 12px oklch(0.19 0.012 250 / 0.04);
+  --shadow-lift: 0 2px 4px oklch(0.19 0.012 250 / 0.06), 0 12px 28px oklch(0.19 0.012 250 / 0.09);
+  --shadow-pop: 0 8px 20px oklch(0.19 0.012 250 / 0.12), 0 24px 60px oklch(0.19 0.012 250 / 0.16);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark theme. Only the semantic tokens and the ink ramp flip — every component
+   that reads them follows automatically. The brand ramp is lifted slightly
+   because mid-blues lose apparent contrast against a dark ground. */
+.dark {
+  --color-ink-50: oklch(0.16 0.012 250);
+  --color-ink-100: oklch(0.2 0.012 250);
+  --color-ink-200: oklch(0.26 0.012 250);
+  --color-ink-300: oklch(0.34 0.012 250);
+  --color-ink-400: oklch(0.58 0.012 250);
+  --color-ink-500: oklch(0.68 0.012 250);
+  --color-ink-600: oklch(0.72 0.01 250);
+  --color-ink-700: oklch(0.82 0.008 250);
+  --color-ink-800: oklch(0.9 0.006 250);
+  --color-ink-900: oklch(0.97 0.004 250);
+  --color-ink-950: oklch(0.99 0.002 250);
+
+  --color-brand-50: oklch(0.24 0.05 254);
+  --color-brand-100: oklch(0.28 0.07 254);
+  --color-brand-200: oklch(0.34 0.1 254);
+  --color-brand-300: oklch(0.45 0.14 254);
+  --color-brand-400: oklch(0.58 0.17 254);
+  --color-brand-500: oklch(0.68 0.17 254);
+  --color-brand-600: oklch(0.74 0.15 254);
+  --color-brand-700: oklch(0.8 0.13 254);
+  --color-brand-800: oklch(0.86 0.1 254);
+  --color-brand-900: oklch(0.92 0.06 254);
+
+  --color-surface: oklch(0.17 0.012 250);
+  --color-panel: oklch(0.215 0.012 250);
+  --color-panel-2: oklch(0.245 0.012 250);
+  --color-line: oklch(0.3 0.012 250);
+  --color-line-soft: oklch(0.26 0.012 250);
+  --color-invert: oklch(0.97 0.004 250);
+  --color-invert-hover: oklch(0.88 0.006 250);
+  --color-on-invert: oklch(0.15 0.012 250);
+
+  /* Lifted just enough to hold against a dark ground while keeping white label
+     text above 4.5:1. */
+  --color-brand-solid: oklch(0.55 0.2 254);
+  --color-brand-solid-hover: oklch(0.6 0.19 254);
+
+  --color-cat-finance: oklch(0.72 0.15 155);
+  --color-cat-health: oklch(0.72 0.17 15);
+  --color-cat-math: oklch(0.72 0.16 254);
+  --color-cat-conversion: oklch(0.75 0.14 195);
+  --color-cat-date-time: oklch(0.73 0.16 300);
+  --color-cat-developer: oklch(0.72 0.13 265);
+  --color-cat-seo: oklch(0.78 0.15 70);
+  --color-cat-lifestyle: oklch(0.74 0.15 30);
+
+  /* Shadows do almost nothing on a dark ground — depth there comes from the
+     panel being lighter than the page, not from a drop shadow. Keep them, but
+     weak, so elevated surfaces still separate at the edges. */
+  --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.4), 0 12px 28px oklch(0 0 0 / 0.35);
+  --shadow-pop: 0 8px 20px oklch(0 0 0 / 0.5), 0 24px 60px oklch(0 0 0 / 0.55);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+    /* Blanket brake. Every transition and animation below is decorative, so
+       honouring the preference globally is safer than remembering to opt each
+       one out individually. */
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Held for one frame while the theme flips. Two reasons, one cosmetic and one
+     a correctness bug:
+
+     Cosmetically, a whole page cross-fading from light to dark reads as a
+     rendering glitch rather than as a transition.
+
+     More importantly, an element whose colour comes from a custom property and
+     which also has `transition-colors` can be left holding the previous
+     theme's value when that property changes on an ancestor — the transition
+     never re-resolves. That is how the calculator inputs stayed light-on-dark
+     after a toggle while the page around them changed correctly. Suppressing
+     transitions for the frame in which the class lands avoids the whole class
+     of problem rather than patching each control that hits it. */
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: none !important;
   }
 
   body {
-    background-color: var(--color-white);
-    color: var(--color-ink-800);
+    background-color: var(--color-surface);
+    color: var(--color-ink-700);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -59,8 +224,14 @@
   }
 
   *:focus-visible {
-    outline: 2px solid var(--color-brand-600);
+    outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: white;
   }
 
   /* Number inputs: the spinner arrows are a hit-target hazard on the narrow
@@ -73,14 +244,119 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
+
+  /* The default track is a bright seam against a dark page. */
+  .dark ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-200);
+    border: 3px solid var(--color-surface);
+    border-radius: 999px;
+  }
 }
 
-/* ---------------------------------------------------------------------------
-   Long-form article styling. Applied to the MDX body of tool and blog pages.
-   Written as plain CSS rather than the typography plugin so the exact vertical
-   rhythm and table treatment stay under our control.
---------------------------------------------------------------------------- */
 @layer components {
+  /* -------------------------------------------------------------------------
+     Decorative backdrops. Kept here rather than inline because each is a stack
+     of several layers that would be unreadable as utility soup.
+  ------------------------------------------------------------------------- */
+
+  /* Hero backdrop: a fine grid, faded out radially so it never reaches an edge
+     and turns into a visible rectangle. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  /* Soft colour bloom behind the hero heading. */
+  .bg-bloom {
+    background-image:
+      radial-gradient(ellipse 60% 50% at 50% -10%, var(--color-brand-500), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 85% 10%, var(--color-accent-500), transparent 70%);
+    opacity: 0.14;
+  }
+  .dark .bg-bloom {
+    opacity: 0.22;
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-ink-900) 30%,
+      var(--color-brand-600) 60%,
+      var(--color-accent-500)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Cards lift on hover. `will-change` is deliberately absent — promoting every
+     card in a long grid to its own layer costs more than the animation saves. */
+  .card-lift {
+    transition:
+      transform 0.25s var(--ease-out-soft),
+      box-shadow 0.25s var(--ease-out-soft),
+      border-color 0.25s var(--ease-out-soft);
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .animate-rise {
+    animation: rise 0.5s var(--ease-out-soft) both;
+  }
+
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .animate-overlay-in {
+    animation: overlay-in 0.15s ease-out both;
+  }
+  .animate-dialog-in {
+    animation: dialog-in 0.2s var(--ease-out-soft) both;
+  }
+
+  /* -------------------------------------------------------------------------
+     Long-form article styling. Applied to the MDX body of tool and blog pages.
+     Written as plain CSS rather than the typography plugin so the exact vertical
+     rhythm and table treatment stay under our control.
+  ------------------------------------------------------------------------- */
   .prose-content {
     color: var(--color-ink-700);
     font-size: 1.0625rem;
@@ -97,6 +373,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.3;
+    letter-spacing: -0.015em;
     color: var(--color-ink-900);
     scroll-margin-top: 5.5rem;
   }
@@ -159,8 +436,8 @@
   .prose-content .table-wrap {
     margin-top: 1.75em;
     overflow-x: auto;
-    border: 1px solid var(--color-ink-200);
-    border-radius: 0.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
   }
 
   .prose-content table {
@@ -170,7 +447,7 @@
   }
 
   .prose-content thead {
-    background-color: var(--color-ink-50);
+    background-color: var(--color-panel-2);
   }
 
   .prose-content th {
@@ -183,7 +460,7 @@
 
   .prose-content td {
     padding: 0.75rem 1rem;
-    border-top: 1px solid var(--color-ink-200);
+    border-top: 1px solid var(--color-line);
     vertical-align: top;
   }
 
@@ -197,7 +474,8 @@
   .prose-content code {
     padding: 0.15em 0.4em;
     border-radius: 0.25rem;
-    background-color: var(--color-ink-100);
+    background-color: var(--color-panel-2);
+    border: 1px solid var(--color-line);
     font-family: var(--font-mono);
     font-size: 0.875em;
     color: var(--color-ink-900);
@@ -207,19 +485,20 @@
     margin-top: 1.5em;
     padding: 1rem 1.25rem;
     overflow-x: auto;
-    border-radius: 0.5rem;
-    background-color: var(--color-ink-950);
-    color: var(--color-ink-100);
+    border-radius: 0.75rem;
+    background-color: oklch(0.13 0.012 250);
+    color: oklch(0.96 0.003 250);
   }
 
   .prose-content pre code {
     padding: 0;
+    border: none;
     background: none;
     color: inherit;
   }
 
   .prose-content hr {
     margin-top: 2.5em;
-    border-color: var(--color-ink-200);
+    border-color: var(--color-line);
   }
 }

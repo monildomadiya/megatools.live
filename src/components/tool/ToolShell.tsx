@@ -106,7 +106,7 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
  */
 export function CalculatorPanel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-ink-200 bg-white p-5 shadow-sm sm:p-7">
+    <div className="rounded-2xl border border-line bg-panel p-5 shadow-panel sm:p-7">
       {children}
     </div>
   );

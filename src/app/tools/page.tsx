@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/tool/Breadcrumbs';
-import { ToolGrid } from '@/components/tool/ToolCard';
+import {
+  ToolExplorer,
+  type ExplorerCategory,
+  type ExplorerTool,
+} from '@/components/tool/ToolExplorer';
+import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata, withBrand } from '@/lib/seo/metadata';
 import { breadcrumbSchema, jsonLdGraph, type Crumb } from '@/lib/seo/schema';
 import { categories } from '@/lib/tools/categories';
@@ -23,6 +28,24 @@ const crumbs: Crumb[] = [
 export default function ToolsIndexPage() {
   const populated = categories.filter((category) => getToolsByCategory(category.slug).length > 0);
 
+  // Flattened on the server so the client component receives only what it
+  // renders and searches — never the FAQ and source arrays.
+  const explorerTools: ExplorerTool[] = allTools.map((tool) => ({
+    href: tool.href,
+    name: tool.name,
+    shortDescription: tool.shortDescription,
+    category: tool.category,
+    search: [tool.name, tool.keywords.join(' '), tool.shortDescription]
+      .join(' ')
+      .toLowerCase(),
+  }));
+
+  const explorerCategories: ExplorerCategory[] = populated.map((category) => ({
+    slug: category.slug,
+    name: category.name,
+    count: getToolsByCategory(category.slug).length,
+  }));
+
   return (
     <>
       <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
@@ -41,33 +64,55 @@ export default function ToolsIndexPage() {
           </p>
         </header>
 
-        <div className="mt-12 space-y-14">
-          {populated.map((category) => {
-            const tools = getToolsByCategory(category.slug);
-            return (
-              <section key={category.slug} aria-labelledby={`cat-${category.slug}`}>
-                <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <h2
-                    id={`cat-${category.slug}`}
-                    className="text-2xl font-bold text-ink-900"
-                  >
-                    {category.name}
-                  </h2>
+        <div className="mt-10">
+          <ToolExplorer tools={explorerTools} categories={explorerCategories} />
+        </div>
+
+        {/* The hubs are the pillar pages — each has real intro copy the grid
+            above cannot carry, so they get their own route and their own link
+            rather than only existing as a filter state. */}
+        <section aria-labelledby="hubs-heading" className="mt-16 border-t border-line pt-12">
+          <h2 id="hubs-heading" className="text-2xl font-bold tracking-tight text-ink-900">
+            Browse by category
+          </h2>
+          <p className="mt-2 max-w-2xl text-ink-600">
+            Each category page explains what the tools in it assume and where those
+            assumptions stop holding.
+          </p>
+
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {populated.map((category) => {
+              const accent = categoryAccent(category.slug);
+              return (
+                <li key={category.slug}>
                   <Link
                     href={`/tools/${category.slug}`}
-                    className="text-sm font-medium text-brand-700 hover:text-brand-800"
+                    className="card-lift group flex h-full flex-col rounded-2xl border border-line bg-panel p-5 hover:border-ink-300"
                   >
-                    About {category.name.toLowerCase()} tools →
+                    <span className="flex items-center gap-3">
+                      <span
+                        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+                        style={{
+                          color: accent,
+                          backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                        }}
+                      >
+                        <CategoryIcon category={category.slug} className="h-5 w-5" />
+                      </span>
+                      <span className="font-semibold text-ink-900">{category.name}</span>
+                      <span className="ml-auto text-sm text-ink-500">
+                        {getToolsByCategory(category.slug).length}
+                      </span>
+                    </span>
+                    <span className="mt-3 block text-sm leading-relaxed text-ink-600">
+                      {category.metaDescription}
+                    </span>
                   </Link>
-                </div>
-                <p className="mt-2 max-w-3xl text-ink-600">{category.metaDescription}</p>
-                <div className="mt-6">
-                  <ToolGrid tools={tools} />
-                </div>
-              </section>
-            );
-          })}
-        </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
       </div>
     </>
   );

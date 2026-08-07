@@ -20,6 +20,7 @@ const strict = process.argv.includes('--strict');
 
 interface LegacyManifest {
   redirects: Record<string, string>;
+  pendingRedirects: Record<string, string>;
   urls: string[];
 }
 
@@ -50,10 +51,13 @@ for (const tool of allTools) staticRoutes.add(tool.href);
 // Redirects declared in next.config.ts count as covered — the URL still resolves
 // for a crawler, it just resolves somewhere else with a 301.
 const redirects = legacy.redirects;
+const pendingRedirects = legacy.pendingRedirects;
 
 const covered: string[] = [];
 const redirected: string[] = [];
+const pending: string[] = [];
 const missing: string[] = [];
+const errors: string[] = [];
 
 for (const url of legacy.urls) {
   if (staticRoutes.has(url)) {
@@ -65,43 +69,82 @@ for (const url of legacy.urls) {
     } else {
       missing.push(`${url} (redirects to ${target}, which does not exist yet)`);
     }
+  } else if (pendingRedirects[url]) {
+    pending.push(`${url} -> ${pendingRedirects[url]} (307, holding the address)`);
   } else {
     missing.push(url);
   }
 }
 
-// The old site used /terms-and-conditions; the new one uses /terms. Catch the
-// case where that rename was made without adding the redirect.
-const configPath = join(ROOT, 'next.config.ts');
-const config = readFileSync(configPath, 'utf8');
-const renamedPaths = ['/terms-and-conditions'];
-for (const path of renamedPaths) {
-  if (legacy.urls.includes(path) && !config.includes(path) && !staticRoutes.has(path)) {
-    missing.push(`${path} (renamed route with no redirect in next.config.ts)`);
+// A redirect is matched before a page is served, so a pendingRedirects entry
+// left in place after its tool ships makes the new page permanently
+// unreachable — and it would look fine in the build output, because the page
+// is still generated. This is the single most damaging way to get this wrong,
+// so it fails the check unconditionally rather than only under --strict.
+for (const [url, target] of Object.entries(pendingRedirects)) {
+  if (staticRoutes.has(url)) {
+    errors.push(
+      `${url} is now a real page but is still listed in pendingRedirects (-> ${target}). ` +
+        `Remove it from scripts/legacy-urls.json or the page will never be served.`,
+    );
   }
 }
 
-console.log(`\nLegacy URL coverage: ${covered.length + redirected.length}/${legacy.urls.length}`);
+// next.config.ts builds its redirect table from this same manifest, so the two
+// cannot drift. Confirm the wiring is actually in place rather than assuming it.
+const config = readFileSync(join(ROOT, 'next.config.ts'), 'utf8');
+if (!config.includes('legacy.redirects') || !config.includes('legacy.pendingRedirects')) {
+  errors.push(
+    'next.config.ts no longer reads both redirect tables from scripts/legacy-urls.json. ' +
+      'Nothing in this manifest is being served.',
+  );
+}
+
+const resolved = covered.length + redirected.length;
+
+console.log(`\nLegacy URL coverage: ${resolved} live, ${pending.length} held, of ${legacy.urls.length}`);
 
 if (redirected.length > 0) {
-  console.log(`\n  ${redirected.length} redirected:`);
+  console.log(`\n  ${redirected.length} permanently redirected:`);
   for (const entry of redirected) console.log(`    > ${entry}`);
 }
 
-if (missing.length > 0) {
-  console.log(`\n  ${missing.length} not yet covered:`);
-  for (const entry of missing) console.log(`    - ${entry}`);
+if (pending.length > 0) {
+  console.log(`\n  ${pending.length} held by a temporary redirect — tool not built yet:`);
+  for (const entry of pending) console.log(`    ~ ${entry}`);
+}
 
+if (missing.length > 0) {
+  console.log(`\n  ${missing.length} returning 404 with nothing holding them:`);
+  for (const entry of missing) console.log(`    - ${entry}`);
+}
+
+if (errors.length > 0) {
+  console.error(`\n${errors.length} blocking problem(s):`);
+  for (const entry of errors) console.error(`  x ${entry}`);
+  console.error('');
+  process.exit(1);
+}
+
+// A bare 404 on an indexed URL is never acceptable now that the new site is
+// live — it costs indexing immediately, whereas a held address costs nothing.
+if (missing.length > 0) {
+  console.error(
+    'Every legacy URL must either exist or be held by a redirect. Add the missing ones to\n' +
+      'pendingRedirects in scripts/legacy-urls.json.\n',
+  );
+  process.exit(1);
+}
+
+if (pending.length > 0) {
   if (strict) {
     console.error(
-      '\nCutover gate failed. Every legacy URL must resolve before replacing the live site.\n',
+      '\nCutover gate failed. Held addresses are a stopgap: every legacy URL needs its own\n' +
+        'page before this passes with --strict.\n',
     );
     process.exit(1);
   }
-
-  console.log(
-    '\n  Expected during the build-out. Run with --strict at cutover to make this blocking.\n',
-  );
+  console.log('\n  Held addresses are a stopgap. Each one needs its real page building.\n');
 } else {
-  console.log('\nEvery legacy URL is covered.\n');
+  console.log('\nEvery legacy URL resolves to its own page.\n');
 }

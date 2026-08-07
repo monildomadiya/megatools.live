@@ -134,12 +134,12 @@ export default function PasswordGenerator() {
 
   const strength =
     entropy >= 100
-      ? { label: 'Very strong', tone: 'text-emerald-700 dark:text-emerald-300' }
+      ? { label: 'Very strong', tone: 'text-emerald-700' }
       : entropy >= 75
-        ? { label: 'Strong', tone: 'text-emerald-700 dark:text-emerald-300' }
+        ? { label: 'Strong', tone: 'text-emerald-700' }
         : entropy >= 60
-          ? { label: 'Adequate', tone: 'text-amber-700 dark:text-amber-300' }
-          : { label: 'Weak', tone: 'text-red-700 dark:text-red-300' };
+          ? { label: 'Adequate', tone: 'text-amber-700' }
+          : { label: 'Weak', tone: 'text-red-700' };
 
   async function copy() {
     if (!password) return;

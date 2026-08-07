@@ -20,7 +20,7 @@ export function ToolCard({
   return (
     <Link
       href={tool.href}
-      className="card-lift group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-panel p-5 hover:border-ink-300"
+      className="card card-lift group relative flex h-full flex-col overflow-hidden p-5 hover:border-ink-300"
     >
       {/* Accent wash, revealed on hover. Sits behind the content and is inert,
           so it never intercepts the pointer. */}
@@ -34,7 +34,7 @@ export function ToolCard({
 
       <div className="relative flex items-start gap-3">
         <span
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
           style={{
             color: accent,
             backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
@@ -45,11 +45,13 @@ export function ToolCard({
 
         <div className="min-w-0 flex-1">
           {showCategory && category && (
-            <span className="block text-[11px] font-semibold uppercase tracking-wider" style={{ color: accent }}>
+            <span className="eyebrow" style={{ color: accent }}>
               {category.name}
             </span>
           )}
-          <h3 className="font-semibold leading-snug text-ink-900">{tool.name}</h3>
+          <h3 className="mt-1 font-display font-extrabold leading-snug tracking-tight text-ink-900">
+            {tool.name}
+          </h3>
         </div>
       </div>
 
@@ -57,7 +59,7 @@ export function ToolCard({
         {tool.shortDescription}
       </p>
 
-      <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-700">
+      <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700">
         Open calculator
         <span
           aria-hidden

@@ -50,48 +50,56 @@ export default function ToolsIndexPage() {
     <>
       <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
 
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <Breadcrumbs crumbs={crumbs} />
+      <section className="hero-bg isolate overflow-hidden px-4 pb-14 pt-6 sm:px-6 sm:pt-8">
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <Breadcrumbs crumbs={crumbs} />
 
-        <header className="mt-6 max-w-3xl">
-          <h1 className="text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-            All calculators and converters
-          </h1>
-          <p className="mt-4 text-lg leading-relaxed text-ink-600">
-            {allTools.length} {allTools.length === 1 ? 'tool' : 'tools'}, each with the
-            formula it uses, a worked example, and the sources the numbers came from.
-            Everything runs locally in your browser.
-          </p>
-        </header>
+          <header className="mt-6 max-w-3xl">
+            <p className="eyebrow">The full index</p>
+            <h1 className="mt-3 text-display-lg text-ink-900">
+              All calculators and converters
+            </h1>
+            <p className="mt-4 text-lg leading-relaxed text-ink-600">
+              {allTools.length} {allTools.length === 1 ? 'tool' : 'tools'}, each with the
+              formula it uses, a worked example, and the sources the numbers came from.
+              Everything runs locally in your browser.
+            </p>
+          </header>
+        </div>
+      </section>
 
-        <div className="mt-10">
+      <div className="mx-auto max-w-6xl px-4 pb-8 sm:px-6">
+        <div className="card relative z-10 p-5 sm:p-8">
           <ToolExplorer tools={explorerTools} categories={explorerCategories} />
         </div>
 
         {/* The hubs are the pillar pages — each has real intro copy the grid
             above cannot carry, so they get their own route and their own link
             rather than only existing as a filter state. */}
-        <section aria-labelledby="hubs-heading" className="mt-16 border-t border-line pt-12">
-          <h2 id="hubs-heading" className="text-2xl font-bold tracking-tight text-ink-900">
-            Browse by category
-          </h2>
-          <p className="mt-2 max-w-2xl text-ink-600">
-            Each category page explains what the tools in it assume and where those
-            assumptions stop holding.
-          </p>
+        <section aria-labelledby="hubs-heading" className="mt-20 border-t border-line pt-16">
+          <div className="mb-12 text-center">
+            <p className="eyebrow">Browse</p>
+            <h2 id="hubs-heading" className="mt-3 text-display-md">
+              Browse by category
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-ink-600 sm:text-lg">
+              Each category page explains what the tools in it assume and where those
+              assumptions stop holding.
+            </p>
+          </div>
 
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {populated.map((category) => {
               const accent = categoryAccent(category.slug);
               return (
                 <li key={category.slug}>
                   <Link
                     href={`/tools/${category.slug}`}
-                    className="card-lift group flex h-full flex-col rounded-2xl border border-line bg-panel p-5 hover:border-ink-300"
+                    className="card card-lift group flex h-full flex-col p-5 hover:border-ink-300"
                   >
                     <span className="flex items-center gap-3">
                       <span
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
                         style={{
                           color: accent,
                           backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
@@ -99,12 +107,14 @@ export default function ToolsIndexPage() {
                       >
                         <CategoryIcon category={category.slug} className="h-5 w-5" />
                       </span>
-                      <span className="font-semibold text-ink-900">{category.name}</span>
-                      <span className="ml-auto text-sm text-ink-500">
+                      <span className="font-display font-extrabold tracking-tight text-ink-900">
+                        {category.name}
+                      </span>
+                      <span className="numeric ml-auto text-sm text-ink-500">
                         {getToolsByCategory(category.slug).length}
                       </span>
                     </span>
-                    <span className="mt-3 block text-sm leading-relaxed text-ink-600">
+                    <span className="mt-3.5 block text-sm leading-relaxed text-ink-600">
                       {category.metaDescription}
                     </span>
                   </Link>

@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Outfit } from 'next/font/google';
 import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { themeInitScript } from '@/components/ui/ThemeToggle';
 import { jsonLdGraph, organizationSchema, websiteSchema } from '@/lib/seo/schema';
 import { site } from '@/lib/site';
 import './globals.css';
@@ -12,21 +11,33 @@ import './globals.css';
 // Self-hosted by next/font at build time — no request to fonts.googleapis.com on
 // page load, which removes a third-party connection from the critical path.
 //
-// Both are variable fonts, so the whole weight range arrives in one file rather
-// than one request per weight.
-const geistSans = Geist({
+// All three are variable fonts, so the whole weight range arrives in one file
+// each rather than one request per weight.
+
+// Headings only. Geometric and wide-apertured, which is what lets it hold shape
+// at the 70px the hero runs at — a text face set that large goes visibly thin.
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-geist-sans',
+  variable: '--font-outfit',
 });
 
-// Carries every figure the site outputs. A calculator's result is the one place
-// where digits have to line up column to column and never reflow as they change,
-// which is exactly what a mono's fixed advance width gives you.
-const geistMono = Geist_Mono({
+// The reading face, and the only one used below 1.25rem outside of figures.
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-geist-mono',
+  variable: '--font-inter',
+});
+
+// Carries every figure the site outputs, plus the eyebrow labels. A
+// calculator's result is the one place where digits have to line up column to
+// column and never reflow as they change, which is exactly what a mono's fixed
+// advance width gives you; using the same face for the small uppercase labels
+// ties them visually to the numbers they introduce.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 });
 
 export const metadata: Metadata = {
@@ -51,27 +62,18 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // Two entries rather than one: the browser chrome should match the theme the
-  // page actually renders in, not always the light one.
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0d12' },
-  ],
+  // Matches `--color-surface`, so the browser chrome continues the page rather
+  // than sitting on top of it as a white band. One entry, because the site
+  // renders in one theme.
+  themeColor: '#f4f5f7',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang={site.language}
-      className={`${geistSans.variable} ${geistMono.variable}`}
-      suppressHydrationWarning
+      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <head>
-        {/* Runs before first paint so the stored theme is on <html> by the time
-            anything renders. Anything later produces a flash of the wrong
-            theme, which is more jarring than having no dark mode at all. */}
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"

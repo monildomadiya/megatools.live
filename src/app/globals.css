@@ -1,40 +1,80 @@
 @import 'tailwindcss';
 
-/* Class-based dark mode. The toggle writes `.dark` onto <html>; an inline
-   script in the root layout applies it before first paint so there is no flash
-   of the wrong theme. */
-@custom-variant dark (&:where(.dark, .dark *));
-
 /* ---------------------------------------------------------------------------
    Design tokens.
+
+   The system is light-only. A grey page carries white cards, which is what
+   makes elevation readable without leaning on shadows: the card is lighter than
+   the ground it sits on, so the boundary is a value step rather than a blur.
+   That relationship has no dark-mode counterpart worth maintaining, so there is
+   no `.dark` block and no theme toggle — one theme, tuned properly.
 
    Two ramps carry the whole site: `ink` for neutrals and `brand` for accent.
    `accent` exists only to give gradients a second stop — it is never used for
    text or borders on its own.
 
-   Semantic tokens (surface / panel / line / invert) sit on top of the ramps.
-   Components reference those rather than raw colours, which is what makes dark
-   mode a variable swap in one place instead of a `dark:` class on every node.
+   Semantic tokens (surface / panel / line) sit on top of the ramps. Components
+   reference those rather than raw colours.
 
    `static` is required, not stylistic: Tailwind only emits theme variables that
    some utility class references, and the category accents are read through
    var() in inline styles rather than through a utility. Without it they are
    pruned from the stylesheet and every accent silently falls back to inherited
-   colour — which is invisible in dark mode, where the .dark block below
-   redeclares them by hand.
+   colour.
 --------------------------------------------------------------------------- */
 @theme static {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
+  /* Three faces, each with one job. `display` is drawn for size — its wide
+     apertures and low contrast hold up at 70px where a text face goes spindly.
+     `sans` is the reading face. `mono` carries every figure and every eyebrow
+     label, which is what ties the small uppercase labels to the numbers they
+     introduce. */
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
 
   /* Tighter than Tailwind's defaults (-0.025em / -0.05em).
-     Tracking that looks correct at 16px reads loose at 60px, and Geist is drawn
-     with enough sidebearing to take the reduction. Overriding the theme value
-     rather than adding a rule keyed on font size matters: every heading already
-     carries `tracking-tight`, and a utility always beats a base-layer rule, so a
-     size-based override would simply never apply. */
+     Tracking that looks correct at 16px reads loose at 70px, and Outfit is
+     drawn with enough sidebearing to take the reduction. Overriding the theme
+     value rather than adding a rule keyed on font size matters: every heading
+     already carries `tracking-tight`, and a utility always beats a base-layer
+     rule, so a size-based override would simply never apply. */
   --tracking-tight: -0.03em;
   --tracking-tighter: -0.045em;
+
+  /* -------------------------------------------------------------------------
+     Display scale. Fluid rather than stepped at breakpoints: a hero headline
+     that jumps two sizes at 640px looks broken on a 600px viewport, and clamp()
+     removes the whole class of problem. The upper bounds match the proportions
+     of the reference — a 4.4rem H1 over a 1.375rem lede.
+  ------------------------------------------------------------------------- */
+  --text-display-xl: clamp(2.25rem, 1.1rem + 5.4vw, 4.4rem);
+  --text-display-xl--line-height: 1.05;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-xl--font-weight: 800;
+
+  --text-display-lg: clamp(1.875rem, 1rem + 3.6vw, 3.25rem);
+  --text-display-lg--line-height: 1.08;
+  --text-display-lg--letter-spacing: -0.03em;
+  --text-display-lg--font-weight: 800;
+
+  --text-display-md: clamp(1.625rem, 1.1rem + 2.2vw, 2.5rem);
+  --text-display-md--line-height: 1.12;
+  --text-display-md--letter-spacing: -0.03em;
+  --text-display-md--font-weight: 800;
+
+  --text-display-sm: clamp(1.375rem, 1.05rem + 1.3vw, 1.875rem);
+  --text-display-sm--line-height: 1.2;
+  --text-display-sm--letter-spacing: -0.025em;
+  --text-display-sm--font-weight: 800;
+
+  /* -------------------------------------------------------------------------
+     Radii. Cards are deliberately large-radius (20px) and controls small
+     (10px), with buttons fully round. The contrast between the three is what
+     reads as a considered system rather than one blanket corner value.
+  ------------------------------------------------------------------------- */
+  --radius-card: 1.25rem;
+  --radius-card-lg: 1.5rem;
+  --radius-control: 0.625rem;
 
   --color-brand-50: oklch(0.97 0.02 254);
   --color-brand-100: oklch(0.93 0.04 254);
@@ -52,39 +92,45 @@
   --color-accent-500: oklch(0.62 0.19 300);
   --color-accent-600: oklch(0.54 0.2 300);
 
+  /* Neutrals. Cooled slightly and pushed darker at the top of the ramp than a
+     generic grey scale — `ink-900` is the near-black everything important is
+     set in, and it needs to sit clearly below the body colour. */
   --color-ink-50: oklch(0.985 0.002 250);
-  --color-ink-100: oklch(0.96 0.003 250);
-  --color-ink-200: oklch(0.92 0.004 250);
-  --color-ink-300: oklch(0.85 0.006 250);
-  --color-ink-400: oklch(0.62 0.009 250);
-  --color-ink-500: oklch(0.55 0.01 250);
-  --color-ink-600: oklch(0.44 0.012 250);
-  --color-ink-700: oklch(0.36 0.012 250);
-  --color-ink-800: oklch(0.26 0.012 250);
-  --color-ink-900: oklch(0.19 0.012 250);
-  --color-ink-950: oklch(0.13 0.012 250);
+  --color-ink-100: oklch(0.955 0.004 250);
+  --color-ink-200: oklch(0.925 0.005 250);
+  --color-ink-300: oklch(0.86 0.006 250);
+  --color-ink-400: oklch(0.63 0.012 250);
+  --color-ink-500: oklch(0.56 0.016 250);
+  --color-ink-600: oklch(0.45 0.014 250);
+  --color-ink-700: oklch(0.37 0.013 250);
+  --color-ink-800: oklch(0.27 0.012 250);
+  --color-ink-900: oklch(0.215 0.011 250);
+  --color-ink-950: oklch(0.15 0.01 250);
 
-  /* Semantic surfaces. */
-  --color-surface: oklch(1 0 0);
+  /* Semantic surfaces. The page is grey and cards are white — the inverse of
+     the usual arrangement, and the single decision the rest of the system hangs
+     off. `panel-2` is the recess inside a card (fields, table heads); `sunken`
+     is the result side of a split panel, which needs to read as a different
+     surface from the inputs beside it. */
+  --color-surface: oklch(0.968 0.003 250);
   --color-panel: oklch(1 0 0);
-  --color-panel-2: oklch(0.985 0.002 250);
-  --color-line: oklch(0.92 0.004 250);
-  --color-line-soft: oklch(0.96 0.003 250);
-  /* High-contrast button: dark chip on light theme, light chip on dark. */
-  --color-invert: oklch(0.19 0.012 250);
-  --color-invert-hover: oklch(0.26 0.012 250);
+  --color-panel-2: oklch(0.958 0.004 250);
+  --color-sunken: oklch(0.94 0.005 250);
+  --color-line: oklch(0.905 0.006 250);
+  --color-line-soft: oklch(0.94 0.005 250);
+
+  /* High-contrast chip: near-black fill with white label. */
+  --color-invert: oklch(0.215 0.011 250);
+  --color-invert-hover: oklch(0.29 0.012 250);
   --color-on-invert: oklch(1 0 0);
 
-  /* Filled brand button. Deliberately NOT `brand-600`: that token lightens in
-     dark mode so the ramp stays legible as text, which would leave white label
-     text sitting on a pale blue fill. This pair holds a mid tone in both themes
-     so `on-brand` is always readable against it. */
+  /* Filled brand button. Held at a mid tone so white label text clears 4.5:1
+     against it. */
   --color-brand-solid: oklch(0.52 0.19 254);
   --color-brand-solid-hover: oklch(0.46 0.18 254);
   --color-on-brand: oklch(1 0 0);
 
-  /* The logo mark. Fixed in both themes on purpose — a brand mark that changes
-     colour with the theme stops being a constant. */
+  /* The logo mark. */
   --color-mark-from: oklch(0.6 0.18 254);
   --color-mark-to: oklch(0.62 0.19 300);
 
@@ -93,8 +139,7 @@
 
      Darker than they look like they need to be: these tint the icon chips, but
      they are also the colour of the category label on mixed grids, which is
-     11px text and therefore needs 4.5:1 against the panel. The brighter,
-     candy-ish versions of these hues failed that badly on white. */
+     11px text and therefore needs 4.5:1 against white. */
   --color-cat-finance: oklch(0.51 0.13 155);
   --color-cat-health: oklch(0.52 0.19 15);
   --color-cat-math: oklch(0.52 0.19 254);
@@ -105,70 +150,18 @@
   --color-cat-lifestyle: oklch(0.52 0.17 30);
 
   /* Layered rather than single-blur: a tight contact shadow plus a wide ambient
-     one reads as a physical card instead of a grey halo. */
+     one reads as a physical card instead of a grey halo. Kept restrained —
+     on a grey page the card's whiteness already does most of the lifting. */
   --shadow-panel: 0 1px 2px oklch(0.19 0.012 250 / 0.05), 0 4px 12px oklch(0.19 0.012 250 / 0.04);
   --shadow-lift: 0 2px 4px oklch(0.19 0.012 250 / 0.06), 0 12px 28px oklch(0.19 0.012 250 / 0.09);
   --shadow-pop: 0 8px 20px oklch(0.19 0.012 250 / 0.12), 0 24px 60px oklch(0.19 0.012 250 / 0.16);
+  /* Tinted with the button's own hue rather than neutral grey, so a brand
+     button appears to be lit by its own colour. */
+  --shadow-brand: 0 1px 2px oklch(0.52 0.19 254 / 0.24), 0 8px 20px oklch(0.52 0.19 254 / 0.22);
+  --shadow-brand-hover: 0 2px 4px oklch(0.52 0.19 254 / 0.28), 0 12px 28px oklch(0.52 0.19 254 / 0.3);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Dark theme. Only the semantic tokens and the ink ramp flip — every component
-   that reads them follows automatically. The brand ramp is lifted slightly
-   because mid-blues lose apparent contrast against a dark ground. */
-.dark {
-  --color-ink-50: oklch(0.16 0.012 250);
-  --color-ink-100: oklch(0.2 0.012 250);
-  --color-ink-200: oklch(0.26 0.012 250);
-  --color-ink-300: oklch(0.34 0.012 250);
-  --color-ink-400: oklch(0.58 0.012 250);
-  --color-ink-500: oklch(0.68 0.012 250);
-  --color-ink-600: oklch(0.72 0.01 250);
-  --color-ink-700: oklch(0.82 0.008 250);
-  --color-ink-800: oklch(0.9 0.006 250);
-  --color-ink-900: oklch(0.97 0.004 250);
-  --color-ink-950: oklch(0.99 0.002 250);
-
-  --color-brand-50: oklch(0.24 0.05 254);
-  --color-brand-100: oklch(0.28 0.07 254);
-  --color-brand-200: oklch(0.34 0.1 254);
-  --color-brand-300: oklch(0.45 0.14 254);
-  --color-brand-400: oklch(0.58 0.17 254);
-  --color-brand-500: oklch(0.68 0.17 254);
-  --color-brand-600: oklch(0.74 0.15 254);
-  --color-brand-700: oklch(0.8 0.13 254);
-  --color-brand-800: oklch(0.86 0.1 254);
-  --color-brand-900: oklch(0.92 0.06 254);
-
-  --color-surface: oklch(0.17 0.012 250);
-  --color-panel: oklch(0.215 0.012 250);
-  --color-panel-2: oklch(0.245 0.012 250);
-  --color-line: oklch(0.3 0.012 250);
-  --color-line-soft: oklch(0.26 0.012 250);
-  --color-invert: oklch(0.97 0.004 250);
-  --color-invert-hover: oklch(0.88 0.006 250);
-  --color-on-invert: oklch(0.15 0.012 250);
-
-  /* Lifted just enough to hold against a dark ground while keeping white label
-     text above 4.5:1. */
-  --color-brand-solid: oklch(0.55 0.2 254);
-  --color-brand-solid-hover: oklch(0.6 0.19 254);
-
-  --color-cat-finance: oklch(0.72 0.15 155);
-  --color-cat-health: oklch(0.72 0.17 15);
-  --color-cat-math: oklch(0.72 0.16 254);
-  --color-cat-conversion: oklch(0.75 0.14 195);
-  --color-cat-date-time: oklch(0.73 0.16 300);
-  --color-cat-developer: oklch(0.72 0.13 265);
-  --color-cat-seo: oklch(0.78 0.15 70);
-  --color-cat-lifestyle: oklch(0.74 0.15 30);
-
-  /* Shadows do almost nothing on a dark ground — depth there comes from the
-     panel being lighter than the page, not from a drop shadow. Keep them, but
-     weak, so elevated surfaces still separate at the edges. */
-  --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.3);
-  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.4), 0 12px 28px oklch(0 0 0 / 0.35);
-  --shadow-pop: 0 8px 20px oklch(0 0 0 / 0.5), 0 24px 60px oklch(0 0 0 / 0.55);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @layer base {
@@ -176,10 +169,6 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     color-scheme: light;
-  }
-
-  html.dark {
-    color-scheme: dark;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -199,25 +188,6 @@
     }
   }
 
-  /* Held for one frame while the theme flips. Two reasons, one cosmetic and one
-     a correctness bug:
-
-     Cosmetically, a whole page cross-fading from light to dark reads as a
-     rendering glitch rather than as a transition.
-
-     More importantly, an element whose colour comes from a custom property and
-     which also has `transition-colors` can be left holding the previous
-     theme's value when that property changes on an ancestor — the transition
-     never re-resolves. That is how the calculator inputs stayed light-on-dark
-     after a toggle while the page around them changed correctly. Suppressing
-     transitions for the frame in which the class lands avoids the whole class
-     of problem rather than patching each control that hits it. */
-  html.theme-switching *,
-  html.theme-switching *::before,
-  html.theme-switching *::after {
-    transition: none !important;
-  }
-
   body {
     background-color: var(--color-surface);
     color: var(--color-ink-700);
@@ -227,15 +197,19 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Balanced headings. A two-line heading whose second line holds one word is
-     the most visible typographic flaw on a page with large display type, and
-     `balance` fixes it without hand-inserted line breaks that would be wrong at
-     the next breakpoint. Limited to headings — the algorithm is capped at a few
-     lines and is not meant for body copy. */
+  /* Every heading is display type. Set once here rather than as a class on each
+     one — a heading in body face is always a mistake on this site, so the
+     default should be the correct thing. */
   h1,
   h2,
   h3,
   h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink-900);
+    /* Balanced headings. A two-line heading whose second line holds one word is
+       the most visible typographic flaw on a page with large display type, and
+       `balance` fixes it without hand-inserted line breaks that would be wrong
+       at the next breakpoint. */
     text-wrap: balance;
   }
 
@@ -283,60 +257,125 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
-
-  /* The default track is a bright seam against a dark page. */
-  .dark ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-  .dark ::-webkit-scrollbar-track {
-    background: var(--color-surface);
-  }
-  .dark ::-webkit-scrollbar-thumb {
-    background: var(--color-ink-200);
-    border: 3px solid var(--color-surface);
-    border-radius: 999px;
-  }
 }
 
 @layer components {
   /* -------------------------------------------------------------------------
-     Decorative backdrops. Kept here rather than inline because each is a stack
-     of several layers that would be unreadable as utility soup.
+     Eyebrow. The small mono uppercase label that introduces every section.
+
+     It does real work beyond decoration: with sections this large, the eyebrow
+     is what tells a scanning reader which band of the page they are in before
+     they have read the heading. Mono and letterspaced so it never competes with
+     the display heading directly beneath it.
+  ------------------------------------------------------------------------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand-700);
+  }
+
+  @media (min-width: 640px) {
+    .eyebrow {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Muted variant, for eyebrows inside a card where a brand-coloured label
+     would fight the content it introduces. */
+  .eyebrow-muted {
+    color: var(--color-ink-500);
+  }
+
+  /* -------------------------------------------------------------------------
+     Buttons. Pill-shaped throughout. The two variants are a filled brand
+     primary and an outlined white secondary — never two filled buttons side by
+     side, which leaves the reader with no primary action at all.
+  ------------------------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft),
+      box-shadow 0.2s var(--ease-out-soft),
+      transform 0.2s var(--ease-out-soft);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background-color: var(--color-brand-solid);
+    color: var(--color-on-brand);
+    box-shadow: var(--shadow-brand);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-brand-solid-hover);
+    box-shadow: var(--shadow-brand-hover);
+  }
+
+  .btn-outline {
+    background-color: var(--color-panel);
+    color: var(--color-ink-800);
+    border: 1px solid var(--color-line);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-brand-400);
+    color: var(--color-ink-900);
+  }
+
+  /* Neutral high-contrast chip, for tertiary actions that still need to read as
+     a button (Reset, Clear filters). */
+  .btn-ink {
+    background-color: var(--color-invert);
+    color: var(--color-on-invert);
+  }
+
+  .btn-ink:hover {
+    background-color: var(--color-invert-hover);
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  .btn-md {
+    padding: 0.6875rem 1.375rem;
+    font-size: 0.9375rem;
+  }
+  .btn-lg {
+    padding: 0.9rem 2rem;
+    font-size: 1.0625rem;
+  }
+
+  /* -------------------------------------------------------------------------
+     Surfaces.
   ------------------------------------------------------------------------- */
 
-  /* Hero backdrop: a fine grid, faded out radially so it never reaches an edge
-     and turns into a visible rectangle. */
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
-    background-size: 56px 56px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-  }
-
-  /* Soft colour bloom behind the hero heading. */
-  .bg-bloom {
-    background-image:
-      radial-gradient(ellipse 60% 50% at 50% -10%, var(--color-brand-500), transparent 70%),
-      radial-gradient(ellipse 40% 40% at 85% 10%, var(--color-accent-500), transparent 70%);
-    opacity: 0.14;
-  }
-  .dark .bg-bloom {
-    opacity: 0.22;
-  }
-
-  .text-gradient {
-    background-image: linear-gradient(
-      110deg,
-      var(--color-ink-900) 30%,
-      var(--color-brand-600) 60%,
-      var(--color-accent-500)
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
+  /* The default white card. Border and shadow are both deliberately faint — on
+     a grey page the value step from surface to panel is already the boundary,
+     and a heavy border on top of it reads as a box drawn around a box. */
+  .card {
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-panel);
   }
 
   /* Cards lift on hover. `will-change` is deliberately absent — promoting every
@@ -350,6 +389,99 @@
   .card-lift:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lift);
+  }
+
+  /* A hairline of brand colour along the top edge of a card, fading out at both
+     ends. Cheaper than a full coloured header band and it survives on a card of
+     any height. */
+  .card-topline::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      var(--color-brand-500) 50%,
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out-soft);
+  }
+  .card-topline:hover::before {
+    opacity: 1;
+  }
+
+  /* -------------------------------------------------------------------------
+     Decorative backdrops. Kept here rather than inline because each is a stack
+     of several layers that would be unreadable as utility soup.
+  ------------------------------------------------------------------------- */
+
+  /* Hero backdrop: a fine grid plus a soft brand bloom, both faded out radially
+     so neither ever reaches an edge and turns into a visible rectangle. */
+  .hero-bg {
+    position: relative;
+    background-color: var(--color-surface);
+  }
+
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 30%, transparent 100%);
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(ellipse 55% 45% at 50% -5%, var(--color-brand-500), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 88% 5%, var(--color-accent-500), transparent 70%);
+    opacity: 0.13;
+  }
+
+  /* Standalone bloom, for CTA panels that want the colour without the grid. */
+  .bg-bloom {
+    background-image:
+      radial-gradient(ellipse 60% 50% at 50% -10%, var(--color-brand-500), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 85% 10%, var(--color-accent-500), transparent 70%);
+    opacity: 0.13;
+  }
+
+  /* Ink → brand → accent, so the gradient only takes over the second half of
+     the phrase. A heading that is gradient from its first letter reads as a
+     graphic rather than as text. */
+  .text-gradient {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-ink-900) 25%,
+      var(--color-brand-600) 60%,
+      var(--color-accent-500)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Pure accent gradient, for a single highlighted phrase inside an otherwise
+     ink-coloured headline. */
+  .text-gradient-accent {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-brand-600),
+      var(--color-accent-500)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
 
   @keyframes rise {
@@ -392,7 +524,7 @@
   }
 
   /* -------------------------------------------------------------------------
-     Long-form article styling. Applied to the MDX body of tool and blog pages.
+     Long-form article styling. Applied to the MDX body of tool and legal pages.
      Written as plain CSS rather than the typography plugin so the exact vertical
      rhythm and table treatment stay under our control.
   ------------------------------------------------------------------------- */
@@ -409,21 +541,20 @@
   .prose-content h2 {
     margin-top: 2.5em;
     margin-bottom: 0.75em;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: -0.015em;
-    color: var(--color-ink-900);
+    font-size: 1.625rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
     scroll-margin-top: 5.5rem;
   }
 
   .prose-content h3 {
     margin-top: 2em;
     margin-bottom: 0.6em;
-    font-size: 1.1875rem;
-    font-weight: 650;
-    line-height: 1.4;
-    color: var(--color-ink-900);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
     scroll-margin-top: 5.5rem;
   }
 
@@ -476,7 +607,8 @@
     margin-top: 1.75em;
     overflow-x: auto;
     border: 1px solid var(--color-line);
-    border-radius: 0.75rem;
+    border-radius: var(--radius-card);
+    background-color: var(--color-panel);
   }
 
   .prose-content table {
@@ -524,8 +656,8 @@
     margin-top: 1.5em;
     padding: 1rem 1.25rem;
     overflow-x: auto;
-    border-radius: 0.75rem;
-    background-color: oklch(0.13 0.012 250);
+    border-radius: var(--radius-card);
+    background-color: oklch(0.15 0.01 250);
     color: oklch(0.96 0.003 250);
   }
 

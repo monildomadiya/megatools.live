@@ -16,83 +16,85 @@ const siteLinks = [
   // '/blog' returns here once the guides exist.
 ];
 
+/** Column heading. Mono eyebrows here rather than bold sans: at four columns of
+ *  short links, the labels need to read as signposts, not as content. */
+function ColumnHeading({ children }: { children: React.ReactNode }) {
+  return <h2 className="eyebrow eyebrow-muted">{children}</h2>;
+}
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="text-sm text-ink-600 transition-colors hover:text-brand-700"
+      >
+        {label}
+      </Link>
+    </li>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-line bg-panel-2">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <footer className="mt-24 border-t border-line bg-panel">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 text-base font-bold text-ink-900">
+            <div className="flex items-center gap-2.5 font-display text-lg font-extrabold tracking-tight text-ink-900">
               <span
                 aria-hidden
-                className="grid h-7 w-7 place-items-center rounded-[9px] bg-gradient-to-br from-mark-from to-mark-to text-xs font-bold text-white"
+                className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-sm font-extrabold text-white"
               >
                 M
               </span>
               {site.name}
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-ink-600">
-              {site.tagline}. Every calculation runs in your browser — nothing you
-              type is sent to a server.
+            <p className="mt-4 text-sm leading-relaxed text-ink-600">
+              {site.tagline}. Every calculation runs in your browser — nothing you type
+              is sent to a server.
             </p>
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold text-ink-900">Categories</h2>
-            <ul className="mt-3 space-y-2">
+            <ColumnHeading>Categories</ColumnHeading>
+            <ul className="mt-4 space-y-2.5">
               {categories.map((category) => (
-                <li key={category.slug}>
-                  <Link
-                    href={`/tools/${category.slug}`}
-                    className="text-sm text-ink-600 transition-colors hover:text-brand-700"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
+                <FooterLink
+                  key={category.slug}
+                  href={`/tools/${category.slug}`}
+                  label={category.name}
+                />
               ))}
             </ul>
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold text-ink-900">Site</h2>
-            <ul className="mt-3 space-y-2">
+            <ColumnHeading>Site</ColumnHeading>
+            <ul className="mt-4 space-y-2.5">
               {siteLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-ink-600 transition-colors hover:text-brand-700"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
+                <FooterLink key={link.href} {...link} />
               ))}
             </ul>
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold text-ink-900">Legal</h2>
-            <ul className="mt-3 space-y-2">
+            <ColumnHeading>Legal</ColumnHeading>
+            <ul className="mt-4 space-y-2.5">
               {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-ink-600 transition-colors hover:text-brand-700"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
+                <FooterLink key={link.href} {...link} />
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-ink-500">
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
           <p className="text-sm text-ink-500">
-            Results are for general information only and are not professional
-            financial or medical advice.
+            Results are for general information only and are not professional financial
+            or medical advice.
           </p>
         </div>
       </div>

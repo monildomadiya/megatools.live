@@ -8,13 +8,13 @@ import type { Crumb } from '@/lib/seo/schema';
 export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-ink-500">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-500">
         {crumbs.map((crumb, index) => {
           const isLast = index === crumbs.length - 1;
           return (
-            <li key={crumb.path} className="flex items-center gap-x-1.5">
+            <li key={crumb.path} className="flex items-center gap-x-2">
               {isLast ? (
-                <span className="text-ink-700" aria-current="page">
+                <span className="font-medium text-ink-700" aria-current="page">
                   {crumb.name}
                 </span>
               ) : (
@@ -25,9 +25,20 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
                   >
                     {crumb.name}
                   </Link>
-                  <span aria-hidden className="text-ink-300">
-                    /
-                  </span>
+                  <svg
+                    aria-hidden
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-ink-300"
+                  >
+                    <path d="m4.5 3 3 3-3 3" />
+                  </svg>
                 </>
               )}
             </li>

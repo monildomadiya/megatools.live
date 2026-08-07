@@ -199,11 +199,11 @@ export function SiteSearch() {
           restoreFocusTo.current = event.currentTarget;
           setOpen(true);
         }}
-        className="group flex h-9 items-center gap-2 rounded-lg border border-line bg-panel-2 px-2.5 text-sm text-ink-500 transition-colors hover:border-ink-300 hover:text-ink-700 sm:w-56 sm:px-3"
+        className="group flex h-10 items-center gap-2 rounded-full border border-line bg-panel px-3 text-sm text-ink-500 transition-colors hover:border-brand-400 hover:text-ink-700 sm:w-60"
       >
         <SearchGlyph className="h-4 w-4 shrink-0" />
         <span className="hidden sm:inline">Search tools</span>
-        <kbd className="ml-auto hidden shrink-0 rounded border border-line bg-panel px-1.5 py-0.5 font-sans text-[11px] font-medium text-ink-500 sm:inline">
+        <kbd className="ml-auto hidden shrink-0 rounded-md border border-line bg-panel-2 px-1.5 py-0.5 font-mono text-[11px] font-medium text-ink-500 sm:inline">
           ⌘K
         </kbd>
       </button>
@@ -217,9 +217,10 @@ export function SiteSearch() {
             aria-label="Close search"
             tabIndex={-1}
             onClick={close}
-            // Fixed black, not `ink-950`: the ink ramp inverts, so that token is
-            // near-white in dark mode and the scrim would wash the page out.
-            className="animate-overlay-in absolute inset-0 cursor-default bg-black/40 backdrop-blur-sm dark:bg-black/60"
+            // Fixed black rather than an ink token: the scrim's job is to darken
+            // whatever is behind it, which a near-black from the neutral ramp
+            // does less reliably against the site's already-light surfaces.
+            className="animate-overlay-in absolute inset-0 cursor-default bg-black/40 backdrop-blur-sm"
           />
 
           <div className="absolute inset-x-0 top-0 flex justify-center px-4 pt-[10vh]">
@@ -227,7 +228,7 @@ export function SiteSearch() {
               role="dialog"
               aria-modal="true"
               aria-label="Search tools"
-              className="animate-dialog-in w-full max-w-xl overflow-hidden rounded-2xl border border-line bg-panel shadow-pop"
+              className="animate-dialog-in w-full max-w-xl overflow-hidden rounded-card-lg border border-line bg-panel shadow-pop"
             >
               <div className="flex items-center gap-3 border-b border-line px-4">
                 <SearchGlyph className="h-4.5 w-4.5 shrink-0 text-ink-500" />
@@ -245,7 +246,7 @@ export function SiteSearch() {
                   aria-controls={listId}
                   className="h-14 flex-1 bg-transparent text-[15px] text-ink-900 outline-none placeholder:text-ink-500"
                 />
-                <kbd className="hidden shrink-0 rounded border border-line px-1.5 py-0.5 font-sans text-[11px] text-ink-500 sm:inline">
+                <kbd className="hidden shrink-0 rounded-md border border-line px-1.5 py-0.5 font-mono text-[11px] text-ink-500 sm:inline">
                   Esc
                 </kbd>
               </div>
@@ -261,7 +262,7 @@ export function SiteSearch() {
                         role="option"
                         aria-selected={active === i}
                         data-active={active === i}
-                        className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                        className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
                           active === i ? 'bg-panel-2' : ''
                         }`}
                       >
@@ -293,7 +294,7 @@ export function SiteSearch() {
                         role="option"
                         aria-selected={active === i}
                         data-active={active === i}
-                        className={`flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors ${
+                        className={`flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors ${
                           active === i ? 'bg-panel-2' : ''
                         }`}
                       >
@@ -362,7 +363,7 @@ export function SiteSearch() {
 
 function Key({ children }: { children: React.ReactNode }) {
   return (
-    <kbd className="rounded border border-line bg-panel px-1.5 py-0.5 font-sans text-[11px] text-ink-600">
+    <kbd className="rounded-md border border-line bg-panel-2 px-1.5 py-0.5 font-mono text-[11px] text-ink-600">
       {children}
     </kbd>
   );

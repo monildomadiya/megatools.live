@@ -9,10 +9,12 @@ import { useId } from 'react';
 --------------------------------------------------------------------------- */
 
 const fieldBase =
-  // `panel-2` rather than `panel`: the field sits inside a panel-coloured card,
-  // so matching it leaves the border doing all the work of showing where the
-  // input is. A half-step recess reads as a field in both themes.
-  'w-full rounded-lg border bg-panel-2 px-3.5 py-2.5 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30';
+  // `panel-2` rather than `panel`: the field sits inside a white card, so
+  // matching the card would leave the border doing all the work of showing
+  // where the input is. A half-step recess reads as a field at a glance.
+  'w-full rounded-control border bg-panel-2 px-3.5 py-3 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-4 focus:ring-brand-500/15';
+
+const labelBase = 'block text-sm font-semibold text-ink-800';
 
 interface NumberFieldProps {
   label: string;
@@ -50,10 +52,10 @@ export function NumberField({
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-ink-800">
+      <label htmlFor={id} className={labelBase}>
         {label}
       </label>
-      <div className="relative mt-1.5">
+      <div className="relative mt-2">
         <input
           id={id}
           type="number"
@@ -66,25 +68,29 @@ export function NumberField({
           onChange={(event) => onChange(event.target.value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : hint ? hintId : undefined}
-          className={`${fieldBase} ${unit ? 'pr-14' : ''} ${
-            error ? 'border-red-400 focus:ring-red-500/30' : 'border-ink-300 focus:border-brand-500'
+          // Figures the reader types should look like the figures the tool
+          // reports back, so the input carries the same mono face as the result.
+          className={`numeric ${fieldBase} ${unit ? 'pr-14' : ''} ${
+            error
+              ? 'border-red-400 focus:ring-red-500/20'
+              : 'border-line focus:border-brand-500'
           }`}
         />
         {unit && (
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-3.5 flex items-center text-sm font-medium text-ink-500"
+            className="pointer-events-none absolute inset-y-0 right-3.5 flex items-center text-sm font-semibold text-ink-500"
           >
             {unit}
           </span>
         )}
       </div>
       {error ? (
-        <p id={errorId} role="alert" className="mt-1.5 text-sm text-red-600">
+        <p id={errorId} role="alert" className="mt-2 text-sm text-red-600">
           {error}
         </p>
       ) : hint ? (
-        <p id={hintId} className="mt-1.5 text-sm text-ink-500">
+        <p id={hintId} className="mt-2 text-sm leading-relaxed text-ink-500">
           {hint}
         </p>
       ) : null}
@@ -122,7 +128,7 @@ export function DateField({
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-ink-800">
+      <label htmlFor={id} className={labelBase}>
         {label}
       </label>
       <input
@@ -134,16 +140,18 @@ export function DateField({
         onChange={(event) => onChange(event.target.value)}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : hint ? hintId : undefined}
-        className={`${fieldBase} mt-1.5 ${
-          error ? 'border-red-400 focus:ring-red-500/30' : 'border-ink-300 focus:border-brand-500'
+        className={`numeric ${fieldBase} mt-2 ${
+          error
+            ? 'border-red-400 focus:ring-red-500/20'
+            : 'border-line focus:border-brand-500'
         }`}
       />
       {error ? (
-        <p id={errorId} role="alert" className="mt-1.5 text-sm text-red-600">
+        <p id={errorId} role="alert" className="mt-2 text-sm text-red-600">
           {error}
         </p>
       ) : hint ? (
-        <p id={hintId} className="mt-1.5 text-sm text-ink-500">
+        <p id={hintId} className="mt-2 text-sm leading-relaxed text-ink-500">
           {hint}
         </p>
       ) : null}
@@ -170,14 +178,14 @@ export function SelectField<T extends string>({
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-ink-800">
+      <label htmlFor={id} className={labelBase}>
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value as T)}
-        className={`${fieldBase} mt-1.5 border-ink-300 focus:border-brand-500`}
+        className={`${fieldBase} mt-2 border-line focus:border-brand-500`}
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -185,7 +193,7 @@ export function SelectField<T extends string>({
           </option>
         ))}
       </select>
-      {hint && <p className="mt-1.5 text-sm text-ink-500">{hint}</p>}
+      {hint && <p className="mt-2 text-sm leading-relaxed text-ink-500">{hint}</p>}
     </div>
   );
 }
@@ -201,6 +209,9 @@ interface UnitToggleProps<T extends string> {
  * Metric/US switch. Implemented as a radiogroup rather than a select because it
  * is a two-way choice a reader makes before anything else, and one tap beats
  * open-scroll-tap.
+ *
+ * The selected segment is a white pill on a grey track — the same
+ * card-on-surface relationship the whole site is built from, at control scale.
  */
 export function UnitToggle<T extends string>({
   label,
@@ -209,7 +220,11 @@ export function UnitToggle<T extends string>({
   options,
 }: UnitToggleProps<T>) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-lg bg-ink-100 p-1">
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="inline-flex rounded-full border border-line bg-panel-2 p-1"
+    >
       {options.map((option) => (
         <button
           key={option.value}
@@ -217,7 +232,7 @@ export function UnitToggle<T extends string>({
           role="radio"
           aria-checked={value === option.value}
           onClick={() => onChange(option.value)}
-          className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
+          className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
             value === option.value
               ? 'bg-panel text-ink-900 shadow-panel'
               : 'text-ink-600 hover:text-ink-900'
@@ -230,7 +245,13 @@ export function UnitToggle<T extends string>({
   );
 }
 
-/** The primary result readout: one big number plus a plain-language reading. */
+/**
+ * The primary result readout: one big number plus a plain-language reading.
+ *
+ * Sized far larger than anything else on the page on purpose. This is the single
+ * figure the reader came for, and a result that competes with the H1 for
+ * attention makes them hunt for it.
+ */
 export function ResultCard({
   label,
   value,
@@ -247,17 +268,17 @@ export function ResultCard({
   children?: React.ReactNode;
 }) {
   const toneClass = {
-    neutral: 'bg-ink-50 border-line',
-    good: 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-900',
-    warn: 'bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-900',
-    bad: 'bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-900',
+    neutral: 'bg-surface border-line',
+    good: 'bg-emerald-50 border-emerald-200',
+    warn: 'bg-amber-50 border-amber-200',
+    bad: 'bg-red-50 border-red-200',
   }[tone];
 
   const verdictClass = {
-    neutral: 'text-ink-700',
-    good: 'text-emerald-800 dark:text-emerald-300',
-    warn: 'text-amber-800 dark:text-amber-300',
-    bad: 'text-red-800 dark:text-red-300',
+    neutral: 'text-ink-800',
+    good: 'text-emerald-800',
+    warn: 'text-amber-800',
+    bad: 'text-red-800',
   }[tone];
 
   return (
@@ -265,15 +286,21 @@ export function ResultCard({
       // Results appear after the reader acts, so screen readers need to be told.
       // `polite` rather than `assertive`: it should not interrupt typing.
       aria-live="polite"
-      className={`rounded-xl border p-5 sm:p-6 ${toneClass}`}
+      className={`rounded-card border p-5 sm:p-7 ${toneClass}`}
     >
-      <p className="text-sm font-medium text-ink-600">{label}</p>
-      <p className="mt-1 flex items-baseline gap-1.5">
-        <span className="numeric text-4xl font-bold text-ink-900">{value}</span>
-        {unit && <span className="text-lg font-medium text-ink-500">{unit}</span>}
+      <p className="eyebrow eyebrow-muted">{label}</p>
+      <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
+        <span className="numeric text-4xl font-bold text-ink-900 sm:text-5xl">
+          {value}
+        </span>
+        {unit && <span className="text-lg font-semibold text-ink-500">{unit}</span>}
       </p>
-      {verdict && <p className={`mt-2 font-semibold ${verdictClass}`}>{verdict}</p>}
-      {children && <div className="mt-4">{children}</div>}
+      {verdict && (
+        <p className={`mt-3 text-lg font-bold tracking-tight ${verdictClass}`}>
+          {verdict}
+        </p>
+      )}
+      {children && <div className="mt-5">{children}</div>}
     </div>
   );
 }
@@ -285,13 +312,16 @@ export function ResultRows({
   rows: readonly { label: string; value: string; emphasis?: boolean }[];
 }) {
   return (
-    <dl className="divide-y divide-line rounded-xl border border-line">
+    <dl className="divide-y divide-line overflow-hidden rounded-card border border-line bg-panel">
       {rows.map((row) => (
-        <div key={row.label} className="flex items-center justify-between gap-4 px-5 py-3">
+        <div
+          key={row.label}
+          className="flex items-center justify-between gap-4 px-5 py-3.5"
+        >
           <dt className="text-sm text-ink-600">{row.label}</dt>
           <dd
-            className={`numeric text-sm ${
-              row.emphasis ? 'font-bold text-ink-900' : 'font-medium text-ink-800'
+            className={`numeric shrink-0 text-sm ${
+              row.emphasis ? 'font-bold text-ink-900' : 'font-semibold text-ink-800'
             }`}
           >
             {row.value}
@@ -304,11 +334,7 @@ export function ResultRows({
 
 export function ResetButton({ onClick }: { onClick: () => void }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-ink-700 transition-colors hover:bg-panel-2"
-    >
+    <button type="button" onClick={onClick} className="btn btn-outline btn-sm">
       Reset
     </button>
   );

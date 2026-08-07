@@ -70,7 +70,7 @@ export function ToolExplorer({
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Filter tools…"
             aria-label="Filter tools by name or keyword"
-            className="h-11 w-full rounded-xl border border-line bg-panel pl-10 pr-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-ink-500 focus:border-brand-500"
+            className="h-11 w-full rounded-full border border-line bg-panel-2 pl-10 pr-4 text-sm text-ink-900 outline-none transition-colors placeholder:text-ink-500 focus:border-brand-500 focus:bg-panel focus:ring-4 focus:ring-brand-500/15"
           />
         </div>
 
@@ -95,13 +95,13 @@ export function ToolExplorer({
         </div>
       </div>
 
-      <p aria-live="polite" className="mt-5 text-sm text-ink-500">
+      <p aria-live="polite" className="eyebrow eyebrow-muted mt-6">
         {visible.length === tools.length
           ? `Showing all ${tools.length} tools`
           : `${visible.length} of ${tools.length} tools`}
       </p>
 
-      <div className="mt-4">
+      <div className="mt-5">
         {visible.length > 0 ? (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((tool) => (
@@ -111,9 +111,11 @@ export function ToolExplorer({
             ))}
           </ul>
         ) : (
-          <div className="rounded-2xl border border-dashed border-line px-6 py-16 text-center">
-            <p className="font-medium text-ink-900">Nothing matches that filter</p>
-            <p className="mx-auto mt-1.5 max-w-sm text-sm text-ink-500">
+          <div className="rounded-card-lg border border-dashed border-line px-6 py-16 text-center">
+            <p className="font-display text-lg font-extrabold tracking-tight text-ink-900">
+              Nothing matches that filter
+            </p>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
               Try a broader term, or clear the filters to see everything.
             </p>
             <button
@@ -122,7 +124,7 @@ export function ToolExplorer({
                 setQuery('');
                 setActive('all');
               }}
-              className="mt-5 rounded-lg bg-invert px-4 py-2 text-sm font-semibold text-on-invert transition-colors hover:bg-invert-hover"
+              className="btn btn-ink btn-sm mt-6"
             >
               Clear filters
             </button>
@@ -153,17 +155,17 @@ function FilterChip({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-sm font-medium transition-colors ${
+      className={`flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition-colors ${
         selected
           ? 'border-transparent bg-invert text-on-invert'
-          : 'border-line text-ink-600 hover:border-ink-300 hover:text-ink-900'
+          : 'border-line bg-panel text-ink-600 hover:border-brand-400 hover:text-ink-900'
       }`}
     >
       {icon && (
         <span style={selected || !accent ? undefined : { color: accent }}>{icon}</span>
       )}
       {label}
-      <span className={selected ? 'opacity-60' : 'text-ink-500'}>{count}</span>
+      <span className={`numeric ${selected ? 'opacity-60' : 'text-ink-500'}`}>{count}</span>
     </button>
   );
 }

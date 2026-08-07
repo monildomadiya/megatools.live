@@ -56,53 +56,54 @@ export default async function CategoryPage({ params }: PageProps) {
     <>
       <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
 
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <Breadcrumbs crumbs={crumbs} />
+      <section className="hero-bg isolate overflow-hidden px-4 pb-14 pt-6 sm:px-6 sm:pt-8">
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <Breadcrumbs crumbs={crumbs} />
 
-        <header className="mt-6 max-w-3xl">
-          <div className="flex items-center gap-3">
-            <span
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl"
-              style={{
-                color: accent,
-                backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
-              }}
-            >
-              <CategoryIcon category={category.slug} className="h-6 w-6" />
-            </span>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-                {category.h1}
-              </h1>
-              <p className="mt-1 text-sm text-ink-500">
-                {tools.length === 0
-                  ? 'In progress'
-                  : `${tools.length} ${tools.length === 1 ? 'tool' : 'tools'}`}
-              </p>
-            </div>
-          </div>
-          <p className="mt-5 text-lg leading-relaxed text-ink-600">{category.intro}</p>
-        </header>
-
-        <div className="mt-10">
-          {tools.length > 0 ? (
-            <ToolGrid tools={tools} />
-          ) : (
-            <div className="rounded-2xl border border-dashed border-line px-6 py-16 text-center">
-              <p className="font-medium text-ink-900">Still being written</p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-500">
-                Every tool in this section gets a worked example and cited sources before
-                it goes live, which takes a while.
-              </p>
-              <Link
-                href="/tools"
-                className="mt-6 inline-block rounded-lg bg-invert px-4 py-2 text-sm font-semibold text-on-invert transition-colors hover:bg-invert-hover"
+          <header className="mt-6 max-w-3xl">
+            <div className="flex items-center gap-3.5">
+              <span
+                className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border"
+                style={{
+                  color: accent,
+                  backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                  borderColor: `color-mix(in oklab, ${accent} 22%, transparent)`,
+                }}
               >
-                Browse other tools
-              </Link>
+                <CategoryIcon category={category.slug} className="h-7 w-7" />
+              </span>
+              <div>
+                <p className="eyebrow" style={{ color: accent }}>
+                  {tools.length === 0
+                    ? 'In progress'
+                    : `${tools.length} ${tools.length === 1 ? 'tool' : 'tools'}`}
+                </p>
+                <h1 className="mt-2 text-display-lg text-ink-900">{category.h1}</h1>
+              </div>
             </div>
-          )}
+            <p className="mt-5 text-lg leading-relaxed text-ink-600">{category.intro}</p>
+          </header>
         </div>
+      </section>
+
+      <div className="mx-auto max-w-6xl px-4 pb-8 sm:px-6">
+        {tools.length > 0 ? (
+          <ToolGrid tools={tools} />
+        ) : (
+          <div className="rounded-card-lg border border-dashed border-line bg-panel px-6 py-16 text-center">
+            <p className="font-display text-xl font-extrabold tracking-tight text-ink-900">
+              Still being written
+            </p>
+            <p className="mx-auto mt-3 max-w-md leading-relaxed text-ink-500">
+              Every tool in this section gets a worked example and cited sources before it
+              goes live, which takes a while.
+            </p>
+            <Link href="/tools" className="btn btn-primary btn-md mt-7">
+              Browse other tools
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

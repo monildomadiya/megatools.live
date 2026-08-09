@@ -1,0 +1,74 @@
+## The question behind the question
+
+"How many days between 1 March and 3 March?" has two correct answers, and which one you want depends entirely on what you are counting.
+
+**Two**, if you are measuring elapsed time. Two nights pass. A car hired on the 1st and returned on the 3rd was out for two days, and that is what you are charged for.
+
+**Three**, if you are counting the days themselves. A conference running from the 1st to the 3rd is a three-day conference. A jury summons for those dates asks for three days of your life.
+
+Neither is a rounding error or a convention this tool picked; they are answers to different questions. This calculator reports both, labelled, rather than choosing for you — because the one-day discrepancy between them is the single most common date mistake in contracts, invoices and project plans.
+
+Legal drafting has vocabulary for it. "Clear days" excludes both the first and the last day. "Days inclusive" counts both. A notice period of "14 days from 1 June" almost always means the period ends on 15 June, not 14 June, because the period runs *from* a day rather than including it. If a document does not say, the applicable procedural rules usually do.
+
+## Days, weeks, months, years
+
+The total day count is unambiguous once you have fixed the inclusive question. The calendar breakdown — years, months and days — is not, and it is worth understanding what this tool does.
+
+**It counts real calendar months, not average ones.** From 15 January to 15 March is exactly two months here, even though that span is 59 days in a common year and 60 in a leap year. Tools that report months by dividing the day count by 30.44 give a smoothed statistical figure. That figure is useful for a chart and wrong for an anniversary, a contract term or a rent period.
+
+**It clamps at month ends.** One month after 31 January has no exact answer, since 31 February does not exist, so it resolves to 28 or 29 February. Every mainstream date library does this. One consequence is worth knowing: adding a month twice is not always the same as adding two months. From 31 January, one month gives 28 February, and one more month gives 28 March — but two months at once gives 31 March.
+
+**The remainder is measured in real days from a clamped anniversary**, which is why it can never come out negative. The naive method — subtract the day numbers and borrow a month when the result goes below zero — breaks at month ends. From 31 January to 1 March it borrows February's 28 days against a shortfall of 30 and still ends up negative, producing a nonsensical "1 month, −2 days".
+
+## Working days
+
+The default here is Monday to Friday, which is the convention most contracts, courier services and statutory deadlines use.
+
+Public holidays are the part no calculator can assume. They differ by country, by region within a country, by industry, and often by employer — England and Scotland do not share a full set, and the United States has federal holidays that many private employers do not observe. So this tool takes them as input: paste the dates that apply to you and they are subtracted from the weekday total.
+
+Holidays landing on a Saturday or Sunday are ignored, because they were never working days to begin with. Whether they generate a substitute weekday off is a matter of local law — the UK grants substitute days, the US federal system observes a nearby weekday, and many jurisdictions do neither. If a substitute day applies to you, enter the substitute date.
+
+Some definitions are narrower still. **Banking days** exclude days when the settlement system is closed, which is not the same list as public holidays. **Court days** follow the court's own calendar. **Trading days** follow the exchange's. If a contract says "business days" without defining them, that ambiguity has been litigated more than once.
+
+## Leap years and the Gregorian rule
+
+A year is a leap year if it is divisible by 4, **except** century years, which are leap years only if divisible by 400.
+
+- 1996: divisible by 4, leap year
+- 1900: century, not divisible by 400, **not** a leap year
+- 2000: century, divisible by 400, leap year
+- 2100: century, not divisible by 400, will not be a leap year
+
+The 1900 exception is responsible for a famous piece of software archaeology: Lotus 1-2-3 treated 1900 as a leap year, Excel copied the bug for compatibility, and Excel's date serial numbers are still wrong by a day for anything before 1 March 1900 — a bug now preserved deliberately for thirty-odd years of backwards compatibility.
+
+The rule gives 97 leap years per 400 years, making the average Gregorian year 365.2425 days. The actual tropical year is about 365.24219 days, so the calendar gains roughly 27 seconds a year — about one day every 3,200 years. That is a problem for a future civilisation, not for a project plan.
+
+The calculator counts how many 29 Februaries fall inside your range, which is a quick way to check a day count that feels one off.
+
+## ISO 8601 weeks
+
+Week numbers are more slippery than they look, and there are two incompatible systems in common use.
+
+**ISO 8601**, used across Europe and in most logistics, manufacturing and payroll systems, defines the week as starting on Monday, with week 1 being the week that contains the first Thursday of January — equivalently, the week containing 4 January. This means a year has 52 or 53 weeks, and the first days of January can legitimately belong to week 52 or 53 of the *previous* year. 1 January 2027 falls in ISO week 53 of 2026.
+
+**The US convention** starts weeks on Sunday and calls the week containing 1 January week 1, which produces a partial first week and different numbers for most of the year.
+
+This calculator reports ISO weeks, and labels them with the ISO year rather than the calendar year for exactly the reason above.
+
+## Why two calculators can disagree by one day
+
+Three causes account for nearly all of it.
+
+**The inclusive question.** Covered above. Check what each tool is counting before assuming one is broken.
+
+**Time zones.** A "date" is not a point in time; it is a date *somewhere*. If one tool interprets your input in local time and another in UTC, and you are east or west of Greenwich, the two can land on different days. This calculator parses both dates as UTC midnight, so the clock never enters the arithmetic and the result does not change depending on where you are sitting.
+
+**Daylight saving.** A span crossing a DST transition is 23 or 25 hours long, not 24. Any tool that computes elapsed milliseconds and divides by 86,400,000 will produce a fraction and round it — sometimes the wrong way. Working on whole UTC dates avoids the problem entirely, which is why this tool does.
+
+## What this calculator does not do
+
+It works with dates, not times. It cannot tell you the duration between 09:30 on Tuesday and 14:15 on Friday, and it does not know about time zones beyond deliberately ignoring them.
+
+It also does not know your holidays, your notice-period rules, or whether your contract counts clear days. It gives you the raw counts under stated conventions; applying the right convention to your situation is a decision only you can make, and if the answer matters legally, the governing rules of procedure are the authority — not this page.
+
+Dates are handled per the proleptic Gregorian calendar and ISO 8601, and week numbering follows ISO 8601-1:2019. The calendar rules trace to the USNO's astronomical applications material, and the bank holiday examples to GOV.UK — all linked below.

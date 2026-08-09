@@ -1,0 +1,107 @@
+## What these formulas actually measure
+
+Every readability formula on this page counts the same two things: how long your sentences are, and how long your words are. That is it.
+
+None of them read your writing. They cannot tell whether an argument follows, whether an example lands, whether the paragraphs are in a sensible order, or whether a sentence means anything at all. A paragraph of short, common, entirely unrelated words scores as brilliantly readable.
+
+Knowing that is the difference between using these scores well and using them badly. They are a smoke alarm: a bad reading tells you something is probably wrong and roughly where to look. A good reading tells you almost nothing.
+
+## Flesch Reading Ease
+
+Rudolf Flesch published this in 1948, and it remains the most widely used readability measure in English.
+
+> 206.835 − 1.015 × (words ÷ sentences) − 84.6 × (syllables ÷ words)
+
+The output is a score, not a grade, and higher is easier. The constants were fitted to reading comprehension data rather than derived from anything, which is why they look arbitrary — they are.
+
+| Score | Interpretation | Typical example |
+| --- | --- | --- |
+| 90–100 | Very easy, 5th grade | Children's books |
+| 80–90 | Easy, 6th grade | Consumer fiction |
+| 70–80 | Fairly easy, 7th grade | Popular magazines |
+| 60–70 | Plain English, 8th–9th grade | Newspapers, good web copy |
+| 50–60 | Fairly difficult, 10th–12th grade | Broadsheet features |
+| 30–50 | Difficult, college | Academic writing |
+| 0–30 | Very difficult | Legal contracts |
+
+The 60–70 band is the usual target for general-audience writing, and it is the one most style guides point at. It is also a legal requirement in places: several US states set a statutory minimum Flesch score for consumer insurance policies, Florida's being the best known at 45.
+
+Note that the scale is not bounded at 100. A text of one-syllable words in very short sentences can score above 120.
+
+## Flesch–Kincaid Grade Level
+
+The same two inputs, reweighted to produce a US school grade instead of a score.
+
+> 0.39 × (words ÷ sentences) + 11.8 × (syllables ÷ words) − 15.59
+
+It was developed in 1975 by J. Peter Kincaid and colleagues under a US Navy contract, to check whether technical manuals were readable by the enlisted personnel who had to use them. That origin explains its later spread: it was written into US Department of Defense procurement standards, then into word processors, and from there into everything.
+
+A result of 8.0 means an average American eighth-grader — around 13 to 14 years old — should be able to read it. Most guidance for general audiences targets grade 8 or below.
+
+The grade is not bounded either, and it can go negative for very simple text.
+
+## Gunning Fog
+
+Robert Gunning developed this for business writing in 1952. It replaces the syllable average with the proportion of "complex" words, defined as three or more syllables.
+
+> 0.4 × [ (words ÷ sentences) + 100 × (complex words ÷ words) ]
+
+The original definition excludes proper nouns, familiar compound words, and verbs made three-syllable only by an -ed or -es ending. Most implementations, including this one, skip those exclusions because they cannot be detected reliably, which makes automated Fog scores run slightly high on text with a lot of names in it.
+
+Gunning's own target was a Fog index under 12 for a general audience.
+
+## SMOG
+
+G. Harry McLaughlin published SMOG in 1969, and it is the standard in health communication for one specific reason: it was calibrated against **100% comprehension**, where the Flesch formulas were calibrated against 50–75%. If it matters that everyone understands — a medication leaflet, a consent form, a safety notice — SMOG is the appropriate measure and it will give you a higher, more conservative grade.
+
+> 1.0430 × √( polysyllables × (30 ÷ sentences) ) + 3.1291
+
+It was designed to be applied to a sample of exactly 30 sentences — ten from the start, ten from the middle, ten from the end. The formula above is the generalisation everyone uses for other lengths, and it is genuinely unreliable on short passages. The tool warns when your sample is too small for it.
+
+## Coleman–Liau and ARI
+
+Both of these count **characters** instead of syllables, which was the point: they were designed for mechanical scoring in an era before reliable syllable-counting software.
+
+**Coleman–Liau** uses letters per 100 words and sentences per 100 words:
+
+> 0.0588 × L − 0.296 × S − 15.8
+
+**Automated Readability Index** uses characters per word and words per sentence:
+
+> 4.71 × (characters ÷ words) + 0.5 × (words ÷ sentences) − 21.43
+
+Because they avoid syllables entirely, they are the most reproducible of the six — two implementations will agree exactly, where syllable-based formulas will not. They are also the least sensitive to the difference between a familiar long word and an unfamiliar one, since both are simply long.
+
+## Why no two tools agree
+
+Two problems, neither of which has a clean solution.
+
+**Syllables cannot be counted by rule.** English spelling is not a reliable guide to pronunciation. "Business" is two syllables, "busy" is two, "busier" is three. "Fire" is one syllable for some speakers and two for others. "Poem" and "orange" defeat almost every heuristic. Every readability tool uses a slightly different vowel-group approximation with a slightly different list of corrections, and they disagree on maybe 5% of words — which is enough to move a grade level by half a point.
+
+**Sentences are hard to detect.** A full stop ends a sentence, except in "Dr. Smith", "3.5 kg", "e.g." and "etc.". A bullet list may or may not be sentences. A heading has no terminal punctuation at all, so a tool that splits on punctuation alone will glue a heading to the paragraph below it and report one very long sentence. This tool guards the common abbreviations and decimals, which handles most of it and not all of it.
+
+So expect a spread of about half a grade level between any two tools, and do not treat a change from 8.2 to 8.0 as an improvement. Only large moves mean anything.
+
+## Using the score to actually improve writing
+
+The scores respond to two levers, and one is much more useful than the other.
+
+**Sentence length is the lever worth pulling.** It has the largest coefficient in most of the formulas and, unlike word choice, shortening a sentence almost always improves clarity as well as the score. The tool lists your longest sentences for exactly this reason — splitting a 60-word sentence into three is usually a real improvement, not a cosmetic one.
+
+**Word length is the lever to be careful with.** The formulas count syllables, not familiarity, which produces perverse advice. "Everybody" is four syllables and universally understood. "Wend" is one syllable and almost nobody uses it. Swapping the first for the second improves your score and makes the writing worse.
+
+The genuinely useful version of this advice is to replace *jargon* with plain equivalents — "use" for "utilise", "buy" for "purchase", "about" for "approximately" — where a plainer word exists and means the same thing. Where it does not, keep the technical term and explain it once. The Federal Plain Language Guidelines are the best free reference for this, and they are about word choice and structure rather than about hitting a number.
+
+## Readability and search
+
+Google has said repeatedly that it does not use a readability score as a ranking factor, and no formula appears in any documented ranking system.
+
+What readability affects is what people do. Text that is hard to follow gets abandoned, and abandonment is visible in ways that matter regardless of whether a formula is being read. Writing so people understand you is worth doing; writing to hit 60.0 on a scale is not, and the two come apart quickly if you optimise for the number.
+
+## What this tool does not do
+
+It does not check spelling, grammar, tone, accuracy or structure. It does not know your audience — grade 8 is right for a consumer page and wrong for a paper aimed at specialists, where the necessary terminology sets a floor no amount of editing will get below.
+
+It also works on English. The formulas were all fitted to English text, and applying them to another language produces a number with no meaning behind it.
+
+The formulas here are implemented as published: Flesch (1948), Kincaid et al. (1975), Gunning (1952), McLaughlin (1969), Coleman–Liau (1975) and ARI (1967). The two primary papers most worth reading and the Federal Plain Language Guidelines are linked below.

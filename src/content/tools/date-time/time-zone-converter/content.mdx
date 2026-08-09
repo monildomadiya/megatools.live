@@ -1,0 +1,79 @@
+## Why the date matters as much as the time
+
+Most time zone converters ask you for a time and quietly assume today's date. That is fine for "what time is it in Tokyo right now" and wrong for almost everything else, because the gap between two cities is not a constant.
+
+London and New York are five hours apart for most of the year. But the United States moves its clocks forward on the second Sunday in March, and the European Union moves on the last Sunday in the same month. For those two or three weeks in between, the gap is four hours. In autumn it happens again in reverse: the EU falls back on the last Sunday in October, the US on the first Sunday in November, so there is a week at six hours.
+
+A recurring 3 p.m. London call is a 10 a.m. New York call for most of the year, an 11 a.m. call for three weeks in spring, and a 9 a.m. call for a week in autumn. Anyone who has run an international standing meeting has watched this happen.
+
+This converter asks for the date first, and applies the rules that were in force on that date.
+
+## Offsets, zones, and the difference between them
+
+A **UTC offset** is a number: +05:30, −08:00. It tells you how far local clocks are from Coordinated Universal Time at one particular moment, and nothing else.
+
+A **time zone** is a place with a history. `America/New_York` is not "UTC−5" — it is the rule that says this region is UTC−5 in winter and UTC−4 in summer, that it switched on these specific dates in each past year, and that it once did something different again before 1967.
+
+The distinction matters whenever you store a future time. Recording "14:00 UTC−5" for a meeting next November is a bet that the rules will not change. Recording "14:00 America/New_York" survives a legislature abolishing daylight saving, which several have done at a few weeks' notice.
+
+## Never trust an abbreviation
+
+`CST` means Central Standard Time (UTC−6), China Standard Time (UTC+8), and Cuba Standard Time (UTC−5). `IST` means India (UTC+5:30), Ireland (UTC+1) and Israel (UTC+2). `BST` means British Summer Time (UTC+1) and, historically, Bering Standard Time.
+
+There is no authority that assigns these, no registry, and no guarantee of uniqueness. They are conventions that grew up locally and collided globally. A calendar invite reading "3pm IST" has genuinely started meetings four and a half hours apart.
+
+The IANA identifiers — `Asia/Kolkata`, `Europe/Dublin`, `Asia/Jerusalem` — are unambiguous, which is why every operating system, database and programming language uses them internally. This tool labels zones by city for readability and uses the IANA identifier underneath.
+
+## UTC and GMT
+
+They are the same to within 0.9 seconds, but they are not the same kind of thing.
+
+**UTC** is a time standard. It is generated from a weighted average of about 450 atomic clocks worldwide, coordinated by the BIPM, and kept within 0.9 seconds of the Earth's actual rotation by inserting occasional leap seconds. It has no daylight saving and never will.
+
+**GMT** is a time zone based on mean solar time at the Greenwich meridian. In the UK it also colloquially means winter time specifically — Britain is on GMT in January and BST in July — which makes "GMT" ambiguous in exactly the way a technical standard must not be.
+
+For anything technical, log files, or API contracts, use UTC. The convention of writing `Z` (for Zulu) at the end of an ISO 8601 timestamp means UTC precisely.
+
+Leap seconds themselves are on the way out: in 2022 the General Conference on Weights and Measures resolved to stop inserting them by 2035, having accepted that a one-second discontinuity causes more trouble in computing than a slowly drifting standard does in astronomy.
+
+## Offsets that are not whole hours
+
+The idea that the world is divided into 24 hour-wide slices is a convenient fiction.
+
+- **India** is UTC+5:30, a single zone spanning a country wide enough for two
+- **Nepal** is UTC+5:45, deliberately set to Kathmandu's solar time, and the only 45-minute national offset
+- **Iran** is UTC+3:30, **Afghanistan** UTC+4:30, **Myanmar** UTC+6:30
+- **The Chatham Islands** are UTC+12:45, and observe daylight saving on top
+- **Newfoundland** is UTC−3:30
+
+These exist because a country set its clock to the solar time of its capital and never rounded. Any code that stores offsets as whole hours is broken for about a fifth of the world's population, which is a bug that resurfaces every few years in some new booking system.
+
+## The hours that do not exist, and the ones that happen twice
+
+When clocks spring forward, an hour of wall-clock time is skipped. In the United States, on the changeover date, 02:00 becomes 03:00 and 02:30 simply never occurs. A time entered inside that gap has no corresponding instant, and this converter says so rather than silently shifting it.
+
+When clocks fall back, an hour repeats. 01:30 happens twice, an hour apart, and the wall clock alone cannot tell you which one you mean. Databases handle this by storing the UTC instant; humans handle it by not scheduling anything at 1:30 a.m. on the last Sunday in October.
+
+Both cases are why "add 24 hours" and "same time tomorrow" are different operations. On a changeover date, one of them is off by an hour.
+
+## Countries are not time zones
+
+**China** spans five geographic zones and keeps one official time, UTC+8. In Kashgar, in the far west, the sun can rise close to 10 a.m. by the official clock, and much local life runs on an unofficial Xinjiang time two hours behind.
+
+**Russia** has eleven zones. **France**, counting overseas departments and territories, has twelve — more than any other country. **The United States** has six including Alaska and Hawaii, and Arizona mostly does not observe daylight saving while the Navajo Nation within it does.
+
+**Spain** is on Central European Time despite sitting almost entirely west of Greenwich, a decision made in 1940 and never reversed, which is a large part of why Spanish daily life runs so much later than the rest of Europe's.
+
+## Where the rules come from
+
+Every operating system, browser and database gets its answers from the same place: the **IANA Time Zone Database**, also called tz or zoneinfo. It records every offset and daylight saving rule change back to 1970, city by city, and it is updated several times a year as governments announce changes — sometimes with only weeks of notice.
+
+This tool reads offsets from your device's copy of that database through the browser's `Intl` API. That has one consequence worth stating: if a government changed its rules very recently and your device has not been updated, the answer here will reflect the old rule. For anything expensive — a flight, a court filing, an exam — confirm against an official source.
+
+## What this converter does not do
+
+It converts one moment between zones. It does not find a meeting slot that works for everyone, does not know your working hours, and does not handle recurring events — which is where daylight saving causes the most trouble, because a weekly meeting fixed in one zone drifts in every other zone twice a year.
+
+It also assumes the future rules are the current ones. They are the best available guess, and for dates more than a year or two out they are only that: several countries have abolished or reintroduced daylight saving at short notice in recent years, and the EU's long-discussed plan to stop changing clocks remains unresolved.
+
+Zone data comes from the IANA Time Zone Database, the UTC definition from the BIPM, and the US daylight saving rules from the Department of Transportation, which has administered them since the Uniform Time Act. All three are linked below.

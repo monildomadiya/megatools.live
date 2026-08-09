@@ -1,0 +1,87 @@
+## Speed is one number expressed six different ways
+
+Every unit on this page is distance divided by time. The only thing that changes between them is which distance and which time, and every one of those choices is a definition rather than a measurement — so every conversion here is exact.
+
+| Unit | Exact value in m/s | Where it comes from |
+| --- | --- | --- |
+| Metre per second | 1 | the SI form |
+| Kilometre per hour | 1000 ÷ 3600 = 0.2777… | metres per kilometre over seconds per hour |
+| Mile per hour | 1609.344 ÷ 3600 = 0.44704 | the mile is exactly 1,609.344 m |
+| Foot per second | 0.3048 | the foot is exactly 0.3048 m |
+| Knot | 1852 ÷ 3600 = 0.5144… | one nautical mile, exactly 1,852 m, per hour |
+
+Mach is the exception, and it is the one that needs a warning rather than a factor. It is not a unit of speed. More on that below.
+
+## Converting speed by hand
+
+Take the value to metres per second, then out again.
+
+### Worked example — mph to km/h
+
+Convert 70 mph, a British motorway limit, to km/h.
+
+- To m/s: 70 × 0.44704 = 31.293 m/s
+- To km/h: 31.293 ÷ 0.2777… = **112.65 km/h**
+
+The single-step version is to multiply mph by 1.609344. The mental version — add 60%, so 70 becomes 70 + 42 = 112 — is within half a percent, which is close enough to read a sign by.
+
+### Worked example — km/h to m/s
+
+Convert 100 km/h to metres per second.
+
+- 100 ÷ 3.6 = **27.78 m/s**
+
+This is worth internalising if you drive. At 100 km/h you cover nearly 28 metres in every second, so a two-second reaction time is 56 metres of road gone before the brakes touch. The speedometer figure hides that; the m/s figure does not.
+
+### Worked example — knots to mph
+
+Convert 20 knots of wind to mph.
+
+- To m/s: 20 × 0.5144 = 10.289 m/s
+- To mph: 10.289 ÷ 0.44704 = **23.02 mph**
+
+A knot is about 1.151 mph. The 15% gap between a nautical mile and a statute mile is large enough that treating them as interchangeable materially understates a wind or a boat speed.
+
+## Speed and pace are reciprocals
+
+Runners and cyclists mostly think in pace — minutes per kilometre or minutes per mile — while every speed unit above is the other way round, distance per unit of time. The two are reciprocals, which is why converting between them feels awkward and why a 30-second improvement in pace means something different at 4:00/km than at 7:00/km.
+
+The conversion is:
+
+- **Speed in km/h** = 60 ÷ (pace in minutes per km)
+- **Pace in minutes per km** = 60 ÷ (speed in km/h)
+
+A 5:00/km pace is 60 ÷ 5 = 12 km/h. A 4:00/km pace is 15 km/h. Those two paces are one minute apart, and the speeds are 3 km/h apart. Now compare 8:00/km (7.5 km/h) and 7:00/km (8.57 km/h) — also one minute apart, but only about 1.07 km/h of speed. The same pace improvement is worth roughly three times as much speed at the fast end, which is the arithmetic behind why the last minute of pace is so much harder to find than the first.
+
+Useful reference points: a 5:41/km pace is a 4-hour marathon. A 4:00/km pace is a 2:49 marathon. A 3:00/km pace, 20 km/h, is faster than the world record and is included only to show where the scale ends.
+
+## Mach is not a speed
+
+Mach number is the ratio of an object's speed to the speed of sound in the air *around that object*. Since the speed of sound in an ideal gas depends only on temperature, and air temperature varies enormously with altitude, Mach 1 is not a fixed number of metres per second.
+
+The relationship is *a* = √(γRT), where γ is the ratio of specific heats for air (about 1.4), R the specific gas constant (287.05 J/kg·K), and T the absolute temperature in kelvin. Working it through:
+
+- At sea level in the International Standard Atmosphere, 15 °C (288.15 K): **340.3 m/s**, or 1,225 km/h
+- At 11,000 m, where the ISA troposphere ends at −56.5 °C (216.65 K): **295.1 m/s**, or 1,062 km/h
+
+That is a 13% difference. An airliner cruising at Mach 0.85 in the stratosphere is doing about 903 km/h true airspeed; the same Mach number at sea level would be 1,041 km/h. This converter pins Mach to the sea-level ISA value so the number is reproducible, and the dropdown says so, but do not use it for anything at altitude.
+
+Pressure altitude matters for a second reason in aviation: indicated airspeed, true airspeed and ground speed all differ, and only ground speed tells you when you will arrive. A converter can only ever handle the last of those.
+
+## Where speed conversions go wrong
+
+**Assuming a knot is a nautical variant of mph.** It is 15% larger. A 30-knot wind is a 34.5 mph wind, and the difference between those two is the difference between two Beaufort forces.
+
+**Mixing up average and instantaneous speed.** A journey of 120 km in 2 hours gives an average of 60 km/h, but that average tells you nothing about the maximum. Conversely, driving 60 km at 100 km/h and 60 km at 50 km/h does not average 75 km/h — it averages 66.7 km/h, because you spend more time at the slower speed. Average speed is total distance over total time, never the mean of the speeds.
+
+**Speed limits are not conversions.** A 50 km/h urban limit is 31.07 mph, but the equivalent limit in a mph country is 30 mph, not 31. Limits are set as round numbers in the local unit and are legally the number posted, not its conversion.
+
+**Wind gusts versus sustained wind.** Forecasts quote a sustained speed, usually a 10-minute mean, and a gust figure separately. Converting one does not give you the other, and the difference is often 40% or more.
+
+**Rounding a Mach number.** Mach values are usually quoted to two decimals because the difference between Mach 0.80 and Mach 0.85 is about 50 km/h at cruise. Dropping a digit throws away more than the precision suggests.
+
+## What is not here
+
+This tool converts steady speeds. It does not calculate acceleration, stopping distance, or the time to cover a distance — those need a second input and a different formula. It also does not handle the aviation distinction between indicated, calibrated, equivalent and true airspeed, all of which are real and all of which differ from each other in flight.
+
+The exact factors above trace to the SI Brochure and NIST Special Publication 811. The speed-of-sound figures come from the U.S. Standard Atmosphere, 1976, which is the model the ISA numbers in aviation are built on. All three are linked below.

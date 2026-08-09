@@ -1,0 +1,92 @@
+## The mistake this page exists to stop
+
+Someone measures a room at 20 square metres, wants the figure in square feet, remembers that a metre is about 3.28 feet, multiplies, and orders 66 square feet of flooring for a room that needs 215.
+
+That error is off by a factor of 3.3, and it is the most common unit mistake in the trades. It happens because the length factor feels like the right number to reach for, and because 66 is not so obviously absurd that it stops anyone. Area is two-dimensional. When you convert it, both dimensions change, so the factor is squared.
+
+A metre is 3.280839895 feet. A square metre is 3.280839895² = 10.7639104 square feet. Volume goes further still: a cubic metre is 3.280839895³ = 35.3146667 cubic feet. The rule generalises — an *n*-dimensional quantity uses the length factor raised to the *n*th power.
+
+## The factors this converter uses
+
+Everything is defined against the square metre, and every imperial value is the exact square of the exact length definition rather than a separately rounded area constant.
+
+| Unit | Exact value in square metres | Where it comes from |
+| --- | --- | --- |
+| Square millimetre | 0.000001 | 0.001² |
+| Square centimetre | 0.0001 | 0.01² |
+| Square metre | 1 | base unit |
+| Hectare | 10,000 | 100 m × 100 m |
+| Square kilometre | 1,000,000 | 1,000² |
+| Square inch | 0.00064516 | 0.0254² |
+| Square foot | 0.09290304 | 0.3048² |
+| Square yard | 0.83612736 | 0.9144² |
+| Acre | 4,046.8564224 | 43,560 ft² |
+| Square mile | 2,589,988.110336 | 1,609.344² |
+
+None of these are measurements. The 1959 international yard and pound agreement fixed the yard at exactly 0.9144 metres, and every imperial area unit above follows from that by arithmetic. The acre inherits its exactness from the square foot: it is defined as exactly 43,560 square feet, so 43,560 × 0.09290304 gives 4,046.8564224 square metres with no rounding anywhere in the chain.
+
+The converter takes your input to square metres, then out to the target. Going through a single base unit means converting acres to square yards carries no more error than converting acres to square metres does.
+
+## How to convert area by hand
+
+Two steps, the same as any unit conversion: multiply into the base unit, divide out of it.
+
+### Worked example — square metres to square feet
+
+Convert 20 m² to square feet.
+
+- To square metres: already there, 20 m²
+- To square feet: 20 ÷ 0.09290304 = **215.28 ft²**
+
+The mental shortcut is to multiply by 10.76. For a rough check, "add most of an order of magnitude" gets you close enough to notice if you have made the 3.28 mistake.
+
+### Worked example — acres to hectares
+
+Convert 12 acres to hectares.
+
+- To square metres: 12 × 4,046.8564224 = 48,562.28 m²
+- To hectares: 48,562.28 ÷ 10,000 = **4.856 ha**
+
+The shortcut is to multiply acres by 0.4047. Going the other way, a hectare is about 2.471 acres.
+
+### Worked example — a room in feet and inches
+
+Rooms are rarely a whole number of feet, and this is where mixed units cause trouble.
+
+A room measuring 14 ft 6 in by 11 ft 3 in:
+
+- Reduce each measurement to one unit first: 14.5 ft and 11.25 ft
+- Multiply: 14.5 × 11.25 = **163.125 ft²**
+- In metric: 163.125 × 0.09290304 = **15.155 m²**
+
+Converting the feet and the inches separately and adding at the end is where people go wrong, because the product of two mixed measurements is not the sum of the products of their parts.
+
+## Acres, hectares, and why land is measured strangely
+
+An acre is not a square. Historically it was a strip one furlong long by one chain wide — 660 feet by 66 feet — because that was the area a team of oxen could plough in a day, and a long thin strip minimised the number of turns. The awkward number 43,560 is the fossil of that: 660 × 66.
+
+A hectare, by contrast, is exactly what it sounds like: a square 100 metres on a side, 10,000 square metres. It was designed rather than inherited.
+
+Both survive because land records do not get rewritten. Property in the United States and much of the Commonwealth is registered in acres; property across most of continental Europe is registered in hectares. Agricultural yields are quoted per acre in one place and per hectare in another, which is worth remembering before comparing two farming figures directly — the same yield looks 2.47 times better in the wrong unit.
+
+Smaller traditional units still appear in deeds. A rood is a quarter of an acre. A perch, also called a rod or pole, is a fortieth of a rood — about 25.29 square metres. They are obsolete for new work but they turn up in older titles.
+
+## Where area conversions go wrong
+
+**Applying the length factor.** Covered above, and worth repeating because it is the failure that costs money rather than embarrassment.
+
+**Confusing floor area with material area.** Flooring, tiling and roofing all need more material than the bare area, because of cuts, pattern matching and pitch. The usual trade allowance is 5% for straight-laid flooring, 10% for diagonal layouts, and more for large-repeat patterns. A pitched roof has more surface than its footprint by a factor set by the pitch — a 6:12 roof is about 1.118 times its plan area. This converter handles the geometry of units, not the geometry of buildings.
+
+**Gross versus net internal area.** Property listings quote different things in different markets. Gross external area includes the wall thickness; net internal area excludes walls, stairwells and plant rooms. Two listings for the same building can differ by 15% or more without either being dishonest. If you are comparing prices per square metre, check which measurement standard is in use — the RICS International Property Measurement Standards exist precisely because this was chaos.
+
+**Square feet quoted as "sq"** in roofing. A roofing square is 100 square feet, not one. A quote for 24 squares is 2,400 square feet.
+
+**Precision that is not there.** If you measured a wall to the nearest 10 cm, the area you calculate from it is not accurate to four decimal places, no matter how many digits the arithmetic produces. Two measurements each carrying 1% uncertainty give an area carrying roughly 2%. On a 20 m² room that is a genuine ±0.4 m² — a full box of tiles.
+
+## What this converter does not do
+
+It converts area only. Volume is a different exponent and needs its own factors. Perimeter is a length, not an area, and cannot be derived from the area alone — a 20 m² room could be 4 × 5 or 1 × 20, and those have very different perimeters, which matters if you are ordering skirting board rather than flooring.
+
+It also does not handle land parcels described by boundary coordinates. Working out the area of an irregular plot from a survey is a different problem — the shoelace formula over the vertex list — and it belongs in surveying software where the coordinate system and datum are explicit.
+
+Every factor above traces to the SI Brochure from the BIPM or to NIST Special Publication 811, both linked below. If a conversion matters enough to defend, go to those documents; this tool is built to give the same answer they would.

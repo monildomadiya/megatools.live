@@ -1,0 +1,91 @@
+## What standard deviation actually measures
+
+A mean tells you where a set of numbers sits. It tells you nothing about how tightly they cluster there, and two datasets with identical means can describe completely different situations.
+
+Consider two classes, each with a mean exam score of 65:
+
+- Class A: 63, 64, 65, 66, 67 — everyone within two marks of the mean
+- Class B: 30, 45, 65, 85, 100 — a mean nobody actually scored
+
+The mean is 65 in both. The standard deviation is 1.58 in the first and 28.5 in the second, and that number is the whole difference between a class that is uniformly average and one that is polarised. Standard deviation is the answer to "how far from the mean is a typical value?"
+
+It is expressed in the same units as the data. Scores in marks give a standard deviation in marks; salaries in pounds give one in pounds. That is why variance — the square of the standard deviation — is less intuitive to read directly, despite being the quantity the mathematics is actually built on.
+
+## The formula
+
+For a **population**, where your numbers are the whole group:
+
+> σ = √( Σ(xᵢ − μ)² / N )
+
+For a **sample**, where your numbers are a subset drawn from a larger group:
+
+> s = √( Σ(xᵢ − x̄)² / (n − 1) )
+
+The only difference is the divisor. Everything else is identical.
+
+### The five steps
+
+1. **Find the mean.** Add all the values and divide by how many there are.
+2. **Find each deviation.** Subtract the mean from every value. Some will be negative.
+3. **Square each deviation.** This removes the signs — without squaring, the deviations sum to exactly zero every time, which is why you cannot just average them.
+4. **Sum the squares and divide.** By N for a population, by n − 1 for a sample. This is the variance.
+5. **Take the square root.** Squaring in step 3 put the result in squared units; the root brings it back to the units of the original data.
+
+The calculator above shows steps 2 and 3 for your numbers so you can check working line by line.
+
+### Worked example
+
+Take 12, 15, 15, 18, 24, 31, 47 as a sample.
+
+- Sum = 162, n = 7, so the mean is 162 ÷ 7 = 23.1429
+- Deviations: −11.14, −8.14, −8.14, −5.14, 0.857, 7.857, 23.857
+- Squares: 124.16, 66.31, 66.31, 26.45, 0.73, 61.73, 569.16
+- Sum of squares = 914.86
+- Sample variance = 914.86 ÷ 6 = 152.48
+- Sample standard deviation = √152.48 = **12.35**
+
+Had we treated the same numbers as a whole population, the divisor would be 7 rather than 6, giving a variance of 130.69 and a standard deviation of 11.43. The sample figure is always the larger of the two.
+
+## Sample or population: how to decide
+
+This is the choice people get wrong, and the rule is simpler than the terminology suggests. Ask what you want the number to describe.
+
+**Use the population formula** when your numbers *are* the group. The heights of all 22 players who took the field. Every transaction processed last Tuesday. All 50 US states. There is nothing beyond your data that you are trying to say something about.
+
+**Use the sample formula** when your numbers are a draw from something larger. 200 customers out of 40,000. Ten measurements of the same component off a production line. A week of server response times standing in for the general behaviour of the server.
+
+The second case is far more common, which is why Excel's `STDEV.S`, R's `sd()`, and NumPy's `std(ddof=1)` all use n − 1 by default — and why NumPy's plain `std()`, which defaults to `ddof=0`, catches so many people out.
+
+### Why n − 1
+
+The correction has a reason, not just a convention. When you compute deviations from the *sample* mean rather than the true population mean, you are measuring against a value that was itself calculated from those same points — and the sample mean is, by construction, the point that minimises the sum of squared deviations for that particular sample. Deviations measured from it are therefore systematically a little too small.
+
+Dividing by n − 1 instead of n inflates the result by exactly the right amount to cancel that bias. The n − 1 is the degrees of freedom: once you know the mean and any n − 1 of the values, the last value is determined, so only n − 1 of the deviations are free to vary.
+
+The correction matters most when n is small. At n = 2 it doubles the variance. At n = 5 it raises it 25%. At n = 100 it is about 1%, and at n = 1,000 it is negligible — which is why the choice is critical for a small experiment and academic for a large dataset.
+
+## Reading the result
+
+**A standard deviation on its own means nothing.** It carries units, so 12.35 is meaningless until you know 12.35 *of what*, and relative to what mean. The coefficient of variation — standard deviation as a percentage of the mean — is the unitless version, and it is what lets you say that a process with CV 5% is more consistent than one with CV 30%, even if they measure different things.
+
+**The empirical rule applies to normal data only.** For a bell-shaped distribution, about 68% of values fall within one standard deviation of the mean, 95% within two, 99.7% within three. This is genuinely useful for measurement error, heights, and manufacturing tolerances. It is actively misleading for incomes, house prices, response times, and anything else with a long right tail, where far more than 68% sit below the mean and the top few percent stretch out much further than three standard deviations. The calculator above reports what percentage of *your* values fall within one SD, which is a quick way to see whether the assumption holds.
+
+**Outliers dominate.** Deviations are squared, so a point three times further from the mean contributes nine times as much. One mistyped value with an extra zero can multiply your standard deviation. That sensitivity is sometimes the point — in quality control the outlier *is* the finding — but if you want a spread measure that ignores extremes, the interquartile range is the one to reach for, and it is reported above alongside the SD.
+
+## Standard deviation versus standard error
+
+These get conflated constantly, and they answer different questions.
+
+**Standard deviation** describes the spread of the data. Collecting more data does not shrink it; if the underlying thing is variable, more measurements just describe that variability more accurately.
+
+**Standard error of the mean** is s ÷ √n, and it describes how precisely you have pinned down the mean. It *does* shrink as n grows — by the square root, so quadrupling your sample halves the standard error.
+
+Error bars on a chart can be either, and a figure caption that does not say which is unreadable. Bars showing standard error look reassuringly tight and say nothing about the spread of individuals; bars showing standard deviation look wide and say nothing about the confidence in the mean.
+
+## Where this calculator stops
+
+It computes descriptive statistics for a list of numbers you have. It does not do inference: no confidence intervals, no hypothesis tests, no distribution fitting. Those need assumptions about how your data was collected, and a tool cannot check whether your sample was random or whether your observations are independent.
+
+It also assumes the values are unweighted and on an interval or ratio scale. Standard deviation of a Likert scale, or of ranked categories, is a number the arithmetic will happily produce and that means very little.
+
+The definitions here follow the NIST/SEMATECH e-Handbook of Statistical Methods, which is a free primary reference maintained by NIST and worth reading directly if you are doing this professionally. Both relevant sections are linked below.

@@ -1,0 +1,99 @@
+## The reverse calculation almost everyone gets wrong
+
+Adding tax to a price is easy. Taking it back out is where the errors happen, and the error is always the same one.
+
+A UK invoice totals £120 including VAT at 20%. How much VAT is in it?
+
+The instinct is to take 20% of £120, which gives £24. That is wrong. The VAT was charged on the **net** price, not on the total, so the arithmetic has to run backwards:
+
+- Net = 120 ÷ 1.20 = **£100**
+- VAT = 120 − 100 = **£20**
+
+The rule is: **divide by 1 plus the rate**, never subtract the rate.
+
+The gap widens as the rate rises. At 5% the two methods differ by 24 pence on a £120 bill; at 20% they differ by £4; at 23% Irish VAT they differ by nearly £5.20. On a single receipt that is an annoyance. Repeated across a quarter of purchase invoices it is a reclaim that does not reconcile.
+
+There is a shortcut worth memorising for UK VAT at 20%: **divide the gross by 6** to get the VAT. £120 ÷ 6 = £20. It works because 20% of the net is one sixth of the gross.
+
+## Tax as a share of the price is not the tax rate
+
+A related confusion, and the one that makes the reverse calculation feel wrong.
+
+At a 20% rate, tax makes up **16.67%** of the gross price, not 20%. At 23%, it is 18.70%. At 8.25% US sales tax, it is 7.62%.
+
+Both numbers are correct; they have different denominators. The rate is measured against the net price and the share is measured against the gross. Any argument about VAT that seems to have two right answers is usually this.
+
+## VAT and sales tax are different taxes
+
+They collect a similar amount from a similar place, and they work completely differently.
+
+**Sales tax** is charged once, at the final retail sale to a consumer. A business buying goods to resell provides a resale certificate and pays no tax. The whole burden lands at the last step.
+
+**VAT** is charged at every stage of the chain. A manufacturer charges VAT to a wholesaler, who charges it to a retailer, who charges it to a consumer — and each business reclaims the VAT it paid on its own inputs. Only the value added at each step is really taxed, and the consumer still bears the whole amount at the end.
+
+The consequences of that design are why the two feel so different in practice:
+
+**VAT is self-policing.** Each business has a documentary interest in the stage before it, because it needs a valid invoice to reclaim its input tax. Sales tax has no equivalent, which is one reason exemption certificate fraud is a bigger problem than VAT carousel fraud is in most retail sectors.
+
+**VAT is usually shown inclusive.** European consumer prices include VAT by law, because the rate is national and a printed price can be correct everywhere.
+
+**US sales tax is added at the till.** This one is not a cultural quirk — it is arithmetic. A US sales tax rate is a stack of state, county, city and special-district rates, and there are more than 11,000 taxing jurisdictions. Two shops on opposite sides of a street can owe different totals. A retailer cannot print a tax-inclusive price on a package that will be sold in forty states, so the tax is calculated at the point of sale, at the address of the sale.
+
+## Zero-rated, reduced-rated, exempt
+
+These sound like synonyms and they are three different things with different consequences for a business.
+
+**Standard rate** — the default. 20% in the UK, 23% in Ireland, 19% in Germany, 20% in France.
+
+**Reduced rate** — a lower positive rate for specified goods. The UK's 5% covers domestic fuel and power, children's car seats, and some energy-saving materials.
+
+**Zero-rated** — taxed at 0%. In the UK this covers most food, books, newspapers, children's clothing, and public transport. The transaction is still a taxable supply, which matters: a zero-rated business charges nothing but can still **reclaim** the VAT it paid on its costs.
+
+**Exempt** — outside VAT altogether. Insurance, most financial services, postage stamps, and health services provided by registered professionals. An exempt business charges no VAT and **cannot reclaim** input VAT, so the tax it pays on its own purchases becomes a real cost.
+
+Zero-rated is therefore better for a business than exempt, which is counterintuitive until you follow the reclaim. It is also why the boundaries are litigated so fiercely — the UK case law on whether a Jaffa Cake is a zero-rated cake or a standard-rated biscuit is famous precisely because the difference is 20% of turnover.
+
+## Working with US sales tax
+
+**The rate is a stack.** A quoted rate of 9.5% might be 6% state, 2.25% county, 1% city and 0.25% for a transit district. The tool takes the combined figure, which is what you will see on a rate lookup for a specific address.
+
+**Origin versus destination sourcing.** Most states tax at the address where the goods are delivered. A minority use origin sourcing for intrastate sales, taxing at the seller's location. For an online business the practical rule is that the customer's address usually decides the rate.
+
+**Economic nexus.** Since *South Dakota v. Wayfair* in 2018, a state can require an out-of-state seller to register and collect once it passes a threshold — commonly $100,000 of sales or 200 transactions into that state in a year. Thresholds and rules differ, and several states have since dropped the transaction-count test. If you sell across state lines at any volume, this is an accountant question.
+
+**Not everything is taxable.** Groceries, prescription medicines and clothing are exempt or reduced in many states, and the definitions differ — the same item can be taxable in one state and not the next. A single division across a mixed receipt will not reproduce either line, which is worth remembering before reverse-calculating a supermarket total.
+
+## Rounding, and why an invoice can be a penny out
+
+VAT on a single line rarely comes to a whole number of pence, and there is more than one acceptable way to deal with it.
+
+HMRC permits a VAT-registered business either to round the total VAT **down** to the nearest penny, or to round each line to the nearest penny by ordinary arithmetic rounding. Both are allowed. On a multi-line invoice they can produce totals that differ by a penny or two, which is the usual explanation when an invoice and a purchase order disagree by an amount too small to be a mistake and too consistent to be a coincidence.
+
+There is a second, subtler source: rounding per line and summing gives a different answer from summing and rounding once. Accounting systems make this choice differently, and neither is wrong.
+
+This calculator does ordinary arithmetic rounding on the final figure, which matches what most invoices show for a single item.
+
+## Worked examples
+
+**Adding 8.25% sales tax to $99.00**
+
+- Tax: 99.00 × 0.0825 = $8.17
+- Total: 99.00 + 8.17 = **$107.17**
+
+**Stripping 8.25% out of a $107.25 receipt**
+
+- Net: 107.25 ÷ 1.0825 = **$99.08**
+- Tax: 107.25 − 99.08 = **$8.17**
+
+**Finding the VAT in a £599 gross price at 20%**
+
+- Net: 599 ÷ 1.20 = **£499.17**
+- VAT: 599 − 499.17 = **£99.83**, or equivalently 599 ÷ 6
+
+## What this calculator does not do
+
+It applies one rate to one amount. It does not know which rate applies to what you are selling, whether you are required to register, or whether a customer is exempt — all of which are questions of law rather than arithmetic, and all of which change more often than a calculator page does.
+
+It also does not handle a mixed-rate basket, cascading taxes such as Canadian GST plus a provincial sales tax charged on the GST-inclusive amount, or duties and excise that sit alongside a sales tax rather than inside it.
+
+The rates in the presets are the standard national rates at the time of writing and are there for convenience, not as authority. Rates change with budgets. Check the current figure with HMRC, the European Commission, or the relevant state authority — all linked below — before invoicing on it.

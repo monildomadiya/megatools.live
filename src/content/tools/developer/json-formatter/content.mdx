@@ -1,0 +1,89 @@
+## Nothing you paste leaves your browser
+
+This is the first thing to say about a JSON tool, because it is the thing that should decide whether you use one.
+
+The documents people most often need to format are API responses, configuration files, webhook payloads and log entries. Those are exactly the documents that tend to contain bearer tokens, connection strings, customer email addresses and internal hostnames. Pasting one into a site that posts it to a server is a data disclosure, and a great many online formatters do exactly that.
+
+This page parses with the browser's own `JSON.parse` and renders the result locally. It makes no request with your input. You do not have to take that on trust — open your browser's network tab, paste something, and watch nothing happen.
+
+## What JSON actually allows
+
+JSON is much smaller than people remember, and most parse failures come from assuming it is JavaScript.
+
+The complete set of values is: **string**, **number**, **boolean**, **null**, **array**, **object**. That is all of them. There is no date, no integer-versus-float distinction, no binary type, no comment, no undefined, and no function.
+
+The rules that catch people:
+
+- **Keys must be double-quoted strings.** Unquoted keys are legal JavaScript and illegal JSON.
+- **Strings must use double quotes.** Single quotes are never valid, anywhere.
+- **No trailing commas.** A comma after the last element of an array or the last member of an object is a syntax error.
+- **No comments.** Not with two slashes, not with slash-star.
+- **Numbers cannot be `NaN`, `Infinity`, or hexadecimal**, cannot have a leading zero, and cannot have a leading plus. A leading decimal point is also out — write `0.5`, not `.5`.
+
+A fifth failure is harder to see: smart quotes. Text copied out of a word processor or a chat client often has curly typographic quotes substituted for straight ones. They look nearly identical in most fonts and they are not the same character. If a document looks perfect and will not parse, this is worth checking.
+
+## Reading a parse error
+
+Browser error messages for JSON are notoriously unhelpful, and they differ by engine. V8, in Chrome and Node, reports a character offset. SpiderMonkey, in Firefox, reports a line and column. Neither tells you what you should have written.
+
+This tool converts whatever the engine gives it into a line, a column, and a caret pointing at the offending character, because the position is nearly always more useful than the wording. A few common messages, translated:
+
+**"Unexpected token } in JSON at position N"** — almost always a trailing comma just before that brace.
+
+**"Unexpected end of JSON input"** — the document is truncated. A brace or bracket was never closed, or the response was cut off in transit.
+
+**"Unexpected token ' in JSON"** — single quotes.
+
+**"Expected property name or '}'"** — an unquoted key, or a comment where a key should be.
+
+One thing a parser cannot tell you is *which* opening brace was never closed. It only notices at the end of the file. If a large document reports an unexpected end of input, formatting the fragment that does parse and comparing indentation levels is usually faster than reading the whole thing.
+
+## Pretty printing and minifying
+
+Pretty printing adds whitespace so a human can read the structure. Minifying removes all of it so a machine can transfer less.
+
+The two are lossless in both directions for the *data*. They are not lossless for the *text*: key order is preserved by every mainstream parser but is not guaranteed by the specification, and formatting is discarded entirely. If a JSON file is under version control, pick one style and stay with it, or every diff will be the whole file.
+
+Minification matters less than it used to on the wire, because HTTP responses are usually compressed, and gzip is very good at repeated whitespace. It still matters for anything stored uncompressed — a database column, a log line, a message queue payload — where the bytes are counted directly. The tool reports both sizes so you can see whether it is worth it in your case.
+
+The **sort keys** option rewrites objects with their members in alphabetical order. This is genuinely useful for diffing two documents that were generated in different orders. It leaves arrays alone, deliberately: the order of an array is part of the data, and sorting one would change what the document means rather than how it looks.
+
+## Two traps that cost real money
+
+### Large integers lose precision
+
+JSON places no limit on the size of a number. Most parsers, however, read numbers into an IEEE 754 double, which represents integers exactly only up to 2⁵³ − 1 — that is 9,007,199,254,740,991.
+
+A 64-bit database identifier, a Twitter-style snowflake ID, or a nanosecond timestamp will exceed that. When it does, the parse does not fail. It silently returns the nearest representable number, and the last few digits change. The record you then update is a different record.
+
+This is why so many APIs return identifiers as quoted strings. It looks like a mistake and it is a deliberate defence. This tool checks the source text for long bare integers and warns before the value is used, because by the time you are looking at the parsed output the digits are already gone.
+
+### Duplicate keys are not an error
+
+RFC 8259 says object names *should* be unique, but stops short of requiring it. A document with the same key twice will parse in almost every implementation, and the behaviour differs: JavaScript keeps the last occurrence, some parsers keep the first, and a few return both in a multimap. Two systems reading the same document can therefore act on different values, which has been the basis of real security bypasses in signed-payload systems.
+
+## Dates, binary, and things JSON has no type for
+
+**Dates** are strings, by convention in ISO 8601 with an explicit offset — the format JavaScript's `JSON.stringify` produces from a Date. The alternative is a Unix timestamp as a number, which is compact and unreadable and needs its unit documented, because seconds and milliseconds are both common and a factor of a thousand apart.
+
+**Binary data** is normally Base64-encoded into a string, which costs about 33% in size. If a payload is mostly binary, JSON is the wrong container.
+
+**Very large or very precise decimals** — currency amounts especially — should be strings or integer minor units, never floats. Storing £19.99 as the number 19.99 introduces a representation error before anything has been added up.
+
+## JSON, JSON5, JSONC, and NDJSON
+
+Several near-relatives exist and it is worth knowing which one you are holding.
+
+**JSON5** adds comments, trailing commas, unquoted keys, single quotes and hexadecimal numbers. It is a superset, and a strict parser will reject it.
+
+**JSONC** is JSON with comments, used by VS Code for its settings files. Also not JSON.
+
+**NDJSON**, newline-delimited JSON, puts one complete JSON document on each line. It is the standard shape for logs and streamed records, because it can be appended to and processed line by line without loading everything. A whole NDJSON file is not itself a valid JSON document, which surprises people who paste one into a formatter.
+
+This tool validates strict JSON, per RFC 8259 and ECMA-404. If your file needs a lenient parser to load, it is one of the above rather than JSON, and the right fix is usually to say so explicitly in your tooling rather than to hope every consumer is forgiving.
+
+## What this tool does not do
+
+It does not validate against a schema — whether the structure is *correct* for your application is a JSON Schema question, not a syntax one. It does not repair broken documents, because guessing at intent is how a formatter silently changes data. It does not query or transform, which is what `jq` and JSONPath are for. And it works on what fits comfortably in a browser tab; a multi-hundred-megabyte export needs a streaming parser.
+
+The rules described here come from RFC 8259 and ECMA-404, which are the two normative definitions of JSON and are mercifully short — both are linked below and both can be read in a sitting.

@@ -1,0 +1,109 @@
+## Two gallons, twenty per cent apart
+
+Before any arithmetic, the trap that makes most fuel comparisons wrong.
+
+A **US gallon** is 3.785411784 litres. A **UK imperial gallon** is 4.54609 litres. The imperial gallon is about 20% larger, and both are called a gallon.
+
+So a car rated at 45 mpg in Britain does 37.5 mpg by the American measure, with nothing changed but the unit. An American reading a British review, or anyone comparing a European economy figure against a US EPA rating, is comparing numbers that differ by a fifth before any real difference between the cars is considered.
+
+This calculator asks which gallon you mean, and converts your figure into every unit so you can see all of them at once.
+
+The divergence is historical. The UK defined the imperial gallon in 1824 as the volume of ten pounds of water; the US kept the older English wine gallon of 231 cubic inches. Both are now defined exactly in litres, and both are still in use.
+
+## The calculation
+
+Fuel cost is three numbers multiplied together, once everything is in matching units.
+
+> Cost = distance × (fuel per unit distance) × price per unit of fuel
+
+The tool normalises everything to litres per kilometre internally, which is the only way to keep the four possible economy units and three possible price units from producing a mess.
+
+### Worked example — a UK trip
+
+A 250-mile journey, a car averaging 45 mpg imperial, petrol at £1.45 per litre.
+
+- Distance in km: 250 × 1.609344 = 402.3 km
+- Litres per km: 4.54609 ÷ (45 × 1.609344) = 0.06277
+- Fuel used: 402.3 × 0.06277 = **25.25 litres**
+- Cost: 25.25 × 1.45 = **£36.62**
+
+That works out at about 14.6p per mile in fuel alone.
+
+### Worked example — a US trip
+
+A 400-mile journey, a car averaging 28 mpg US, gasoline at $3.40 per gallon.
+
+- Gallons used: 400 ÷ 28 = **14.29 gallons**
+- Cost: 14.29 × 3.40 = **$48.57**
+
+About 12.1 cents per mile.
+
+## mpg and l/100km are reciprocals, and it matters
+
+Miles per gallon measures distance per unit of fuel. Litres per 100 km measures fuel per unit of distance. They are inverses, and the inversion has a consequence that is genuinely counterintuitive.
+
+**Equal improvements in mpg do not save equal amounts of fuel.**
+
+Consider driving 10,000 miles a year:
+
+- 15 mpg → 20 mpg saves 167 gallons
+- 30 mpg → 40 mpg saves 83 gallons
+- 50 mpg → 60 mpg saves 33 gallons
+
+The first change is 5 mpg and the second is 10, yet the first saves twice as much fuel. This is sometimes called the MPG illusion, and its practical implication is that replacing the least efficient vehicle in a household or fleet saves far more than upgrading an already efficient one — even though the mpg figure improves less.
+
+Litres per 100 km does not have this problem, because it is already fuel-per-distance. A one-litre improvement saves the same amount of fuel wherever you start. That is the main argument for the metric convention.
+
+The conversion between them, if you need it by hand: **282.481 ÷ mpg(US) = l/100km**, or **235.215 ÷ mpg(imperial)**.
+
+## Why your car never hits its official figure
+
+Official economy figures come from a standardised laboratory test, not from driving.
+
+Europe used the **NEDC** cycle until 2017. It was designed in the 1980s, used gentle accelerations and a top speed no motorway driver would recognise, and by the end manufacturers had optimised so thoroughly against it that real-world consumption ran 30–40% above the published figure.
+
+**WLTP** replaced it, with a longer cycle, higher speeds, more realistic accelerations, and optional equipment counted in. The figures are considerably closer to reality, but they are still measured on a rolling road at a controlled temperature with no wind, no hills, no roof box, no passengers and no air conditioning.
+
+The US uses **EPA** ratings, which have their own city and highway cycles plus adjustment factors, and are generally regarded as closer to real-world results than NEDC ever was.
+
+Expect 10–20% worse than the official figure in ordinary use, and considerably worse in cold weather, on short trips where the engine never warms up, or in stop-start traffic. For a calculation you can act on, use your own long-term average from the trip computer or from litres filled divided by distance covered — not the brochure.
+
+## What actually moves the number
+
+**Speed, above about 50 mph.** Aerodynamic drag rises with the square of speed, and the power needed to overcome it with the cube. The US Department of Energy's guidance is that each 5 mph over 50 is roughly equivalent to paying an extra 20–30 cents per gallon. Driving a long motorway trip at 70 rather than 60 typically costs 10–15% more fuel — and saves less time than the difference suggests, once junctions and stops are counted.
+
+**Roof boxes and bike racks.** An empty roof box can cost 10–25% on a motorway run, entirely through drag. Taking it off when it is not in use is one of the largest single savings available.
+
+**Tyre pressure.** Underinflation increases rolling resistance. The effect is small per psi but it compounds, and it costs tyre life as well.
+
+**Cold and short trips.** An engine below operating temperature runs richer and the transmission is less efficient. A five-mile trip from cold can use half again what the same five miles cost mid-journey, which is why urban economy is so much worse than the highway figure.
+
+**Air conditioning.** Costs a few percent, and much less than driving at speed with the windows open, which adds drag. At low speeds the windows win; on the motorway the air conditioning does.
+
+**Weight, barely.** A full 60-litre tank weighs about 45 kg, roughly 3% of a small car's mass, and mass mostly costs fuel during acceleration rather than at steady speed. Running the tank half empty to save weight is not a strategy.
+
+## Fuel is not the cost of driving
+
+This calculator gives you the fuel cost, which is the part people think of. It is usually between a third and a half of the real cost per mile.
+
+Depreciation is normally the largest single item, and it is partly distance-driven. Tyres, brakes, servicing intervals and many repairs scale with mileage. Insurance and road tax do not, but they are still a cost of having the car available.
+
+The reimbursement rates give a sense of the true figure. The UK approved mileage allowance payment is 45p per mile for the first 10,000 business miles and 25p thereafter. The US IRS standard mileage rate is set annually and covers the same ground. Both are several times the pure fuel cost, deliberately — they are meant to cover the whole cost of running the vehicle.
+
+So if you are deciding whether to drive or take a train, compare the ticket against the mileage rate, not against the fuel cost. If you are splitting a journey with friends, the fuel figure is the fair one, because the car was going anyway.
+
+## Comparing against an electric car
+
+The like-for-like comparison is **cost per mile**, which is what this tool reports.
+
+For an EV, divide the electricity price per kWh by the car's miles per kWh. A car managing 3.5 miles per kWh on a 7p/kWh overnight tariff costs 2p per mile. The same car on a 79p/kWh rapid charger costs 22.6p per mile — more than most petrol cars.
+
+Which is to say: an EV is dramatically cheaper to run if you charge at home on a cheap tariff, and roughly a wash if you rely on public rapid charging. The answer depends more on where you plug in than on the car.
+
+## What this calculator does not do
+
+It assumes one economy figure for the whole trip. A journey that is half urban and half motorway will not match either figure, and the honest approach is to run it twice and add the results.
+
+It does not know about traffic, terrain, load, or the weather, all of which move real consumption more than most people expect. And it works from the numbers you give it — the single biggest improvement you can make to its accuracy is to use your own measured average rather than a published one.
+
+The efficiency guidance here comes from the US Department of Energy's fuel economy programme, the test-cycle background from the UK Vehicle Certification Agency, and the mileage rates from HMRC. All three are linked below.

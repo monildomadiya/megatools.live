@@ -1,0 +1,87 @@
+## One name, two sizes
+
+Buy a 1 TB drive, plug it into Windows, and the properties dialog says 931 GB. Nothing has gone missing, nobody has cheated, and the drive holds exactly the number of bytes printed on the box. What has happened is that two different quantities are both being called a gigabyte.
+
+The manufacturer means the decimal gigabyte: 10⁹ bytes, one billion. Windows means the binary one: 2³⁰ bytes, 1,073,741,824. Divide a trillion bytes by 1,073,741,824 and you get 931.32. The drive is 1 TB *and* 931 GiB, and both statements are true.
+
+This page converts both, side by side, so you can see the gap rather than argue about it.
+
+## The two ladders
+
+The decimal prefixes are the SI ones — kilo, mega, giga, tera — and each step is a factor of 1,000.
+
+| Unit | Bytes |
+| --- | --- |
+| Kilobyte (kB) | 1,000 |
+| Megabyte (MB) | 1,000,000 |
+| Gigabyte (GB) | 1,000,000,000 |
+| Terabyte (TB) | 1,000,000,000,000 |
+| Petabyte (PB) | 1,000,000,000,000,000 |
+
+The binary prefixes are the IEC ones — kibi, mebi, gibi, tebi — and each step is a factor of 1,024, which is 2¹⁰.
+
+| Unit | Bytes | As a power of two |
+| --- | --- | --- |
+| Kibibyte (KiB) | 1,024 | 2¹⁰ |
+| Mebibyte (MiB) | 1,048,576 | 2²⁰ |
+| Gibibyte (GiB) | 1,073,741,824 | 2³⁰ |
+| Tebibyte (TiB) | 1,099,511,627,776 | 2⁴⁰ |
+| Pebibyte (PiB) | 1,125,899,906,842,624 | 2⁵⁰ |
+
+The gap compounds. A kibibyte is 2.4% larger than a kilobyte, a mebibyte 4.9% larger than a megabyte, a gibibyte 7.4%, a tebibyte 10.0%, a pebibyte 12.6%. That is why the discrepancy on a 1 TB drive is so much more noticeable than it was on a 1.44 MB floppy disk, and it is why the problem got worse rather than better as capacities grew.
+
+## Why the mess exists
+
+Early computing borrowed the SI prefixes because they were close enough. Memory is addressed in powers of two — n address lines give exactly 2ⁿ locations, no more and no less — so a chip that could hold 1,024 bytes got called a kilobyte, and the 2.4% error was not worth a new word.
+
+Disk storage never had that constraint. A disk is a count of sectors, and there is no physical reason for that count to be a power of two, so drive manufacturers used the prefixes as the SI defines them. Both industries were internally consistent, and for two decades the difference was small enough to ignore.
+
+Then capacities grew, the gap widened past the point of plausible deniability, and the two conventions started meeting in the same dialog box. In the United States it produced consumer class actions against drive manufacturers — the plaintiffs lost, because the manufacturers were the ones using the prefixes correctly.
+
+The IEC published kibi, mebi and gibi in 1998 to end the ambiguity. IEEE adopted them in 2002. They are now in IEC 80000-13:2008 and endorsed by NIST and the BIPM. Adoption has been uneven: macOS moved to decimal display in 2009 and matches the box, most Linux tooling offers both, and Windows still divides by 1,024 while writing "GB".
+
+## Bits, bytes, and the factor of eight
+
+A byte is eight bits. That much is settled — it was not always, but it has been since the System/360 era.
+
+What is not settled is which one gets quoted. **File sizes are in bytes. Network speeds are in bits.** The capital B and the lower-case b are the only thing distinguishing them, and they are routinely swapped in marketing copy.
+
+The practical consequence: a 100 Mbps connection moves 100 million bits per second, which is 12.5 megabytes per second at the absolute theoretical maximum. If your download manager shows 11 MB/s on a 100 Mbps line, the line is performing correctly and you are seeing normal protocol overhead. If you expected 100 MB/s, the disappointment is a unit error.
+
+Gigabit ethernet is 125 MB/s at line rate. A 1 Gbps fibre connection is the same. Real throughput lands 5–15% below that once TCP headers, TLS handshakes, filesystem writes and the far end's own limits are accounted for, which is why the tool above shows both the theoretical figure and one with 10% overhead.
+
+## Worked examples
+
+### A 500 GB SSD in Windows
+
+- Advertised capacity: 500 GB = 500,000,000,000 bytes
+- Divided by 1024³: 500,000,000,000 ÷ 1,073,741,824 = **465.66**
+- Windows displays: 465 GB
+
+Formatting takes a further slice for the filesystem's own structures — NTFS reserves space for the MFT — so the usable figure lands a little lower again. That part *is* real overhead, unlike the prefix difference.
+
+### How long to download a 4.7 GB file on 50 Mbps
+
+- 4.7 GB = 4,700,000,000 bytes = 37,600,000,000 bits
+- 37,600,000,000 ÷ 50,000,000 = **752 seconds**, about 12.5 minutes at line rate
+- Allowing 10% overhead: about 13.9 minutes
+
+### RAM is genuinely binary
+
+A 16 GB memory module holds 17,179,869,184 bytes — it is 16 GiB, and the label is the one that is imprecise. Unlike disks, memory really is sized in powers of two, so here the binary reading is the physically correct one.
+
+## Where this bites in practice
+
+**Cloud storage billing.** Providers vary. AWS S3 bills in binary units (a "GB" in the S3 console is a GiB), Google Cloud Storage uses binary too, while some CDN bandwidth is billed decimal. On a petabyte-scale bill the 12.6% difference between PB and PiB is a real line item, so read the pricing page's definition rather than assuming.
+
+**Backup planning.** Sizing a backup target by comparing a decimal figure from one tool against a binary figure from another is how a "just big enough" disk turns out to be 7% too small at the worst possible moment.
+
+**Video and audio bitrates.** Bitrate is in bits per second; storage is in bytes. A one-hour recording at 8 Mbps is 8,000,000 × 3,600 ÷ 8 = 3.6 GB. Forgetting the ÷ 8 overstates the requirement eightfold, which is at least an error in the safe direction.
+
+**Sector sizes.** Drives moved from 512-byte to 4,096-byte physical sectors (Advanced Format) around 2010. A small file still occupies a whole allocation unit, so a directory of ten thousand 100-byte files consumes far more space than a megabyte. Size on disk and size are different numbers for a reason.
+
+## What this converter does not do
+
+It converts quantities of data. It does not tell you how much of a drive is usable after formatting, how well a given file will compress, or how much redundancy a RAID level costs you — all of which change the answer to "will it fit" and none of which are unit conversions.
+
+The prefix definitions above come from NIST's binary multiples page, IEC 80000-13, and the SI Brochure. All three are linked below, and the NIST page in particular is a single short, readable document that settles the argument.

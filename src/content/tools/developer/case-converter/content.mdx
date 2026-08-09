@@ -1,0 +1,93 @@
+## Case is a convention, and conventions carry meaning
+
+Renaming `user_account_id` to `userAccountId` does not change what it refers to. It changes which language, which layer, and often which team you are talking to — and getting it wrong is the kind of small friction that shows up in every code review.
+
+Most languages have settled on a house style, and in several of them the case itself is load-bearing. In JavaScript, Java and C#, a name beginning with a capital is a class or a type and a name beginning lowercase is a variable or a function. In Go, capitalisation is not a convention at all: an identifier starting with an uppercase letter is exported from its package and a lowercase one is not, enforced by the compiler.
+
+## The cases, and where each belongs
+
+**camelCase** — `userAccountId`. First word lowercase, every subsequent word capitalised. JavaScript and Java variables and functions, C# locals and parameters, JSON keys by convention in most web APIs.
+
+**PascalCase** — `UserAccountId`. Also called UpperCamelCase. Classes, types, interfaces and constructors across the C family. C# uses it for public members too, which is the main way C# code looks different from Java at a glance.
+
+**snake_case** — `user_account_id`. Python variables and functions, Ruby methods and locals, Rust identifiers, and column names in most SQL schemas.
+
+**CONSTANT_CASE** — `USER_ACCOUNT_ID`. Also called SCREAMING_SNAKE_CASE. Compile-time constants in nearly every language, and environment variables everywhere.
+
+**kebab-case** — `user-account-id`. URL slugs, CSS class names, HTML attributes, npm package names, and command-line flags. It cannot be used for identifiers in most languages, because the hyphen is the subtraction operator — which is precisely why it is safe in the places where it is used.
+
+**Train-Case** — `User-Account-Id`. HTTP header names, as in `Content-Type` and `X-Request-Id`. Header names are case-insensitive per the HTTP specification, but this is the conventional presentation, and HTTP/2 lowercases them on the wire.
+
+**dot.case** — `user.account.id`. Java package names, configuration keys, and the property paths in most config formats.
+
+**Title Case** and **Sentence case** are editorial rather than technical, and are covered below.
+
+## Two arguments worth knowing
+
+### snake_case survives lowercasing; camelCase does not
+
+Many SQL databases fold unquoted identifiers to a single case — PostgreSQL to lowercase, Oracle to uppercase. A column created as `userAccountId` becomes `useraccountid`, and every word boundary is gone. Created as `user_account_id`, it survives intact.
+
+This is a real reason, not an aesthetic one, and it is why almost every schema you will encounter uses snake_case for columns even when the application code around it is camelCase.
+
+### kebab-case is better for URLs than snake_case
+
+Google has stated that hyphens are treated as word separators in URLs and underscores are not. So `/blue-widgets` reads as two words and `/blue_widgets` can be read as one token. For a URL that is meant to rank for a phrase, that matters.
+
+Case matters in URLs for a second reason: path components are case-sensitive on most web servers, so `/Blue-Widgets` and `/blue-widgets` are two different pages. Two URLs serving identical content is a duplicate-content problem you did not need to have. Lowercase everything.
+
+## Title case has no single correct answer
+
+This surprises people who assume there is a rule. There are several, they disagree, and the disagreements are not trivial.
+
+The common core is stable: capitalise the first and last word, capitalise all major words — nouns, pronouns, verbs, adjectives, adverbs — and leave articles, coordinating conjunctions and short prepositions lowercase in between.
+
+The disagreement is about where "short" stops.
+
+- **APA style** capitalises words of four letters or more, including prepositions, so "With" and "From" are capitalised
+- **Chicago** lowercases all prepositions regardless of length, so "Through" stays lowercase
+- **AP style** capitalises prepositions of four letters or more, like APA, but treats some other categories differently
+
+The word "is" is capitalised in every guide, because it is a verb, and it is the word most often got wrong — it is short, so it looks like it belongs with "in" and "of", and it does not.
+
+This tool follows the APA rule and says so above the output. If you are writing to a house style, check it; if you are not, pick one and stay consistent, which matters more than which one you picked.
+
+**Sentence case** — capitalise only the first word and any proper nouns — is now the default in most product and documentation style guides, including Google's, Apple's and the UK Government Digital Service's. It is easier to read at small sizes, easier to apply consistently, and does not require anyone to memorise a preposition rule.
+
+## Case conversion is harder than it looks
+
+### It is not a per-character operation
+
+**The German ß** uppercases to `SS`. One character becomes two, so the string gets longer. A capital ẞ exists but is not what a default uppercase produces.
+
+**Turkish has two i's.** Dotted `i` and dotless `ı` are separate letters. Uppercasing `i` gives `İ` in a Turkish locale and `I` everywhere else. This has broken real software: a case-insensitive comparison of the string `"file"` against `"FILE"` fails on a Turkish system, which is why security-sensitive comparisons should use locale-invariant case folding rather than `toUpperCase`.
+
+**Some scripts have no case at all.** Chinese, Japanese, Arabic, Hebrew, Thai and Devanagari have no upper and lower forms, so case conversion is a no-op — which is correct behaviour, not a failure.
+
+**Greek final sigma.** The letter ς appears only at the end of a word, and σ everywhere else. Correct lowercasing has to know where the word ends.
+
+Unicode specifies all of this in its default case algorithms, and the short version is that changing case is a locale-sensitive string transformation and should be treated as one.
+
+### Splitting words is ambiguous
+
+Before you can convert a case, you have to know where the words are. This tool splits on separators, punctuation, and the transition from lowercase to uppercase — the boundaries every convention recognises.
+
+The awkward case is a run of capitals. `XMLHttpRequest` should split into `XML`, `Http`, `Request`, not into eleven single letters and not into `XMLHttp` and `Request`. The rule that gets this right is to keep a run of capitals together *except* for its last letter, which belongs to the word that follows.
+
+Acronyms then raise a style question with no universal answer: is it `parseHTTPResponse` or `parseHttpResponse`? Google's Java style guide says treat acronyms as ordinary words — `parseHttpResponse` — on the grounds that it makes the splitting rule unambiguous. Microsoft's .NET guidelines keep two-letter acronyms uppercase and title-case longer ones. Both are defensible; consistency within a codebase is what actually matters.
+
+Digits are another judgment call. This tool keeps a digit attached to the word before it, so `version2` stays one word rather than becoming `version 2`, which matches how identifiers are usually read aloud.
+
+## Environment variables are a standard, not a habit
+
+The convention of uppercase environment variable names is stronger than a convention. POSIX defines the portable character set for environment variable names as uppercase letters, digits and underscore, and reserves lowercase names for applications.
+
+Lowercase names usually work in practice, and shells will accept them. But tooling that assumes the standard exists, and the failure when you find some of it is obscure. Use `DATABASE_URL`, not `database_url`.
+
+## What this tool does not do
+
+It converts one block of text at a time. Bulk-renaming identifiers across a codebase is a refactoring job for an IDE or a language-aware tool, both of which understand scope and will not rename a string that happens to match.
+
+It also cannot know your proper nouns. Sentence case lowercases everything after the first word, which is right for most sentences and wrong for any containing a name — restore those by hand.
+
+Everything runs in your browser. Case mapping uses the platform's Unicode-aware implementation, so the ß and Greek sigma behaviour described above is the standard behaviour rather than something reimplemented here. The Unicode case algorithms, the APA title case rule and the POSIX environment variable definition are all linked below.

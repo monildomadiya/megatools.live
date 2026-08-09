@@ -1,0 +1,97 @@
+## Base64 is not encryption
+
+This is the most important thing on the page, so it goes first.
+
+Base64 has no key, no secret, and no security property whatsoever. It is a reversible mapping from bytes to a 64-character alphabet, and anyone holding the encoded string can recover the original in seconds — with this page, with a command-line utility, or by eye if they have seen enough of it.
+
+Its purpose is transport, not protection. It exists so that arbitrary bytes can pass through channels that were designed for text and would otherwise mangle them.
+
+The failure mode this warning exists for is real and common: a password Base64-encoded in a config file, a personal record Base64-encoded in a database column, an API key Base64-encoded in a log entry. In every case the data is stored in plain text with a step that makes it slightly less obvious to a casual reader, and not at all less accessible to anyone who matters. HTTP Basic authentication is the canonical example — the header is just a username and password Base64-encoded, which is precisely why Basic auth over plain HTTP is unsafe and always was.
+
+If you need confidentiality, you need encryption. If you need integrity, you need a signature or a MAC. Base64 provides neither.
+
+## How the encoding works
+
+Base64 reads the input three bytes at a time. Three bytes is 24 bits, and 24 divides evenly into four groups of 6 bits. Each 6-bit group indexes into a 64-character alphabet: A–Z, then a–z, then 0–9, then two symbols.
+
+So three bytes in, four characters out. That ratio is where the roughly 33% size increase comes from — you are spending 8 bits of character to carry 6 bits of data.
+
+### Worked example
+
+Encoding the three characters `Man`:
+
+- ASCII values: 77, 97, 110
+- In binary: `01001101 01100001 01101110`
+- Regrouped into six-bit chunks: `010011 010110 000101 101110`
+- As numbers: 19, 22, 5, 46
+- Indexed into the alphabet: **T**, **W**, **F**, **u**
+
+So `Man` becomes `TWFu`. This example is from the original MIME specification and has been the standard teaching case for thirty years.
+
+### Padding
+
+When the input length is not a multiple of three, the final group is short, and the encoder pads it.
+
+- Input length ≡ 0 (mod 3): no padding
+- Input length ≡ 1 (mod 3): output ends with `==`
+- Input length ≡ 2 (mod 3): output ends with `=`
+
+The equals signs are not data. They tell the decoder how many bytes of the final group were real, so it does not invent one or two extra zero bytes. This is also why a Base64 string can never be exactly one character longer than a multiple of four — that length is impossible, and this tool rejects it rather than guessing.
+
+Padding is optional in some contexts. Where the length is known by other means, as it is in a JWT, it is conventionally dropped.
+
+## The URL-safe variant
+
+The standard alphabet's last two characters are `+` and `/`. Both are hostile to URLs.
+
+A slash separates path segments, so a Base64 value in a URL path fragments into pieces. A plus is interpreted as an encoded space in a query string by long-standing convention, so a value round-tripped through a form comes back with spaces where plusses were.
+
+RFC 4648 section 5 defines the base64url alphabet, which substitutes `-` for `+` and `_` for `/` and leaves everything else identical. Padding is usually omitted, since `=` also needs escaping in a query string.
+
+JSON Web Tokens use this variant throughout, as do many URL shorteners, cache keys and identifiers. The two alphabets are trivially interconvertible — this decoder accepts either without being told which.
+
+## The UTF-8 problem
+
+The browser's built-in `btoa` function only accepts characters in the range 0–255. It predates Unicode being the default and it has never been fixed, because fixing it would break existing code.
+
+That means `btoa` throws on `é`, on `中`, and on every emoji ever defined. The failure is not subtle — it raises an exception — but it is *late*, because during development everything is ASCII and the first failure arrives from a customer whose name has an accent in it.
+
+The correct approach is to convert the text to UTF-8 bytes first and Base64 those bytes. This tool does exactly that, using `TextEncoder`, which is why it handles any input you can type.
+
+It matters for a second reason too. A single emoji is four UTF-8 bytes, and an accented Latin character is usually two. A string of 10 characters can easily be 25 bytes, which is why the character count and the byte count reported above are different numbers, and why length limits expressed in bytes and length limits expressed in characters are not interchangeable.
+
+## Decoding JSON Web Tokens
+
+A JWT is three segments separated by dots: header, payload, signature. The first two are URL-safe Base64-encoded JSON.
+
+Paste the middle segment into the decoder above and the claims come out readable. That is a useful debugging technique — and it is also a demonstration worth taking seriously.
+
+**A JWT payload is signed, not encrypted.** The signature proves the token was not altered. It does nothing to hide the contents. Anyone holding the token — including the user it was issued to, and anyone who reads it out of a browser's local storage — can read every claim in it.
+
+So never put anything confidential in a JWT payload. Internal user IDs and roles are normal; email addresses are usually acceptable; anything you would not show the user should not be there at all.
+
+## Where Base64 is genuinely the right tool
+
+**Email attachments.** This is the original use case. SMTP was specified for 7-bit text, and MIME uses Base64 to move binary through it. RFC 2045 requires the encoded output to be broken into lines of at most 76 characters, which is why Base64 in an email source has newlines in it and Base64 in a URL does not.
+
+**Data URIs.** A small image inlined into CSS or HTML as `data:image/png;base64,...` saves a round trip. It stops being worthwhile quickly — the 33% overhead plus the loss of separate caching means it is only sensible for genuinely small assets.
+
+**Binary inside JSON or XML.** Neither format has a binary type, so bytes are Base64'd into a string. If a payload is mostly binary, this is a sign the format is wrong rather than a reason to encode harder.
+
+**Cryptographic material in text form.** Keys, certificates and signatures are bytes that need to live in text files. PEM format is Base64 with header and footer lines around it.
+
+## Related encodings
+
+**Base32** uses a 26-letter-plus-digits alphabet with no case sensitivity and no easily confused characters. It is 60% larger than the input rather than 33%, and it is used where a human might read the value aloud or type it — TOTP secrets, for example.
+
+**Base16**, or hex, is exactly 100% overhead and maps each byte to two characters. It is the most readable and the least efficient, which is why it is used for hashes and checksums where people compare values by eye.
+
+**Percent-encoding**, the `%20` style used in URLs, is not a general binary encoding at all — it escapes individual reserved characters and leaves the rest alone. It is far more compact than Base64 for mostly-ASCII text and far worse for binary.
+
+## What this tool does not do
+
+It works with text. Encoding a file is a different job — the browser can do it, but a page that accepts file uploads invites exactly the confusion about where data goes that this page is careful to avoid.
+
+It also does not decode binary payloads into anything meaningful. If the bytes are a PNG rather than text, the decoder says so and shows the first bytes as hex, which is usually enough to identify what you have from its magic number.
+
+Everything runs locally, using the browser's own `atob`, `btoa`, `TextEncoder` and `TextDecoder`. No request is made with your input. The encoding rules follow RFC 4648, the line-length convention comes from RFC 2045, and the UTF-8 handling follows the WHATWG Encoding Standard — all linked below.

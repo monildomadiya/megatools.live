@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert between bytes, kB, MB, GB, TB and their binary counterparts KiB, MiB, GiB, TiB — and see why a 1 TB drive shows up as 931 GB in your operating system.',
   shortDescription:
     'Convert data sizes between decimal and binary units, and see exactly why a 1 TB drive reports as 931 GB once your computer has finished with it.',
+  leadAnswer:
+    'A gigabyte is 1,000,000,000 bytes; a gibibyte is 1,073,741,824. Storage is sold in the decimal units, while Windows reports the binary ones and still writes GB — which is why a 1 TB drive displays as 931 GB. Nothing is missing; only the label is wrong.',
   keywords: [
     'data storage converter',
     'gb to mb',

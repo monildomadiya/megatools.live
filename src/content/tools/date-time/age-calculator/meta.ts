@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out an exact age in years, months and days from a date of birth, with total days lived, the weekday you were born on, and days until your next birthday.',
   shortDescription:
     'Find an exact age in years, months and days, with leap years and month lengths handled properly rather than averaged away.',
+  leadAnswer:
+    'Age in years, months and days is counted in calendar units rather than by dividing a total day count. The method finds the largest whole number of months landing on or before the target date, clamps the day where the target month is shorter, and measures the remainder in real days.',
   keywords: [
     'age calculator',
     'how old am i',
@@ -74,7 +76,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/bmi-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

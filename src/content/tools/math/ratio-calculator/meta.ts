@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Simplify a ratio to its lowest terms, solve a proportion for the missing value, or split a total in a given ratio — with the working shown for each.',
   shortDescription:
     'Simplify ratios, solve proportions for a missing term, or divide a quantity in a given ratio.',
+  leadAnswer:
+    'A ratio compares two or more quantities by division rather than by difference, written as 3:4. Simplifying one means dividing every term by their greatest common divisor. Unlike a fraction, a ratio can have more than two terms and need not describe a part of a whole.',
   keywords: [
     'ratio calculator',
     'simplify ratio',
@@ -80,7 +82,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['math/percentage-calculator', 'math/average-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

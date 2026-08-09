@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Calculate the monthly payment on any amortising loan, see the total interest it will cost, and find out how much an extra payment each month would save you.',
   shortDescription:
     'Find the monthly payment on a personal, car, or education loan, the total interest it costs, and what overpaying would save.',
+  leadAnswer:
+    'An EMI, or equated monthly instalment, is a fixed monthly payment covering both interest and principal, sized so the balance reaches exactly zero at the end of the term. Early payments are mostly interest and later ones mostly principal, even though the amount you pay never changes.',
   keywords: [
     'loan emi calculator',
     'emi calculator',
@@ -84,7 +86,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['finance/mortgage-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

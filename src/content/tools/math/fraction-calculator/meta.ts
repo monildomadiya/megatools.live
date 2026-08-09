@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Add, subtract, multiply and divide fractions and mixed numbers, with the common denominator and every simplification step shown rather than just the answer.',
   shortDescription:
     'Add, subtract, multiply and divide fractions or mixed numbers, and see the common denominator, the working, and the simplified result.',
+  leadAnswer:
+    'A fraction represents a number as one integer divided by another. Multiplying and dividing them is straightforward, because numerators and denominators combine directly. Adding and subtracting needs a common denominator first, since thirds and quarters count different-sized pieces and cannot be added as they stand.',
   keywords: [
     'fraction calculator',
     'add fractions',

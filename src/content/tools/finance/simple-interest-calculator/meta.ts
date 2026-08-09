@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out simple interest and the total repayable, see how far it drifts from compound interest over the same term, and check which day-count basis applies.',
   shortDescription:
     'Calculate simple interest on a principal, and see exactly how much less it is than compound interest over the same term.',
+  leadAnswer:
+    'Simple interest is calculated only on the original principal, never on interest already earned. The formula is I = P × r × t — principal, times the annual rate as a decimal, times the time in years. Unlike compound interest, the amount earned each year never changes.',
   keywords: [
     'simple interest calculator',
     'simple interest formula',
@@ -80,7 +82,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['finance/compound-interest-calculator', 'finance/loan-emi-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

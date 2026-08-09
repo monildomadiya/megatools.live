@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Generate strong random passwords in your browser using the operating system cryptographic random number generator, with the entropy of each result shown in bits.',
   shortDescription:
     'Generate cryptographically random passwords entirely in your browser, with the real entropy of each one shown rather than a vague strength meter.',
+  leadAnswer:
+    'A password’s resistance to guessing comes from entropy — the number of passwords the generator could have produced — not from looking complicated. Length contributes more than character variety: every extra character multiplies the search space, while substituting a 3 for an e barely changes it at all.',
   keywords: [
     'password generator',
     'random password generator',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['math/percentage-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

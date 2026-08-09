@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out your full monthly mortgage payment including property tax, insurance, PMI and HOA — not just principal and interest. Shows total interest and payoff date.',
   shortDescription:
     'Calculate the whole monthly payment, not just principal and interest: tax, insurance, PMI and HOA included, with total interest over the life of the loan.',
+  leadAnswer:
+    'A mortgage payment is an amortising loan payment: a fixed monthly amount split between interest on the outstanding balance and repayment of principal. Because the balance falls each month, the interest share shrinks and the principal share grows, while the total payment stays the same throughout the term.',
   keywords: [
     'mortgage calculator',
     'monthly mortgage payment',
@@ -89,7 +91,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['finance/loan-emi-calculator', 'finance/compound-interest-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

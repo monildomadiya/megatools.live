@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Calculate your BMI in metric or US units, see your WHO weight category and healthy weight range, plus the waist-to-height ratio NICE recommends alongside it.',
   shortDescription:
     'Work out your body mass index, see where it sits against WHO categories, and check your waist-to-height ratio at the same time.',
+  leadAnswer:
+    'Body mass index is your weight in kilograms divided by your height in metres squared. The World Health Organization classifies 18.5 to 24.9 as healthy weight for adults, 25.0 to 29.9 as overweight, and 30.0 or above as obesity. It screens populations well and individuals poorly.',
   keywords: [
     'bmi calculator',
     'body mass index',
@@ -96,7 +98,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/bmr-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

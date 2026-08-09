@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert between Celsius, Fahrenheit, Kelvin and Rankine, with absolute zero enforced and the difference between a temperature and a temperature interval explained.',
   shortDescription:
     'Convert between Celsius, Fahrenheit, Kelvin and Rankine — the one conversion that needs an offset rather than a factor.',
+  leadAnswer:
+    'Celsius and Fahrenheit differ in both step size and zero point, so no single multiplication converts between them. Fahrenheit equals Celsius times 1.8 plus 32; going the other way, subtract 32 first and then divide by 1.8. Kelvin shares the Celsius step size with its zero at absolute zero.',
   keywords: [
     'temperature converter',
     'celsius to fahrenheit',
@@ -80,7 +82,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['conversion/length-converter', 'conversion/weight-converter'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

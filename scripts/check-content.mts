@@ -23,6 +23,12 @@ const MIN_SOURCES = 2;
 const MAX_META_TITLE = 60;
 const MIN_META_DESCRIPTION = 110;
 const MAX_META_DESCRIPTION = 165;
+// The lead answer sits above the calculator, so it is bounded at both ends: too
+// short and it is not a real answer, too long and it pushes the tool off the
+// first screen. 40-60 is the target; the gate fails outside a slightly wider
+// band so an extra clause is not a build break.
+const MIN_LEAD_WORDS = 35;
+const MAX_LEAD_WORDS = 70;
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -121,6 +127,19 @@ for (const tool of allTools) {
   if (tool.metaDescription.length > MAX_META_DESCRIPTION) {
     warn(`${id} — metaDescription is ${tool.metaDescription.length} chars, will be cut`);
   }
+  const leadWords = tool.leadAnswer.trim().split(/\s+/).filter(Boolean).length;
+  if (leadWords < MIN_LEAD_WORDS || leadWords > MAX_LEAD_WORDS) {
+    fail(
+      `${id} — leadAnswer is ${leadWords} words, needs ${MIN_LEAD_WORDS}-${MAX_LEAD_WORDS}`,
+    );
+  }
+  // The lead answer is the one block most likely to be quoted away from the
+  // page, so it has to read as a statement about the subject rather than as a
+  // sentence about this website.
+  if (/^(this|the) (tool|calculator|converter|page)\b/i.test(tool.leadAnswer.trim())) {
+    fail(`${id} — leadAnswer opens by describing the tool; it should define the subject`);
+  }
+
   if (tool.faqs.length < MIN_FAQS) {
     fail(`${id} — ${tool.faqs.length} FAQs, needs at least ${MIN_FAQS}`);
   }

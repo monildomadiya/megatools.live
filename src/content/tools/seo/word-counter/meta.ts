@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Count words, characters, sentences and paragraphs as you type, with reading and speaking time from published reading-rate research. Nothing leaves your browser.',
   shortDescription:
     'Count words, characters, sentences and paragraphs as you type, with the exact counting rule for each figure stated rather than assumed.',
+  leadAnswer:
+    'There is no single definition of a word, which is why two tools rarely agree. This counter treats any run of non-whitespace characters as one word, so “state-of-the-art” counts once, matching Microsoft Word and Google Docs; tools that split on the hyphen report four instead.',
   keywords: [
     'word counter',
     'character counter',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['developer/password-generator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

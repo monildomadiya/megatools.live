@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out how many calories a day to eat to lose, gain or maintain weight at a chosen rate, with a check on whether that rate is one your body can sustain.',
   shortDescription:
     'Set a weight goal and a rate, and see the daily calorie target it implies — plus whether that target is a safe one.',
+  leadAnswer:
+    'Your daily calorie target is your total energy expenditure adjusted for the result you want: eat that figure to maintain weight, less to lose, more to gain. A deficit of 300 to 700 calories a day suits most people; much larger deficits mostly cost muscle rather than fat.',
   keywords: [
     'calorie calculator',
     'daily calorie intake',
@@ -85,7 +87,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/tdee-calculator', 'health/bmr-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

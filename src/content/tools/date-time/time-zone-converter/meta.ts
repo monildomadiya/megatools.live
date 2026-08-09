@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert a time between cities and see it in every zone at once, with daylight saving applied for the date you pick rather than for today.',
   shortDescription:
     'Convert a time between cities with daylight saving applied for the date you actually chose, and see the same moment in every zone at once.',
+  leadAnswer:
+    'A time zone is a rule rather than a fixed offset: New York is UTC−5 in winter and UTC−4 in summer. Because countries change their clocks on different weekends, the gap between two cities is not constant — London and New York are five hours apart most of the year and four for part of March.',
   keywords: [
     'time zone converter',
     'world clock',

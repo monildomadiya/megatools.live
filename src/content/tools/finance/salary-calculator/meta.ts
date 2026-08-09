@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert pay between hourly, daily, weekly, biweekly, monthly and annual, adjust for unpaid weeks, and see FLSA overtime at one and a half times the regular rate.',
   shortDescription:
     'Convert a wage between every pay period, adjust for unpaid time off, and check what overtime is actually worth.',
+  leadAnswer:
+    'Gross salary is what you are paid before deductions; net or take-home pay is what reaches your account after income tax, national insurance or payroll taxes, and pension contributions. The gap between the two is typically 20 to 40 percent depending on where you live and what you earn.',
   keywords: [
     'salary calculator',
     'hourly to salary calculator',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['finance/compound-interest-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

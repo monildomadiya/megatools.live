@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out a percentage of a number, what percent one number is of another, percentage change, and increases or decreases — each with the working shown step by step.',
   shortDescription:
     'Four percentage calculations in one place, each showing the working so you can check it or explain it to someone else.',
+  leadAnswer:
+    'A percentage is a proportion expressed per hundred. To find a percentage of a number, divide by 100 and multiply: 15 percent of 240 is 36. Percentages are reversible, so 15 percent of 240 equals 240 percent of 15, and one of those is usually easier mentally.',
   keywords: [
     'percentage calculator',
     'percentage change calculator',
@@ -74,7 +76,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: [],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

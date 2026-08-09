@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Calculate sample and population standard deviation, variance, standard error and quartiles, with every step of the working shown for the numbers you enter.',
   shortDescription:
     'Work out sample or population standard deviation with the full working shown, plus variance, standard error, quartiles and the coefficient of variation.',
+  leadAnswer:
+    'Standard deviation measures how far a typical value sits from the mean, in the same units as the data. Divide the sum of squared deviations by n for a whole population, or by n − 1 for a sample, then take the square root. The sample form is correct far more often.',
   keywords: [
     'standard deviation calculator',
     'sample standard deviation',

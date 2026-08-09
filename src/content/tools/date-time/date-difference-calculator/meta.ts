@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Count the days, weeks, months and years between two dates, with a separate working-day total that excludes weekends and any holidays you specify.',
   shortDescription:
     'Count the days between two dates in calendar units and in working days, with the inclusive-versus-exclusive question answered explicitly rather than assumed.',
+  leadAnswer:
+    'The number of days between two dates has two correct answers. Counting elapsed days — nights passed — gives one figure; counting the days themselves, as a hotel booking or a notice period does, gives one more. Legal drafting separates them as clear days versus days inclusive.',
   keywords: [
     'date difference calculator',
     'days between dates',

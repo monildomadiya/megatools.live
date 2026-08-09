@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert between kilograms, pounds, stone, ounces, grams and all three tons using the exact defined factors, with troy weight for precious metals included.',
   shortDescription:
     'Convert between every common mass unit using exact defined factors — including stone, troy ounces, and all three kinds of ton.',
+  leadAnswer:
+    'Mass conversions between metric and imperial units are exact definitions rather than measurements. Since the 1959 International Yard and Pound Agreement, one pound is exactly 0.45359237 kilograms, and every other imperial and US customary mass unit — the ounce, the stone, the ton — is defined from that pound.',
   keywords: [
     'weight converter',
     'kg to lbs',
@@ -86,7 +88,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['conversion/length-converter', 'health/bmi-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

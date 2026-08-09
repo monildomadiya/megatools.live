@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Compare the Devine, Hamwi, Robinson and Miller ideal weight formulas side by side, and see the healthy BMI weight range that actually applies to your height.',
   shortDescription:
     'See what four competing ideal weight formulas give for your height, and why the healthy BMI range is a better answer than any of them.',
+  leadAnswer:
+    'Ideal body weight formulas — Devine, Robinson, Miller and Hamwi — estimate a target weight from height and sex. All four descend from the same mid-century insurance tables, so their close agreement reflects shared ancestry rather than independent confirmation. A healthy BMI range is the better answer.',
   keywords: [
     'ideal weight calculator',
     'ideal body weight',
@@ -85,7 +87,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/bmi-calculator', 'health/body-fat-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

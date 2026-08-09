@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Estimate body fat percentage with the US Navy circumference method, cross-check it against the BMI-based Deurenberg formula, and see your fat and lean mass.',
   shortDescription:
     'Estimate body fat from a tape measure using the US Navy method, and see how far the BMI-based estimate disagrees.',
+  leadAnswer:
+    'Body fat percentage is the share of your total body mass that is fat rather than muscle, bone, organs and water. The US Navy method estimates it from height and circumference measurements, with a standard error of about four percentage points against hydrostatic weighing.',
   keywords: [
     'body fat calculator',
     'body fat percentage',
@@ -92,7 +94,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/bmi-calculator', 'health/ideal-weight-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

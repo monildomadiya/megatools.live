@@ -90,9 +90,21 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
 
             <h1 className="mt-4 text-display-lg text-ink-900">{tool.h1}</h1>
 
-            <p className="mt-4 text-lg leading-relaxed text-ink-600">
-              {tool.shortDescription}
-            </p>
+            {/*
+              The lead answer stands in for `shortDescription` here rather than
+              sitting beneath it.
+
+              Two intro paragraphs before the calculator was one too many — and
+              of the two, `shortDescription` is the weaker thing to put under the
+              H1, because it narrates a tool the reader is already looking at.
+              The lead answer defines the subject instead, which is what someone
+              arriving cold actually needs and the only one of the two that
+              means anything quoted on its own.
+
+              `shortDescription` still does its real job on cards, hub pages and
+              search results, where the reader has not opened the tool yet.
+            */}
+            <p className="mt-4 text-lg leading-relaxed text-ink-600">{tool.leadAnswer}</p>
 
             <div className="mt-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-line bg-panel px-4 py-2 text-xs text-ink-500 shadow-panel">
               <span className="font-medium text-ink-800">

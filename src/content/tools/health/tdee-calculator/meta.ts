@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Estimate total daily energy expenditure from your BMR and activity level, compared against the official FAO/WHO/UNU physical activity ranges most calculators ignore.',
   shortDescription:
     'Estimate the calories you burn in a full day, using both the common gym multipliers and the official FAO/WHO/UNU activity ranges so you can see how far apart they are.',
+  leadAnswer:
+    'Total daily energy expenditure is everything your body burns in 24 hours: basal metabolic rate, plus the energy spent digesting food, plus deliberate exercise, plus the incidental movement of an ordinary day. BMR is usually 60 to 70 percent of it, and activity accounts for most of the rest.',
   keywords: [
     'tdee calculator',
     'total daily energy expenditure',
@@ -87,7 +89,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/bmr-calculator', 'health/bmi-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

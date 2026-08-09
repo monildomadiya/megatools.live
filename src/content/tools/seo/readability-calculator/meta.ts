@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Score your text with Flesch Reading Ease, Flesch-Kincaid Grade, Gunning Fog, SMOG, Coleman-Liau and ARI, and see which sentences are dragging the score down.',
   shortDescription:
     'Score your writing with six established readability formulas at once, and see exactly which sentences and words are pushing the grade level up.',
+  leadAnswer:
+    'Readability formulas score text on two inputs only: average sentence length and average word length. Flesch Reading Ease returns 0 to 100, where higher is easier and 60 to 70 counts as plain English. Flesch–Kincaid, Gunning Fog and SMOG return a US school grade level instead.',
   keywords: [
     'readability calculator',
     'flesch reading ease',

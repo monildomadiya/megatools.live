@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Project savings growth with compound interest and regular contributions. Shows how much you paid in versus what the interest earned, plus the effective annual rate.',
   shortDescription:
     'Project how savings grow with compound interest and regular contributions, and see exactly how much of the final balance you paid in yourself.',
+  leadAnswer:
+    'Compound interest is interest earned on interest: each period’s interest is added to the balance, so the next period earns on a larger sum. For a lump sum the balance after t years is A = P(1 + r/n)^(nt), where n is how many times a year interest is compounded.',
   keywords: [
     'compound interest calculator',
     'compound interest formula',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: [],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Encode and decode Base64 in your browser, with correct UTF-8 handling and a URL-safe variant. Nothing you paste is uploaded, and Base64 is not encryption.',
   shortDescription:
     'Encode and decode Base64 locally in your browser, with proper UTF-8 handling and the URL-safe alphabet — and a clear warning that this is encoding, not encryption.',
+  leadAnswer:
+    'Base64 encodes arbitrary bytes as text using a 64-character alphabet, packing three bytes into four characters and growing the data by about a third. It exists so binary can pass through channels built for text. It has no key and no secret, so it is not encryption.',
   keywords: [
     'base64 encoder',
     'base64 decoder',

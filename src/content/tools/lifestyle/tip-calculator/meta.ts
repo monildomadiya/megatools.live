@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out a tip and split the bill between any number of people, with the option to tip on the pre-tax total and to round the amount each person pays.',
   shortDescription:
     'Work out a tip and split a bill evenly, with the option to tip on the pre-tax total rather than the amount at the bottom of the receipt.',
+  leadAnswer:
+    'A tip is a voluntary payment to service staff, conventionally 15 to 20 percent of a restaurant bill in the United States. Calculating it on the pre-tax rather than the post-tax total changes the amount slightly — about 1.8 percent of the bill at a 9 percent tax rate and a 20 percent tip.',
   keywords: [
     'tip calculator',
     'bill splitter',
@@ -74,7 +76,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['math/percentage-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

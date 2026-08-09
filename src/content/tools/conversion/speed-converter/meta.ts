@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert speed between mph, km/h, metres per second, feet per second and knots using exact factors, and switch between speed and running or cycling pace.',
   shortDescription:
     'Convert speed between mph, km/h, m/s, ft/s and knots with exact factors, and turn any of them into a running or cycling pace per mile or kilometre.',
+  leadAnswer:
+    'Speed is distance divided by time, and every common unit is an exact definition: a mile per hour is 0.44704 metres per second, and a knot is one nautical mile of exactly 1,852 metres per hour. Mach is the exception — a ratio to the local speed of sound, not a fixed speed.',
   keywords: [
     'speed converter',
     'mph to kmh',

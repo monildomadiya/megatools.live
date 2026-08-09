@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert text between camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, Title Case and sentence case, all at once and entirely in your browser.',
   shortDescription:
     'Convert text into every common programming and editorial case at once — camelCase, snake_case, kebab-case, Title Case and the rest — in one pass.',
+  leadAnswer:
+    'Case conventions carry meaning in code: camelCase for variables, PascalCase for classes and types, snake_case for Python and SQL columns, kebab-case for URLs and CSS, CONSTANT_CASE for constants and environment variables. Converting between them means finding the word boundaries first, which is the harder half.',
   keywords: [
     'case converter',
     'camelcase converter',

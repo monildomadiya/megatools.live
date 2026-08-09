@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Turn any title into a clean URL slug: accents transliterated, punctuation stripped, words hyphenated, with optional stop-word removal and a length cap.',
   shortDescription:
     'Turn a title into a clean, safe URL slug — accents transliterated and punctuation handled properly.',
+  leadAnswer:
+    'A URL slug is the human-readable part of a web address that identifies a page — the “slug-generator” in this address. Good slugs are lowercase, short, and hyphen-separated, using only characters that survive being copied, shared and pasted without being mangled into percent-encoding.',
   keywords: [
     'slug generator',
     'url slug generator',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['seo/character-counter', 'seo/word-counter'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert between millimetres, centimetres, metres, kilometres, inches, feet, yards, miles and nautical miles using the exact internationally defined factors.',
   shortDescription:
     'Convert length between metric and imperial units using the exact defined factors, not the rounded approximations most converters use.',
+  leadAnswer:
+    'Length conversions between metric and imperial units are exact by definition rather than by approximation. The 1959 international yard and pound agreement fixed the yard at exactly 0.9144 metres, which makes an inch exactly 25.4 millimetres and every other imperial length factor a consequence of that one number.',
   keywords: [
     'length converter',
     'distance converter',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['math/percentage-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Format, validate and minify JSON in your browser. Errors are reported with a line and column, and nothing you paste is ever sent to a server.',
   shortDescription:
     'Pretty-print, validate and minify JSON entirely in your browser, with syntax errors reported by line and column rather than as a bare exception.',
+  leadAnswer:
+    'JSON is a text format with exactly six value types: string, number, boolean, null, array and object. It is far stricter than JavaScript — keys must be double-quoted, trailing commas are invalid, and comments are not allowed at all, which together account for most parse failures.',
   keywords: [
     'json formatter',
     'json validator',

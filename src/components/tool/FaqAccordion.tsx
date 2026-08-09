@@ -4,6 +4,11 @@ import type { Faq } from '@/lib/tools/types';
  * Built on native <details> rather than a JS accordion. The answers are then
  * present in the initial HTML for crawlers and for readers on a slow connection,
  * and there is no hydration cost at all.
+ *
+ * Each question is an <h3> inside its <summary>. The questions are written the
+ * way readers phrase them, so leaving them as anonymous spans kept ~280
+ * query-shaped strings out of the document outline for no reason. A heading
+ * inside a summary is valid, and screen readers get a real outline out of it.
  */
 export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   if (faqs.length === 0) return null;
@@ -22,7 +27,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
             className="card group overflow-hidden px-5 py-4 transition-colors open:border-brand-200 sm:px-6"
           >
             <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left font-display font-extrabold tracking-tight text-ink-900 [&::-webkit-details-marker]:hidden">
-              <span>{faq.question}</span>
+              <h3 className="font-display font-extrabold tracking-tight">{faq.question}</h3>
               <span
                 aria-hidden
                 className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-panel-2 text-ink-500 transition-transform duration-200 group-open:rotate-180 group-open:bg-brand-50 group-open:text-brand-600"

@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Convert between square metres, square feet, acres, hectares and square miles using exact defined factors, with the squaring trap that catches most people explained.',
   shortDescription:
     'Convert area between metric and imperial units, including acres and hectares, using the exact squared factors rather than a length conversion applied twice.',
+  leadAnswer:
+    'Area is two-dimensional, so converting it uses the square of the length factor rather than the length factor itself. A foot is exactly 0.3048 metres, so a square foot is 0.3048² = 0.09290304 square metres. Applying the linear factor instead understates the result by about 3.3 times.',
   keywords: [
     'area converter',
     'square feet to square metres',

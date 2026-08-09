@@ -49,6 +49,19 @@ export interface ToolMeta {
   metaDescription: string;
   /** One sentence used on category/index cards. */
   shortDescription: string;
+  /**
+   * 40-60 words of direct, self-contained answer, rendered between the H1 and
+   * the calculator.
+   *
+   * This is the definition a reader wants before they touch the inputs — what
+   * the thing is and what the formula does — written so it stands on its own if
+   * it is lifted out of the page entirely. `shortDescription` says what the tool
+   * does; this says what the subject *is*.
+   *
+   * Kept to a tight word range by the content gate. Long enough to be a real
+   * answer, short enough that it never pushes the calculator below the fold.
+   */
+  leadAnswer: string;
   keywords: string[];
   faqs: Faq[];
   sources: Source[];

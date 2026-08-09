@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Add sales tax or VAT to a price, or work backwards from a tax-inclusive total to the net amount, with the reverse calculation most people get wrong explained.',
   shortDescription:
     'Add sales tax or VAT to a net price, or strip it back out of a gross one — including the reverse calculation that catches almost everyone.',
+  leadAnswer:
+    'Sales tax and VAT are consumption taxes added to the price of goods and services. Adding tax means multiplying the net price by the rate; removing it from a tax-inclusive total means dividing by one plus the rate, not subtracting the rate, which is where most people go wrong.',
   keywords: [
     'sales tax calculator',
     'vat calculator',

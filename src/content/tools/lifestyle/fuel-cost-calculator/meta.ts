@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Work out what a journey costs in fuel, in miles per gallon or litres per 100 km, and split it between passengers — with the UK and US gallon trap explained.',
   shortDescription:
     'Work out what a journey actually costs in fuel, in whichever units your car reports, and split it fairly between the people in it.',
+  leadAnswer:
+    'Fuel cost for a journey is the distance divided by the fuel economy, multiplied by the price per unit of fuel. The trap is the gallon: a US gallon is 3.785 litres and a UK imperial gallon is 4.546, about 20 percent larger, so 45 mpg in Britain is only 37.5 mpg in America.',
   keywords: [
     'fuel cost calculator',
     'petrol cost calculator',

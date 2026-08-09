@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Paste any list of numbers to get the mean, median, mode, range and standard deviation, plus weighted, geometric and harmonic means and when to use each one.',
   shortDescription:
     'Paste a list of numbers and get every kind of average at once — with a note on which one your data actually calls for.',
+  leadAnswer:
+    'The mean is the total divided by the count, the median is the middle value once the data is sorted, and the mode is the value appearing most often. On symmetric data all three land close together; on skewed data they separate, and that separation is itself information.',
   keywords: [
     'average calculator',
     'mean median mode calculator',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['math/percentage-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

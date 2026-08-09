@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Count characters with and without spaces, plus code points, grapheme clusters and UTF-8 bytes — and check your text against SERP, social and SMS limits.',
   shortDescription:
     'Count characters four different ways — including how emoji actually count — and check the result against real platform limits.',
+  leadAnswer:
+    'A character has at least three technical meanings. A family emoji is one thing you see, seven Unicode code points, and eleven UTF-16 code units. JavaScript reports code units, most databases count code points, and a person counts what they can see — which is why two tools disagree.',
   keywords: [
     'character counter',
     'character count',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['seo/word-counter', 'seo/slug-generator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Calculate basal metabolic rate with both Mifflin-St Jeor and revised Harris-Benedict equations, see how far apart they land, and which one the evidence backs.',
   shortDescription:
     'Estimate the energy your body uses at complete rest, using both standard equations side by side so you can see how much the choice of formula matters.',
+  leadAnswer:
+    'Basal metabolic rate is the energy your body uses at complete rest — breathing, circulation, brain activity, cell repair and holding your temperature steady. It accounts for roughly 60 to 70 percent of most people’s total daily energy use, which is why it dominates any calorie calculation.',
   keywords: [
     'bmr calculator',
     'basal metabolic rate',
@@ -87,7 +89,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['health/tdee-calculator', 'health/bmi-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
 };
 
 export default meta;

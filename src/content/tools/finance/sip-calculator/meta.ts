@@ -10,6 +10,8 @@ const meta: ToolMeta = {
     'Project what a monthly SIP grows to, with an optional annual step-up and an inflation-adjusted figure showing what the final amount is actually worth.',
   shortDescription:
     'Project the maturity value of a monthly SIP, including annual step-ups and what the result is worth after inflation.',
+  leadAnswer:
+    'A systematic investment plan, or SIP, invests a fixed amount at regular intervals rather than as a lump sum. Each instalment compounds for however long remains until maturity, so the earliest contributions do most of the work — which is why starting a year earlier beats contributing slightly more.',
   keywords: [
     'sip calculator',
     'systematic investment plan calculator',
@@ -79,7 +81,7 @@ const meta: ToolMeta = {
   ],
   relatedSlugs: ['finance/compound-interest-calculator'],
   publishedAt: '2026-08-07',
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-09',
   featured: true,
 };
 

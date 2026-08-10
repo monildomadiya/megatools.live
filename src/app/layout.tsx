@@ -4,7 +4,12 @@ import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { jsonLdGraph, organizationSchema, websiteSchema } from '@/lib/seo/schema';
+import {
+  jsonLdGraph,
+  organizationSchema,
+  personSchema,
+  websiteSchema,
+} from '@/lib/seo/schema';
 import { site } from '@/lib/site';
 import './globals.css';
 
@@ -86,7 +91,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
 
-        <JsonLd json={jsonLdGraph([organizationSchema(), websiteSchema()])} />
+        <JsonLd
+          json={jsonLdGraph([organizationSchema(), websiteSchema(), personSchema()])}
+        />
 
         <Header />
         <main id="main" className="flex-1">

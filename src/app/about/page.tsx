@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ProsePage } from '@/components/layout/ProsePage';
 import Content from '@/content/legal/about.mdx';
 import { buildMetadata, withBrand } from '@/lib/seo/metadata';
+import { aboutPageSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = buildMetadata({
   title: withBrand('About MegaTools'),
@@ -16,6 +17,7 @@ export default function AboutPage() {
       title="About MegaTools"
       path="/about"
       intro="Free calculators that show the formula, work the example, cite the source, and tell you where the answer stops holding."
+      schemaNodes={[aboutPageSchema('/about')]}
     >
       <Content />
     </ProsePage>

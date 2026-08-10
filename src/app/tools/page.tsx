@@ -9,7 +9,12 @@ import {
 } from '@/components/tool/ToolExplorer';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata, withBrand } from '@/lib/seo/metadata';
-import { breadcrumbSchema, jsonLdGraph, type Crumb } from '@/lib/seo/schema';
+import {
+  breadcrumbSchema,
+  itemListSchema,
+  jsonLdGraph,
+  type Crumb,
+} from '@/lib/seo/schema';
 import { categories } from '@/lib/tools/categories';
 import { allTools, getToolsByCategory } from '@/lib/tools/registry';
 
@@ -58,7 +63,22 @@ export default function ToolsIndexPage() {
 
   return (
     <>
-      <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
+      <JsonLd
+        json={jsonLdGraph([
+          breadcrumbSchema(crumbs),
+          // The complete index, enumerated. This is the page that answers
+          // "what does this site have", so it should answer it in a form a
+          // parser can read rather than only as a grid of links.
+          itemListSchema(
+            allTools.map((tool) => ({
+              name: tool.name,
+              href: tool.href,
+              description: tool.shortDescription,
+            })),
+            'All MegaTools calculators and converters',
+          ),
+        ])}
+      />
 
       <section className="border-b border-line px-4 pb-10 pt-6 sm:px-6 sm:pt-8">
         <div className="relative z-10 mx-auto max-w-6xl">

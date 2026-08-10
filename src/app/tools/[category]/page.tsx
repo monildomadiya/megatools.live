@@ -6,7 +6,13 @@ import { Breadcrumbs } from '@/components/tool/Breadcrumbs';
 import { ToolGrid } from '@/components/tool/ToolCard';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata, withBrand } from '@/lib/seo/metadata';
-import { breadcrumbSchema, jsonLdGraph, type Crumb } from '@/lib/seo/schema';
+import {
+  breadcrumbSchema,
+  itemListSchema,
+  jsonLdGraph,
+  type Crumb,
+} from '@/lib/seo/schema';
+import { site } from '@/lib/site';
 import { categories, getCategory } from '@/lib/tools/categories';
 import { getToolsByCategory } from '@/lib/tools/registry';
 
@@ -54,7 +60,19 @@ export default async function CategoryPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
+      <JsonLd
+        json={jsonLdGraph([
+          breadcrumbSchema(crumbs),
+          itemListSchema(
+            tools.map((tool) => ({
+              name: tool.name,
+              href: tool.href,
+              description: tool.shortDescription,
+            })),
+            `${category.name} calculators on ${site.name}`,
+          ),
+        ])}
+      />
 
       <section className="border-b border-line px-4 pb-14 pt-6 sm:px-6 sm:pt-8">
         <div className="relative z-10 mx-auto max-w-6xl">

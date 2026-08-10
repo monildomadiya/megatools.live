@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { AdSlot } from '@/components/ads/AdSlot';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/tool/Breadcrumbs';
@@ -12,6 +13,7 @@ import {
   toolSchema,
   type Crumb,
 } from '@/lib/seo/schema';
+import { author } from '@/lib/site';
 import { getCategory } from '@/lib/tools/categories';
 import { getRelatedTools, toolHref } from '@/lib/tools/registry';
 import type { ToolMeta } from '@/lib/tools/types';
@@ -106,7 +108,25 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
             */}
             <p className="mt-4 text-lg leading-relaxed text-ink-600">{tool.leadAnswer}</p>
 
+            {/* The byline is not decoration and not only an SEO artefact. The
+                page's JSON-LD names an author; a reader should be able to see
+                the same claim without opening the source, and on finance and
+                health pages the name is part of the argument for trusting the
+                number. */}
             <div className="mt-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-line bg-panel px-4 py-2 text-xs text-ink-500 shadow-panel">
+              <span className="text-ink-800">
+                By{' '}
+                <Link
+                  href={author.path}
+                  rel="author"
+                  className="font-medium text-brand-700 hover:underline"
+                >
+                  {author.name}
+                </Link>
+              </span>
+              <span aria-hidden className="text-ink-300">
+                •
+              </span>
               <span className="font-medium text-ink-800">
                 Updated <time dateTime={tool.updatedAt}>{formatDate(tool.updatedAt)}</time>
               </span>

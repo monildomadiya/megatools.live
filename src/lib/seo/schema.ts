@@ -1,4 +1,4 @@
-import { absoluteUrl, site } from '@/lib/site';
+import { absoluteUrl, author, profiles, site } from '@/lib/site';
 import type { Faq, ToolMeta } from '@/lib/tools/types';
 
 type Json = Record<string, unknown>;
@@ -6,6 +6,10 @@ type Json = Record<string, unknown>;
 /** Stable @id values so the graph nodes can reference each other. */
 const ORG_ID = `${site.url}/#organization`;
 const SITE_ID = `${site.url}/#website`;
+export const PERSON_ID = `${site.url}/#person`;
+
+/** Only emitted when there is something real to point at — see `profiles`. */
+const sameAs = profiles.length > 0 ? { sameAs: [...profiles] } : {};
 
 export function organizationSchema(): Json {
   return {
@@ -17,6 +21,36 @@ export function organizationSchema(): Json {
     description: site.description,
     email: site.email,
     foundingDate: site.founded,
+    logo: {
+      '@type': 'ImageObject',
+      url: absoluteUrl('/icon.svg'),
+      contentUrl: absoluteUrl('/icon.svg'),
+    },
+    founder: { '@id': PERSON_ID },
+    ...sameAs,
+  };
+}
+
+/**
+ * The author entity, declared once at the root so every page can reference it
+ * by @id rather than restating it.
+ *
+ * This is the node that was missing. A finance or health page with no
+ * identifiable author is the classic thin-YMYL shape, and it is also what stops
+ * an AI assistant from attributing anything to this site: with no Person entity
+ * there is nobody for a citation to be *by*.
+ */
+export function personSchema(): Json {
+  return {
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    name: author.name,
+    url: absoluteUrl(author.path),
+    jobTitle: author.jobTitle,
+    description: author.description,
+    knowsAbout: [...author.knowsAbout],
+    worksFor: { '@id': ORG_ID },
+    ...sameAs,
   };
 }
 
@@ -79,12 +113,76 @@ export function toolSchema(tool: ToolMeta, path: string): Json {
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     publisher: { '@id': ORG_ID },
+    // Named authorship on every tool. These are finance and health pages —
+    // the category where an unattributed answer is discounted hardest, by
+    // ranking systems and by assistants deciding what to quote.
+    author: { '@id': PERSON_ID },
+    isPartOf: { '@id': SITE_ID },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
     datePublished: tool.publishedAt,
     dateModified: tool.updatedAt,
     inLanguage: site.language,
     ...(tool.sources.length > 0
-      ? { citation: tool.sources.map((source) => source.url) }
+      ? {
+          // Full citation objects rather than bare URLs. A string tells a
+          // parser where the source is; this tells it what the source is and
+          // who published it, which is the part that carries weight.
+          citation: tool.sources.map((source) => ({
+            '@type': 'CreativeWork',
+            name: source.title,
+            publisher: { '@type': 'Organization', name: source.publisher },
+            url: source.url,
+          })),
+        }
       : {}),
+  };
+}
+
+/**
+ * An enumerable list of tools, for the index and the category hubs.
+ *
+ * Without this, those pages present a wall of links that a parser has to infer
+ * structure from. With it, "what calculators does this site have" is a
+ * question with a machine-readable answer — which is exactly the question an
+ * assistant asks before it can recommend anything here.
+ */
+export function itemListSchema(
+  items: readonly { name: string; href: string; description?: string }[],
+  listName: string,
+): Json | null {
+  if (items.length === 0) return null;
+
+  return {
+    '@type': 'ItemList',
+    name: listName,
+    numberOfItems: items.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.href),
+      ...(item.description ? { description: item.description } : {}),
+    })),
+  };
+}
+
+/**
+ * The About page, tied to the two entities it actually describes.
+ *
+ * This is the page a search engine resolves an author claim against. Every tool
+ * page says "by Darshan Gondaliya" and points at /about; without a node here
+ * declaring that this page is about that Person, the byline is an unresolved
+ * string rather than a reference to a known entity.
+ */
+export function aboutPageSchema(path: string): Json {
+  return {
+    '@type': 'AboutPage',
+    '@id': `${absoluteUrl(path)}#aboutpage`,
+    url: absoluteUrl(path),
+    isPartOf: { '@id': SITE_ID },
+    mainEntity: { '@id': ORG_ID },
+    about: [{ '@id': ORG_ID }, { '@id': PERSON_ID }],
   };
 }
 

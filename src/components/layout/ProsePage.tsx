@@ -17,11 +17,24 @@ interface ProsePageProps {
   /** Shown under the H1. Legal pages need a visible effective date. */
   updatedAt?: string;
   intro?: string;
+  /**
+   * Extra JSON-LD nodes merged into this page's graph. Most prose pages need
+   * nothing beyond breadcrumbs; /about needs to declare which entities it
+   * describes, which is what resolves the byline on every tool page.
+   */
+  schemaNodes?: (Record<string, unknown> | null)[];
   children: React.ReactNode;
 }
 
 /** Shared shell for the about, contact, and policy pages. */
-export function ProsePage({ title, path, updatedAt, intro, children }: ProsePageProps) {
+export function ProsePage({
+  title,
+  path,
+  updatedAt,
+  intro,
+  schemaNodes = [],
+  children,
+}: ProsePageProps) {
   const crumbs: Crumb[] = [
     { name: 'Home', path: '/' },
     { name: title, path },
@@ -29,7 +42,7 @@ export function ProsePage({ title, path, updatedAt, intro, children }: ProsePage
 
   return (
     <>
-      <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
+      <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs), ...schemaNodes])} />
 
       <section className="border-b border-line px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
         <div className="relative z-10 mx-auto max-w-6xl">

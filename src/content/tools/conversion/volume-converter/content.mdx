@@ -1,0 +1,91 @@
+## Two gallons share one word
+
+The hardest thing about converting volume is not the arithmetic. It is that the United States and the United Kingdom both kept the words gallon, quart, pint and fluid ounce, and then defined them as different sizes.
+
+A US liquid gallon is exactly 3.785411784 litres. An imperial gallon is exactly 4.54609 litres. The imperial gallon is about 20% larger. Every unit built on top of the gallon inherits that gap, so an imperial pint is 568 mL where a US pint is 473 mL, and a recipe, a fuel figure or a beer order can be wrong by a fifth without a single number looking suspicious.
+
+The fluid ounce reverses the direction, which is the detail that catches even careful people. Because the imperial gallon is divided into 160 fluid ounces and the US gallon into 128, an imperial fluid ounce is *smaller* than a US one: 28.413 mL against 29.574 mL. Bigger gallon, smaller ounce.
+
+This converter never merges the two systems. Where a unit exists in both, it appears twice with the system named.
+
+## The factors this converter uses
+
+Everything is defined against the litre, which since 1964 has been exactly one cubic decimetre.
+
+| Unit | Exact value in litres |
+| --- | --- |
+| Millilitre | 0.001 |
+| Cubic centimetre (cc) | 0.001 |
+| Litre | 1 |
+| Cubic metre | 1,000 |
+| Teaspoon (US) | 0.00492892159375 |
+| Tablespoon (US) | 0.01478676478125 |
+| Fluid ounce (US) | 0.0295735295625 |
+| Cup (US customary) | 0.2365882365 |
+| Pint (US liquid) | 0.473176473 |
+| Quart (US liquid) | 0.946352946 |
+| Gallon (US liquid) | 3.785411784 |
+| Fluid ounce (imperial) | 0.0284130625 |
+| Pint (imperial) | 0.56826125 |
+| Gallon (imperial) | 4.54609 |
+| Cubic inch | 0.016387064 |
+| Cubic foot | 28.316846592 |
+
+Every one of those is exact rather than measured. The US units follow from a single definition — the US liquid gallon is exactly 231 cubic inches, and an inch is exactly 25.4 millimetres — so the long decimal expansions are consequences of that arithmetic, not approximations. The imperial gallon has been exactly 4.54609 litres since the Weights and Measures Act 1985 restated it in metric terms.
+
+The converter takes your value to litres first, then out to the target unit. Going through one base rather than storing a factor for every pair means a chain like teaspoons to cubic feet carries no more rounding error than teaspoons to litres does.
+
+## How to convert volume by hand
+
+Multiply by the litre value of the unit you have, then divide by the litre value of the unit you want.
+
+### Worked example — cups to millilitres
+
+Convert 2 US cups to millilitres.
+
+- To litres: 2 × 0.2365882365 = 0.473176473 L
+- To millilitres: 0.473176473 ÷ 0.001 = **473.176 mL**
+
+Most recipe writers round this to 240 mL per cup, which is the US legal cup rather than the customary one. At two cups the difference is about 6 mL, or a teaspoon.
+
+### Worked example — US gallons to litres
+
+Convert 15 US gallons, a typical car fuel tank, to litres.
+
+- To litres: 15 × 3.785411784 = **56.781 L**
+
+The same tank quoted in imperial gallons would be 12.49, because the imperial unit is bigger. Reading a US figure as imperial overstates the tank by a fifth.
+
+### Worked example — cubic feet to litres
+
+Convert 3 cubic feet, roughly a small chest freezer, to litres.
+
+- To litres: 3 × 28.316846592 = **84.951 L**
+
+The cubic foot factor is the cube of the foot: 0.3048³ cubic metres is 0.028316846592 m³, and a cubic metre is 1,000 litres.
+
+## Where the traps are
+
+**Which cup?** Three definitions are in active use. The US customary cup is 236.588 mL, one sixteenth of a US gallon. The US legal cup is exactly 240 mL and is the one the FDA requires on nutrition labels. The metric cup used across Australia and New Zealand is exactly 250 mL. A recipe written in one and measured in another is out by up to 6%. For soup that is invisible; for a cake it is the difference between a good crumb and a dense one.
+
+**Dry measure is a separate system.** The United States maintains dry pints, quarts and bushels for produce, and they are not the liquid units. A US dry pint is about 550.6 mL against a liquid pint's 473.2 mL — around 16% larger. Berry punnets and grain trading use dry measure. This converter handles liquid measure only.
+
+**Tablespoons do not travel.** The US tablespoon is 14.79 mL, the UK metric tablespoon is 15 mL, and the Australian tablespoon is 20 mL. The first two are interchangeable in practice. The third is a third larger, which is enough to ruin the seasoning of a dish or the rise of a cake when a recipe crosses a border.
+
+**Cubic centimetres and millilitres are the same unit.** They have been exactly equal since 1964, when the litre was redefined as one cubic decimetre. Before that the litre was the volume of one kilogram of water at maximum density, which made it 1.000028 dm³ — so a pre-1964 millilitre was very slightly larger than a cubic centimetre. Nothing you will measure today is affected, but old scientific literature quoting volumes to seven figures is.
+
+**Fluid ounces are not ounces.** There is no fixed relationship between the fluid ounce, a unit of volume, and the ounce, a unit of mass. The two coincide only for a substance whose density happens to make them coincide, and water is roughly that substance in the imperial system by design. Assuming the equality for oil, syrup or flour produces answers that are wrong by tens of percent.
+
+## When this tool is the wrong one
+
+**Volume to weight.** Mass equals volume times density, so no volume converter can tell you what a litre weighs without knowing what is in it. A litre of water at 4°C is almost exactly one kilogram, a litre of petrol about 0.75 kg, a litre of honey about 1.42 kg, and a litre of flour somewhere between 0.5 and 0.6 kg depending on how it was packed. Recipes that give flour in cups rather than grams are the single largest source of inconsistency in home baking, and the fix is a scale rather than a converter.
+
+**Scaling a length factor.** Volume scales with the cube of the linear dimension. Converting metres to feet uses 3.2808; converting cubic metres to cubic feet uses 3.2808³ = 35.315. Applying the linear factor to a volume understates it by a factor of about eleven, which is at least large enough to be obvious.
+
+**Gas volumes.** A volume of gas is only meaningful alongside a temperature and a pressure, because the same quantity of gas occupies a different volume under different conditions. Standard conditions exist for exactly this reason, and converting a gas volume without stating them means converting a number that does not yet describe anything.
+
+## A note on precision and trust
+
+The reason the factors are listed in a table on this page rather than buried in the code is that a converter is only as good as the constants inside it, and those constants are checkable. Every value above traces to the SI Brochure published by the BIPM, to NIST Handbook 44 for the US customary units, or to Schedule 1 of the UK Weights and Measures Act 1985 for the imperial ones. All three are linked below.
+
+If you are pricing fuel, filing a shipping declaration, or doing anything where a fifth of a gallon is real money, go to those documents directly. This converter is built to give the answer they would give, but a primary source is a primary source.

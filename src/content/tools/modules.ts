@@ -6,10 +6,16 @@ import DataStorageConverter from './conversion/data-storage-converter/Calculator
 import DataStorageConverterContent from './conversion/data-storage-converter/content.mdx';
 import LengthConverter from './conversion/length-converter/Calculator';
 import LengthConverterContent from './conversion/length-converter/content.mdx';
+import PressureConverter from './conversion/pressure-converter/Calculator';
+import PressureConverterContent from './conversion/pressure-converter/content.mdx';
 import SpeedConverter from './conversion/speed-converter/Calculator';
 import SpeedConverterContent from './conversion/speed-converter/content.mdx';
 import TemperatureConverter from './conversion/temperature-converter/Calculator';
 import TemperatureConverterContent from './conversion/temperature-converter/content.mdx';
+import TimeConverter from './conversion/time-converter/Calculator';
+import TimeConverterContent from './conversion/time-converter/content.mdx';
+import VolumeConverter from './conversion/volume-converter/Calculator';
+import VolumeConverterContent from './conversion/volume-converter/content.mdx';
 import WeightConverter from './conversion/weight-converter/Calculator';
 import WeightConverterContent from './conversion/weight-converter/content.mdx';
 import AgeCalculator from './date-time/age-calculator/Calculator';
@@ -163,6 +169,18 @@ export const toolModules: Record<string, ToolModule> = {
   'conversion/weight-converter': {
     Calculator: WeightConverter,
     Content: WeightConverterContent,
+  },
+  'conversion/volume-converter': {
+    Calculator: VolumeConverter,
+    Content: VolumeConverterContent,
+  },
+  'conversion/time-converter': {
+    Calculator: TimeConverter,
+    Content: TimeConverterContent,
+  },
+  'conversion/pressure-converter': {
+    Calculator: PressureConverter,
+    Content: PressureConverterContent,
   },
   'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
   'date-time/date-difference-calculator': {

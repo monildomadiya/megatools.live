@@ -14,8 +14,11 @@ import type { CategorySlug, ToolMeta, ToolWithHref } from './types';
 import areaConverter from '@/content/tools/conversion/area-converter/meta';
 import dataStorageConverter from '@/content/tools/conversion/data-storage-converter/meta';
 import lengthConverter from '@/content/tools/conversion/length-converter/meta';
+import pressureConverter from '@/content/tools/conversion/pressure-converter/meta';
 import speedConverter from '@/content/tools/conversion/speed-converter/meta';
 import temperatureConverter from '@/content/tools/conversion/temperature-converter/meta';
+import timeConverter from '@/content/tools/conversion/time-converter/meta';
+import volumeConverter from '@/content/tools/conversion/volume-converter/meta';
 import weightConverter from '@/content/tools/conversion/weight-converter/meta';
 import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
 import dateDifferenceCalculator from '@/content/tools/date-time/date-difference-calculator/meta';
@@ -80,8 +83,11 @@ const toolMetas: ToolMeta[] = [
   areaConverter,
   dataStorageConverter,
   lengthConverter,
+  pressureConverter,
   speedConverter,
   temperatureConverter,
+  timeConverter,
+  volumeConverter,
   weightConverter,
   ageCalculator,
   dateDifferenceCalculator,

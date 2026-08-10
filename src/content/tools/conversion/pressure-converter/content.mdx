@@ -1,0 +1,115 @@
+## The conversion is easy; the reference point is not
+
+Every pressure unit on this page is a fixed multiple of the pascal, so converting between them is a single multiplication. The part that goes wrong is not the factor. It is that two readings in the same unit can mean different things depending on what they are measured *from*.
+
+**Absolute pressure** is measured from a perfect vacuum. **Gauge pressure** is measured from whatever the surrounding atmosphere happens to be, which is why a tyre gauge reads zero on a flat tyre rather than reading one atmosphere. The two differ by 101.325 kPa, or 14.696 psi.
+
+A tyre inflated to 32 psi on the gauge contains 46.7 psi absolute. Both numbers are correct. Using one where the other is meant is the error that matters in this subject, and it is why this converter asks which one you have rather than assuming.
+
+## The factors this converter uses
+
+Everything is defined against the pascal, the SI unit: one newton per square metre.
+
+| Unit | Pascals |
+| --- | --- |
+| Pascal | 1 |
+| Hectopascal | 100 |
+| Kilopascal | 1,000 |
+| Megapascal | 1,000,000 |
+| Millibar | 100 |
+| Bar | 100,000 |
+| Atmosphere | 101,325 |
+| Torr | 101,325 ÷ 760 ≈ 133.322368 |
+| Millimetre of mercury | 133.322387415 |
+| Pound per square inch | 6,894.757293168 |
+| Inch of mercury | 3,386.389 |
+| Kilogram-force per cm² | 98,066.5 |
+| Centimetre of water | 98.0665 |
+| Inch of water | 249.0889 |
+
+The bar and the atmosphere are exact by definition — the bar as 10⁵ Pa, the standard atmosphere fixed at 101,325 Pa by the 10th General Conference on Weights and Measures in 1954. The psi figure is exact too, though it does not look it: a pound-force is exactly 4.4482216152605 newtons and a square inch is exactly 0.00064516 square metres, and the division produces that long decimal.
+
+The mercury and water columns are *conventional* units. A millimetre of mercury depends on the density of mercury and on local gravity, neither of which is constant, so the unit was frozen by convention at a density of 13,595.1 kg/m³ under standard gravity of 9.80665 m/s². That is where 133.322387415 comes from.
+
+## Torr and mmHg are not quite the same unit
+
+They are defined differently and agree by accident.
+
+- A torr is exactly one 760th of a standard atmosphere: 101,325 ÷ 760 = 133.322368… Pa.
+- A conventional millimetre of mercury is the mercury column above: 133.322387415 Pa.
+
+The gap is about one part in seven million — invisible in a blood pressure reading, invisible in almost all vacuum work, and real enough that metrology keeps them apart. Both are listed here for that reason.
+
+## How to convert pressure by hand
+
+Multiply by the pascal value of the unit you have, divide by the pascal value of the unit you want.
+
+### Worked example — psi to bar
+
+Convert a 32 psi tyre pressure to bar.
+
+- To pascals: 32 × 6,894.757293168 = 220,632.2 Pa
+- To bar: 220,632.2 ÷ 100,000 = **2.206 bar**
+
+European placards usually quote 2.2 bar for this, which is 31.9 psi. Going the other way, 35 psi is 2.41 bar, and rounding it to 2.5 over-inflates by nearly 1.3 psi.
+
+### Worked example — mmHg to kilopascals
+
+Convert a blood pressure of 120 mmHg.
+
+- To pascals: 120 × 133.322387415 = 15,998.7 Pa
+- To kilopascals: **16.0 kPa**
+
+A 120/80 reading is therefore about 16.0/10.7 kPa. No clinician uses that form, which is the point: mmHg survived because the thresholds built on it are worth more than the tidiness of switching.
+
+### Worked example — gauge to absolute
+
+A scuba cylinder reads 200 bar on the gauge.
+
+- Gauge in pascals: 200 × 100,000 = 20,000,000 Pa
+- Add one atmosphere: 20,000,000 + 101,325 = 20,101,325 Pa
+- Absolute: **201.01 bar**
+
+At 200 bar the atmosphere is a rounding error. At 0.5 bar it is a third of the answer, which is why the correction matters most for low pressures and vacuum work.
+
+## Where the traps are
+
+**psig, psia and bare psi.** A figure written psig is gauge and psia is absolute. A figure written just "psi" is gauge far more often than not, because that is what physical gauges display — but the convention is not universal, and in thermodynamics the default flips to absolute. When a number crosses from a workshop into a calculation, this is the assumption to check first.
+
+**Kilopascals and kilograms-force.** kPa and kgf/cm² look interchangeable in a table of tyre pressures and are not: 1 kgf/cm² is 98.0665 kPa, nearly a hundred times the kilopascal. Older Japanese and Eastern European equipment is labelled in kgf/cm², sometimes abbreviated to "kg", which reads as a mass and is not one.
+
+**Millibars and hectopascals.** These are exactly equal, and the changeover in meteorology was purely cosmetic. Standard sea-level pressure is 1013.25 hPa, 1013.25 mbar, or 29.92 inHg. If two weather sources disagree by a factor of anything, one of them is quoting station pressure rather than pressure reduced to sea level, which is a different measurement rather than a different unit.
+
+**Temperature moves the reading.** Gas pressure in a fixed volume rises with temperature. A tyre gains roughly 1 psi for every 10°F, which is why manufacturers specify cold inflation pressure and why the tyre pressure warning light tends to appear on the first cold morning of autumn.
+
+**Water columns depend on the water.** cmH₂O and inH₂O, common in ventilator settings and duct pressure, are conventional units frozen at a particular water density and standard gravity, exactly like mmHg. They are convenient, not fundamental.
+
+## Where each unit is actually used
+
+Pressure has more surviving legacy units than almost any other quantity, and each one persists in a specific trade rather than at random.
+
+**The bar and its multiples** dominate European engineering, hydraulics and diving. It survives despite not being an SI unit because 1 bar is close enough to atmospheric pressure to make figures intuitive, while being a clean power of ten in pascals.
+
+**The pascal and kilopascal** are the SI forms and the ones used in standards documents, physics and increasingly in vehicle placards outside Europe and North America. The megapascal is standard for hydraulic systems and material strength.
+
+**psi** is universal across the United States: tyres, compressors, plumbing, pressure vessels. Its persistence is the same story as the mile — the installed base of gauges, specifications and trained intuition is enormous.
+
+**The atmosphere** is now mostly a teaching and chemistry unit. Standards bodies have moved away from it because "one atmosphere" invites confusion between the defined 101,325 Pa constant and the actual pressure outside, which is never exactly that.
+
+**mmHg and torr** hold on in medicine and vacuum work respectively, and in both cases the reason is a body of thresholds and specifications too large to restate.
+
+**Inches of mercury** survive in aviation altimetry and US broadcast weather. **Inches and centimetres of water** are the units of ventilator settings, duct pressure and manometer work, where the pressures involved are small enough that a mercury column would barely move.
+
+## When this tool is the wrong one
+
+**Vacuum quoted as a depth.** Vacuum is sometimes given as "25 inHg of vacuum", meaning 25 inHg *below* ambient rather than an absolute pressure of 25 inHg. That is a gauge reading with the sign flipped by convention, and converting it as though it were absolute inverts the answer. Establish the reference before converting.
+
+**Stress and pressure share units.** Material stress is also newtons per square metre, so MPa appears in both a hydraulic spec and a tensile strength figure. The units convert identically; the quantities are not interchangeable, and a converter cannot tell you which one you are holding.
+
+**Altitude.** Gauge pressure is relative to local atmospheric pressure, which falls with altitude — roughly 12% lower in Denver than at sea level. A gauge-to-absolute conversion using the standard atmosphere is therefore an approximation anywhere above the coast. This converter uses the standard 101.325 kPa, which is the right default and the wrong number on a mountain.
+
+## A note on precision and trust
+
+Every factor above traces to the SI Brochure published by the BIPM or to NIST Special Publication 811, which tabulates the conversion factors for units used with but outside the SI. Both are linked below, alongside NHTSA's guidance on vehicle placards for the tyre pressure case that brings most people to a page like this one.
+
+If a pressure figure is going into a safety calculation, a vessel rating or a medical device setting, take the definition from the primary source rather than from any converter, including this one.

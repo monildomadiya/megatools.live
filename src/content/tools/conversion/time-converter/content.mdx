@@ -1,0 +1,106 @@
+## Some of these units are exact, and some are averages
+
+Converting time looks like the easiest job in unit conversion and is quietly one of the messiest, because the units divide into two kinds and most converters do not tell you which is which.
+
+From the nanosecond up to the week, every unit is an exact multiple of the SI second. A minute is 60 seconds because it is defined that way, not because anyone measured it. A week is 604,800 seconds, exactly, always.
+
+Months and years are not like that. A month is 28, 29, 30 or 31 days depending on which one you mean. A year is 365 or 366 days depending on where it falls in the leap cycle. There is no exact conversion from months to seconds, so any tool offering one has silently chosen an average. This page states which average it chose and shows you when it is being used.
+
+## The factors this converter uses
+
+| Unit | Seconds | Exact? |
+| --- | --- | --- |
+| Nanosecond | 0.000000001 | Exact |
+| Microsecond | 0.000001 | Exact |
+| Millisecond | 0.001 | Exact |
+| Second | 1 | Exact |
+| Minute | 60 | Exact |
+| Hour | 3,600 | Exact |
+| Day | 86,400 | Exact |
+| Week | 604,800 | Exact |
+| Month | 2,629,746 | Mean Gregorian |
+| Year | 31,556,952 | Mean Gregorian |
+| Year (Julian) | 31,557,600 | Convention |
+| Decade | 315,569,520 | Mean Gregorian |
+| Century | 3,155,695,200 | Mean Gregorian |
+
+The mean Gregorian figures come from the calendar's own arithmetic rather than from a rule of thumb. The Gregorian cycle repeats every 400 years and contains exactly 146,097 days: 400 × 365 plus 100 leap days, minus the three century years that skip their leap day. That gives a mean year of 365.2425 days, which is 31,556,952 seconds, and a mean month of exactly one twelfth of it, 30.436875 days or 2,629,746 seconds.
+
+The Julian year of exactly 365.25 days is listed separately because astronomy never moved off it. The light-year is defined as the distance light travels in one Julian year, and stellar catalogues use Julian centuries. It is 648 seconds longer than the Gregorian mean year — about eleven minutes.
+
+## Where the second comes from
+
+The second is the only unit here with a physical definition. Since 1967 it has been fixed as the duration of 9,192,631,770 periods of the radiation from the transition between the two hyperfine levels of the ground state of the caesium-133 atom.
+
+Everything above it in the table is arithmetic on that definition, which is why hours and days can be exact while remaining detached from anything astronomical. The day was originally one rotation of the Earth, and 86,400 seconds was an attempt to match it. The Earth did not cooperate: its rotation is slowing irregularly, so a mean solar day is now slightly longer than 86,400 SI seconds.
+
+That mismatch is what leap seconds exist to absorb. UTC inserts an extra second when the gap between atomic time and the Earth's rotation approaches 0.9 seconds. Twenty-seven have been added since the practice began in 1972, the last at the end of 2016. In 2022 the General Conference on Weights and Measures voted to stop the practice by 2035 and let the gap grow instead.
+
+None of this changes a conversion — a second is a second — but it does mean the elapsed seconds between two calendar timestamps is not always what multiplying days by 86,400 predicts.
+
+## How to convert time by hand
+
+Multiply by the seconds in the unit you have, divide by the seconds in the unit you want.
+
+### Worked example — minutes to hours
+
+Convert 90 minutes.
+
+- To seconds: 90 × 60 = 5,400 s
+- To hours: 5,400 ÷ 3,600 = **1.5 h**
+
+Which is where the decimal form causes trouble. Written as 1.5 hours it is unambiguous; written as 1.30 on a timesheet it will be read as one hour thirty by a person and as one hour eighteen by anything doing arithmetic on it.
+
+### Worked example — seconds to a readable duration
+
+Convert 100,000 seconds.
+
+- Days: 100,000 ÷ 86,400 = 1, leaving 13,600 s
+- Hours: 13,600 ÷ 3,600 = 3, leaving 2,800 s
+- Minutes: 2,800 ÷ 60 = 46, leaving 40 s
+- **1 d 3 h 46 min 40 s**
+
+The converter shows this breakdown under the headline figure, because "1.157 days" and "1 d 3 h 46 min" are the same answer in two forms and only one of them is actionable.
+
+### Worked example — days to months
+
+Convert 100 days to months.
+
+- To seconds: 100 × 86,400 = 8,640,000 s
+- To mean months: 8,640,000 ÷ 2,629,746 = **3.285 months**
+
+This is the case to be careful with. Three months and nine days from 1 January is 10 April; three months and nine days from 1 October is 9 January. The average is right on average and wrong on any specific date.
+
+## Where the traps are
+
+**Decimal hours versus hours and minutes.** Payroll systems, invoicing tools and spreadsheets almost always want decimal hours: 7 hours 45 minutes is 7.75, not 7.45. The error is small, systematic and in the employer's favour, which is why it is worth checking rather than assuming.
+
+**"A month" in a contract.** Notice periods and payment terms written in months resolve against the calendar, not against 30.44 days. One month from 31 January is a genuinely contested date, and different jurisdictions resolve it differently. If a deadline matters, count dates rather than converting units.
+
+**Weeks in a year.** A common year is 52 weeks and one day, so a weekly event does not land on the same date next year, and a yearly budget of 52 weeks is short by a day. ISO week numbering makes this explicit by giving some years 53 weeks.
+
+**Unix time.** Computers overwhelmingly count seconds since 1 January 1970 UTC and deliberately ignore leap seconds, treating every day as exactly 86,400 seconds. That keeps date arithmetic simple and means Unix timestamps are behind true elapsed atomic time by the 27 seconds accumulated so far.
+
+**Daylight saving.** A local civil day can be 23 or 25 hours long when clocks change, while remaining exactly 24 hours in UTC. Scheduling arithmetic done in local time across a transition is the reason for a whole genre of bugs, and the fix is always to do the arithmetic in UTC and convert for display.
+
+## The units this converter deliberately leaves out
+
+A few time units come up often enough to be worth naming, and each is excluded for a reason.
+
+**The tropical year**, about 365.2422 days, is the time from one March equinox to the next. It is the quantity the Gregorian calendar was designed to approximate, and the calendar's 365.2425-day mean overshoots it by about 27 seconds a year — roughly one day every 3,200 years. Offering it as a converter option would invite people to use an astronomical quantity for civil arithmetic.
+
+**The sidereal day**, 23 hours 56 minutes 4.09 seconds, is one rotation of the Earth relative to the fixed stars rather than relative to the Sun. The four-minute shortfall is why a given star rises about four minutes earlier each night. It is the correct unit for pointing a telescope and the wrong one for everything else.
+
+**The fortnight and the quarter** are conventions rather than definitions. A fortnight is unambiguously 14 days, but a quarter depends on a fiscal calendar that differs by company and by country, so no single factor is defensible.
+
+**The working day and the working year** cannot be converted at all without a schedule. A 1,800-hour working year is a policy, not a unit.
+
+## When this tool is the wrong one
+
+Unit conversion answers "how long is this duration in other units". It cannot answer "what date is 90 days from now", which depends on a calendar, or "how many working hours is that", which depends on a schedule and a holiday list. Those are calendar problems, and the date and time calculators on this site handle them.
+
+The distinction is worth holding onto because the two questions look identical when written down. "Three months" as a duration is 7,889,238 seconds. "Three months" as a date offset is whatever the calendar says when you count three month-names forward from where you started, which can be 89, 90, 91 or 92 days. Converting the first is arithmetic. Resolving the second requires knowing the starting date, and no unit table contains that.
+
+## A note on precision and trust
+
+The second's definition comes from the SI Brochure published by the BIPM. The realisation and dissemination of civil time in the United States is documented by NIST, and leap seconds are announced by the IERS, which monitors the Earth's rotation. All three are linked below, and every constant in the table above traces to them or to the plain arithmetic of the Gregorian calendar shown here.

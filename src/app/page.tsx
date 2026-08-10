@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { HeroDemo } from '@/components/home/HeroDemo';
+import { HeroSearch } from '@/components/search/HeroSearch';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { categories } from '@/lib/tools/categories';
 import {
   allTools,
+  getToolByKey,
   getToolsByCategory,
   latestUpdate,
   recentTools,
@@ -85,10 +88,26 @@ const steps = [
   },
 ];
 
+/**
+ * The four tools the hero offers as one-tap shortcuts. Hand-picked rather than
+ * derived from a popularity metric the site does not collect — these are the
+ * queries people arrive with, one from each of the largest categories.
+ */
+const POPULAR_KEYS = [
+  'health/bmi-calculator',
+  'finance/mortgage-calculator',
+  'math/percentage-calculator',
+  'finance/vat-calculator',
+];
+
 export default function HomePage() {
   const populated = categories.filter((c) => getToolsByCategory(c.slug).length > 0);
   const latest = recentTools.slice(0, 5);
   const updated = latestUpdate();
+
+  const popular = POPULAR_KEYS.map((key) => getToolByKey(key))
+    .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
+    .map((tool) => ({ href: tool.href, name: tool.name }));
 
   const stats = [
     { value: String(allTools.length), label: 'Calculators live' },
@@ -100,12 +119,18 @@ export default function HomePage() {
   return (
     <>
       {/* ------------------------------------------------------------------
-          Hero. Deep bottom padding on purpose: the panel below pulls up into
-          it, and the overlap is what stops the fold from reading as two
-          unrelated blocks stacked on top of each other.
+          Hero. Search first, then a working calculator — the two things a
+          visitor actually came for, both above the fold. Everything that used
+          to occupy this space (stats, recently added) moved below it: none of
+          it helps someone who arrived wanting to convert a number.
       ------------------------------------------------------------------ */}
-      <section className="hero-bg isolate overflow-hidden px-4 pb-28 pt-14 sm:px-6 sm:pb-36 sm:pt-20">
-        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center">
+      {/* No `overflow-hidden` here, unlike the other hero bands: the search
+          field's result list is absolutely positioned and has to be allowed to
+          hang past the bottom of the section. The decorative layers are all
+          `inset-0`, so nothing else can escape. `z-20` on the copy column keeps
+          that list above the demo card, which is a later sibling. */}
+      <section className="hero-bg isolate px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
+        <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center">
           <p className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-line bg-panel px-4 py-2 shadow-panel">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75" />
@@ -136,182 +161,119 @@ export default function HomePage() {
             .
           </p>
 
-          <div
-            className="animate-rise mt-9 flex flex-col gap-3.5 sm:flex-row sm:gap-4"
-            style={{ animationDelay: '180ms' }}
-          >
-            <Link href="/tools" className="btn btn-primary btn-lg">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5 shrink-0"
-                aria-hidden
-              >
-                <rect x="4" y="3" width="16" height="18" rx="2.5" />
-                <path d="M8 8h8M8.5 13h1M14.5 13h1M8.5 17h1M14.5 17h1" />
-              </svg>
-              Browse all {allTools.length} tools
-            </Link>
-            <Link href="/about" className="btn btn-outline btn-lg">
-              How we build them
-              <span aria-hidden>→</span>
-            </Link>
+          <div className="animate-rise mt-9 flex w-full justify-center" style={{ animationDelay: '180ms' }}>
+            <HeroSearch suggestions={popular} />
           </div>
+        </div>
 
-          <p
-            className="animate-rise mt-8 text-sm text-ink-500"
-            style={{ animationDelay: '240ms' }}
-          >
-            Press{' '}
-            <kbd className="rounded-md border border-line bg-panel px-1.5 py-0.5 font-mono text-xs text-ink-600">
-              /
-            </kbd>{' '}
-            anywhere to search
-          </p>
+        {/* The demo sits in the hero rather than below it. Wider than the copy
+            above so it reads as the subject of the page, not a footnote to it. */}
+        <div
+          className="animate-rise relative z-10 mx-auto mt-12 max-w-5xl text-left sm:mt-14"
+          style={{ animationDelay: '260ms' }}
+        >
+          <HeroDemo />
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink-500">
+            <span className="font-medium text-ink-800">Sources cited on every tool</span>
+            <Link
+              href="/editorial-policy"
+              className="font-semibold text-brand-700 hover:underline"
+            >
+              Editorial policy
+            </Link>
+            <span aria-hidden className="text-ink-300">
+              •
+            </span>
+            <span>
+              Last updated <time dateTime={updated}>{formatDate(updated)}</time>
+            </span>
+          </div>
         </div>
       </section>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* ----------------------------------------------------------------
-            The overlapping panel. Negative margin lifts it into the hero so
-            the two read as one composition; `z-20` keeps it above the hero's
-            decorative layers.
+            Stat strip. Four figures on one line — the claims that used to sit
+            in the fold, now that the fold is doing something more useful.
         ---------------------------------------------------------------- */}
-        <section className="relative z-20 -mt-20 sm:-mt-28">
-          <div className="mb-6 flex justify-center">
-            <div className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-line bg-panel px-4 py-2 text-xs text-ink-500 shadow-panel">
-              <span className="font-medium text-ink-800">Sources cited on every tool</span>
-              <Link
-                href="/editorial-policy"
-                className="font-semibold text-brand-700 hover:underline"
-              >
-                Editorial policy
-              </Link>
-              <span aria-hidden className="text-ink-300">
-                •
-              </span>
-              <span>
-                Last updated <time dateTime={updated}>{formatDate(updated)}</time>
-              </span>
-            </div>
-          </div>
-
-          {/* White on the left, grey on the right — the same input/output
-              split every calculator page uses, so the homepage teaches the
-              layout before the reader reaches a tool. */}
-          <div className="overflow-hidden rounded-card-lg border border-line bg-panel shadow-lift">
-            <div className="grid md:grid-cols-[1.15fr_1fr]">
-              <div className="border-b border-line p-5 sm:p-9 md:border-b-0 md:border-r">
-                <p className="eyebrow">Start here · recently added</p>
-
-                <ul className="mt-6 space-y-1">
-                  {latest.map((tool) => {
-                    const accent = categoryAccent(tool.category);
-                    return (
-                      <li key={tool.href}>
-                        <Link
-                          href={tool.href}
-                          className="group flex items-center gap-3.5 rounded-xl px-2.5 py-3 transition-colors hover:bg-panel-2"
-                        >
-                          <span
-                            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                            style={{
-                              color: accent,
-                              backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
-                            }}
-                          >
-                            <CategoryIcon category={tool.category} className="h-5 w-5" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate font-semibold text-ink-900">
-                              {tool.name}
-                            </span>
-                            <span className="mt-0.5 block truncate text-sm text-ink-500">
-                              {tool.shortDescription}
-                            </span>
-                          </span>
-                          <span
-                            aria-hidden
-                            className="shrink-0 text-brand-600 opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100"
-                          >
-                            →
-                          </span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+        <section aria-label="Site at a glance" className="border-t border-line py-12">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <dt className="sr-only">{stat.label}</dt>
+                <dd>
+                  <span className="numeric block text-4xl font-bold text-ink-900 sm:text-5xl">
+                    {stat.value}
+                  </span>
+                  <span className="mt-1.5 block text-sm text-ink-500">{stat.label}</span>
+                </dd>
               </div>
-
-              <div className="flex flex-col justify-between bg-surface p-5 sm:p-9">
-                <div>
-                  <p className="eyebrow eyebrow-muted">At a glance</p>
-
-                  <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-7">
-                    {stats.map((stat) => (
-                      <div key={stat.label}>
-                        <dt className="sr-only">{stat.label}</dt>
-                        <dd>
-                          <span className="numeric block text-4xl font-bold text-ink-900">
-                            {stat.value}
-                          </span>
-                          <span className="mt-1 block text-sm text-ink-500">
-                            {stat.label}
-                          </span>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-
-                <div className="mt-9">
-                  <p className="text-sm leading-relaxed text-ink-600">
-                    Nothing you type is sent to a server. Every calculation happens on
-                    your own device, which is why there is no account to make.
-                  </p>
-                  <Link href="/tools" className="btn btn-primary btn-md mt-5 w-full">
-                    Find your calculator
-                    <span aria-hidden>→</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Chip row. Secondary destinations that do not deserve a section of
-              their own but do deserve to be one click from the fold. */}
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            {[
-              { href: '/tools', label: 'All calculators' },
-              { href: '/editorial-policy', label: 'How we check the numbers' },
-              { href: '/contact', label: 'Request a tool' },
-            ].map((chip) => (
-              <Link
-                key={chip.href}
-                href={chip.href}
-                className="group inline-flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-3 text-sm font-semibold text-ink-900 shadow-panel transition-colors hover:border-brand-400"
-              >
-                {chip.label}
-                <span
-                  aria-hidden
-                  className="text-brand-600 transition-transform duration-200 group-hover:translate-x-0.5"
-                >
-                  →
-                </span>
-              </Link>
             ))}
+          </dl>
+        </section>
+
+        {/* ----------------------------------------------------------------
+            Recently added.
+        ---------------------------------------------------------------- */}
+        <section aria-labelledby="recent-heading" className="border-t border-line py-20">
+          <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow">Recently added</p>
+              <h2 id="recent-heading" className="mt-3 text-display-md">
+                The newest calculators
+              </h2>
+            </div>
+            <Link href="/tools" className="btn btn-outline btn-md">
+              All {allTools.length} tools
+              <span aria-hidden>→</span>
+            </Link>
           </div>
+
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {latest.map((tool) => {
+              const accent = categoryAccent(tool.category);
+              return (
+                <li key={tool.href}>
+                  <Link
+                    href={tool.href}
+                    className="card card-lift group flex h-full items-center gap-3.5 p-4"
+                  >
+                    <span
+                      className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
+                      style={{
+                        color: accent,
+                        backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
+                      }}
+                    >
+                      <CategoryIcon category={tool.category} className="h-5 w-5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate font-semibold text-ink-900">
+                        {tool.name}
+                      </span>
+                      <span className="mt-0.5 block truncate text-sm text-ink-500">
+                        {tool.shortDescription}
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden
+                      className="shrink-0 text-brand-600 opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100"
+                    >
+                      →
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </section>
 
         {/* ----------------------------------------------------------------
             Why these tools are different.
         ---------------------------------------------------------------- */}
         <section aria-labelledby="promises-heading" className="border-t border-line py-20">
-          <div className="mb-12 text-center">
+          <div className="reveal mb-12 text-center">
             <p className="eyebrow">Important facts</p>
             <h2 id="promises-heading" className="mt-3 text-display-md">
               What makes these different
@@ -355,7 +317,7 @@ export default function HomePage() {
             aria-labelledby="categories-heading"
             className="border-t border-line py-20"
           >
-            <div className="mb-12 text-center">
+            <div className="reveal mb-12 text-center">
               <p className="eyebrow">Browse</p>
               <h2 id="categories-heading" className="mt-3 text-display-md">
                 Pick a category
@@ -417,7 +379,7 @@ export default function HomePage() {
             unrelated features.
         ---------------------------------------------------------------- */}
         <section aria-labelledby="steps-heading" className="border-t border-line py-20">
-          <div className="mb-12 text-center">
+          <div className="reveal mb-12 text-center">
             <p className="eyebrow">How it works</p>
             <h2 id="steps-heading" className="mt-3 text-display-md">
               Three steps to an answer you can check

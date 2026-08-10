@@ -20,7 +20,7 @@ export function ToolCard({
   return (
     <Link
       href={tool.href}
-      className="card card-lift group relative flex h-full flex-col overflow-hidden p-5 hover:border-ink-300"
+      className="card card-lift group relative flex h-full flex-col overflow-hidden p-6 hover:border-ink-300"
     >
       {/* Accent wash, revealed on hover. Sits behind the content and is inert,
           so it never intercepts the pointer. */}
@@ -29,6 +29,18 @@ export function ToolCard({
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background: `radial-gradient(120% 80% at 0% 0%, color-mix(in oklab, ${accent} 10%, transparent), transparent 60%)`,
+        }}
+      />
+
+      {/* A hairline of the category's own colour along the top edge. The shared
+          `.card-topline` is always brand blue; on a grid that mixes categories
+          the accent is what makes the wall scannable, so it is worth the
+          duplicated rule to have the line match the icon beside it. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          backgroundImage: `linear-gradient(to right, transparent, ${accent} 50%, transparent)`,
         }}
       />
 

@@ -498,6 +498,24 @@
     animation: rise 0.5s var(--ease-out-soft) both;
   }
 
+  /* Scroll-reveal, as progressive enhancement and nothing more.
+
+     Guarded twice on purpose. The `@supports` test keeps the rule out of
+     browsers without scroll-driven animations — without it, `both` fill would
+     hold the element at `opacity: 0` forever in Safari and Firefox, which turns
+     a decorative flourish into a blank page. The reduced-motion query is the
+     second gate: the global brake below shortens durations, but an element that
+     animates from transparent should simply not animate at all. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: rise 0.6s var(--ease-out-soft) both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 20%;
+      }
+    }
+  }
+
   @keyframes overlay-in {
     from {
       opacity: 0;

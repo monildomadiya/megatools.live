@@ -66,9 +66,12 @@ const paths: Record<CategorySlug, React.ReactNode> = {
 export function CategoryIcon({
   category,
   className = 'h-5 w-5',
+  style,
 }: {
   category: CategorySlug;
   className?: string;
+  /** For the accent colour, which comes from a var() rather than a utility. */
+  style?: React.CSSProperties;
 }) {
   return (
     <svg
@@ -79,6 +82,7 @@ export function CategoryIcon({
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      style={style}
       aria-hidden
     >
       {paths[category]}

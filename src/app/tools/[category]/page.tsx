@@ -83,6 +83,39 @@ export default async function CategoryPage({ params }: PageProps) {
             </div>
             <p className="mt-5 text-lg leading-relaxed text-ink-600">{category.intro}</p>
           </header>
+
+          {/* Sibling categories, inline. A hub page is a dead end otherwise: a
+              reader who lands here from search and finds the wrong section has
+              to go back up through /tools to get anywhere else. */}
+          <nav aria-label="Other categories" className="mt-8 flex flex-wrap gap-2">
+            {categories
+              .filter((other) => getToolsByCategory(other.slug).length > 0)
+              .map((other) => {
+                const current = other.slug === category.slug;
+                const otherAccent = categoryAccent(other.slug);
+                return (
+                  <Link
+                    key={other.slug}
+                    href={`/tools/${other.slug}`}
+                    aria-current={current ? 'page' : undefined}
+                    className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold transition-colors ${
+                      current
+                        ? 'border-transparent bg-invert text-on-invert'
+                        : 'border-line bg-panel text-ink-700 hover:border-ink-300 hover:text-ink-900'
+                    }`}
+                  >
+                    <CategoryIcon
+                      category={other.slug}
+                      className="h-4 w-4"
+                      // The chip for the current category is near-black, so the
+                      // accent would disappear into it.
+                      style={current ? undefined : { color: otherAccent }}
+                    />
+                    {other.name}
+                  </Link>
+                );
+              })}
+          </nav>
         </div>
       </section>
 

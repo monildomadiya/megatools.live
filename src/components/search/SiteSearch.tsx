@@ -4,95 +4,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
-import { categories } from '@/lib/tools/categories';
-import { allTools } from '@/lib/tools/registry';
-import type { CategorySlug } from '@/lib/tools/types';
+import { countFor, populatedCategories, searchTools } from '@/lib/tools/search';
 
 /**
  * Site-wide search, opened with the header button or Cmd/Ctrl-K.
  *
  * This is the part of the UI built for the tool count going up rather than for
- * the seven that exist today. A grid is a fine way to browse a screenful; past
+ * the handful that exist today. A grid is a fine way to browse a screenful; past
  * roughly thirty tools it stops being discovery and search becomes the primary
- * way in. Building it now means the growth is a data change, not a redesign.
+ * way in.
  *
- * Only `registry.ts` and `categories.ts` cross into this bundle — both are plain
- * data. Importing anything that reaches a calculator component would pull every
- * tool into first load.
+ * The index and the ranking rule live in `@/lib/tools/search` because the hero
+ * field on the homepage queries the same thing — see the note there.
  */
-
-interface Hit {
-  href: string;
-  name: string;
-  description: string;
-  category: CategorySlug;
-  categoryName: string;
-  /** Lower sorts first. */
-  rank: number;
-}
-
-const categoryName = new Map(categories.map((c) => [c.slug, c.name]));
-
-const countByCategory = new Map<string, number>();
-for (const tool of allTools) {
-  countByCategory.set(tool.category, (countByCategory.get(tool.category) ?? 0) + 1);
-}
-
-function countFor(slug: string): number {
-  return countByCategory.get(slug) ?? 0;
-}
-
-// Built once at module scope rather than per keystroke: the haystack never
-// changes, so rebuilding it inside the filter would be pure waste on every
-// character typed.
-const index = allTools.map((tool) => ({
-  href: tool.href,
-  name: tool.name,
-  description: tool.shortDescription,
-  category: tool.category,
-  categoryName: categoryName.get(tool.category) ?? tool.category,
-  haystackName: tool.name.toLowerCase(),
-  haystackKeywords: tool.keywords.join(' ').toLowerCase(),
-  haystackDescription: tool.shortDescription.toLowerCase(),
-}));
-
-/**
- * Ranked substring matching, not fuzzy matching. For a set of tools with names
- * as plain as "Mortgage Calculator", a prefix-then-substring ordering puts the
- * obvious answer first, and it cannot produce the surprising matches a fuzzy
- * matcher does on short queries.
- */
-function search(query: string): Hit[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return [];
-
-  const hits: Hit[] = [];
-
-  for (const entry of index) {
-    let rank = -1;
-
-    if (entry.haystackName.startsWith(q)) rank = 0;
-    else if (entry.haystackName.includes(q)) rank = 1;
-    else if (entry.categoryName.toLowerCase().includes(q)) rank = 2;
-    else if (entry.haystackKeywords.includes(q)) rank = 3;
-    else if (entry.haystackDescription.includes(q)) rank = 4;
-
-    if (rank >= 0) {
-      hits.push({
-        href: entry.href,
-        name: entry.name,
-        description: entry.description,
-        category: entry.category,
-        categoryName: entry.categoryName,
-        rank,
-      });
-    }
-  }
-
-  return hits
-    .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name))
-    .slice(0, 8);
-}
 
 export function SiteSearch() {
   const [open, setOpen] = useState(false);
@@ -104,14 +28,11 @@ export function SiteSearch() {
   const router = useRouter();
   const listId = useId();
 
-  const hits = useMemo(() => search(query), [query]);
+  const hits = useMemo(() => searchTools(query), [query]);
 
   // Fallback when nothing is typed yet: the categories, so the palette is a
   // browse surface as well as a search one and never opens empty.
-  const populated = useMemo(
-    () => categories.filter((c) => allTools.some((t) => t.category === c.slug)),
-    [],
-  );
+  const populated = populatedCategories;
 
   const close = useCallback(() => {
     setOpen(false);

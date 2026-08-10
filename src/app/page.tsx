@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CategoryShowcase } from '@/components/home/CategoryShowcase';
-import { StatsMarquee } from '@/components/home/StatsMarquee';
+import { CategoryIndex } from '@/components/home/CategoryIndex';
 import { HeroSearch } from '@/components/search/HeroSearch';
-import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { categories } from '@/lib/tools/categories';
 import { allTools, getToolsByCategory, latestUpdate } from '@/lib/tools/registry';
@@ -17,69 +15,49 @@ export const metadata: Metadata = buildMetadata({
 });
 
 function formatDate(iso: string): string {
-  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    month: 'short',
+    day: '2-digit',
     timeZone: 'UTC',
   });
 }
 
-const promises = [
+/**
+ * The four claims, written as claims rather than as features. Each is checkable
+ * on any tool page, which is the only reason to make it on the homepage.
+ */
+const principles = [
   {
     title: 'The formula is on the page',
     body: 'Every calculator shows the equation it runs and works through a real example with real numbers, so you can check the result by hand if it matters.',
-    icon: (
-      <>
-        <path d="M4 6h16M4 12h10M4 18h7" />
-        <path d="m16 15 5 5m0-5-5 5" />
-      </>
-    ),
   },
   {
     title: 'Sources you can follow',
-    body: 'Reference values and formulas are cited to the bodies that publish them — WHO, NIH, NICE, national tax authorities — with links you can open.',
-    icon: (
-      <>
-        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" />
-        <path d="M8 8h7M8 11.5h5" />
-      </>
-    ),
+    body: 'Reference values are cited to the bodies that publish them — WHO, NIH, NICE, HMRC, the IETF — with links you can open and read.',
   },
   {
     title: 'Nothing leaves your browser',
-    body: 'Calculations run entirely on your device. Weights, salaries, and everything else you type stay on your machine. There is no account and no upload.',
-    icon: (
-      <>
-        <rect x="4.5" y="10" width="15" height="10.5" rx="2.5" />
-        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-      </>
-    ),
+    body: 'Calculations run on your device. Weights, salaries and everything else you type stay on your machine. No account, no upload, no analytics on your inputs.',
   },
   {
     title: 'We say where it breaks',
     body: 'Every tool has a section on when its answer stops being reliable. A number without its caveats is worse than no number at all.',
-    icon: (
-      <>
-        <path d="M12 3.5 21 19H3z" />
-        <path d="M12 10v4M12 16.5v.5" />
-      </>
-    ),
   },
 ];
 
 const steps = [
   {
-    title: 'Pick the calculator',
-    body: 'Search with the / key, or browse the categories. Every tool page says up front what it assumes about your inputs.',
+    title: 'Find it',
+    body: 'Search from any page with the / key, or read down the index below. Nothing is more than two clicks from here.',
   },
   {
     title: 'Type your numbers',
-    body: 'Results update as you type — there is no submit button and nothing is sent anywhere. Units switch between metric and US where it matters.',
+    body: 'Results update as you type. There is no submit button and nothing is sent anywhere. Units switch between metric and US where it matters.',
   },
   {
     title: 'Check the working',
-    body: 'Under each result sits the formula, a worked example, the limits of the method, and links to the sources the constants came from.',
+    body: 'Under every result sits the formula, a worked example, the limits of the method, and links to the sources the constants came from.',
   },
 ];
 
@@ -87,284 +65,216 @@ export default function HomePage() {
   const populated = categories.filter((c) => getToolsByCategory(c.slug).length > 0);
   const updated = latestUpdate();
 
-  // Facts about the build, not claims about the audience. Every one of these is
-  // checkable from the site itself, which is what lets them run in a marquee
-  // without reading as the usual "1M+ happy users" filler.
-  const stats = [
-    { value: String(allTools.length), label: 'Calculators live' },
-    { value: String(populated.length), label: 'Categories covered' },
-    { value: '$0', label: 'Cost, forever' },
-    { value: '0', label: 'Bytes uploaded' },
-    { value: '100%', label: 'Runs in your browser' },
-    { value: '2+', label: 'Cited sources per tool' },
-    { value: '1,000+', label: 'Words of working per page' },
+  // Set as a colophon — the facts a reference work states about itself. Every
+  // one is checkable from the site, which is why none of them is a user count.
+  const colophon = [
+    { label: 'Calculators', value: String(allTools.length) },
+    { label: 'Categories', value: String(populated.length) },
+    { label: 'Sources per tool', value: '2+' },
+    { label: 'Cost', value: '£0' },
+    { label: 'Last updated', value: formatDate(updated) },
   ];
 
   return (
     <>
-      {/* ------------------------------------------------------------------
-          Hero. A statement, a search field, and nothing else.
+      {/* ==================================================================
+          Hero. Left-aligned and asymmetric: a statement column and a
+          colophon, the way a reference work opens. No centred stack, no
+          gradient headline, no decorative glow — on a site whose subject is
+          cited arithmetic, restraint is the thing that reads as authority.
+      ================================================================== */}
+      <section className="border-b border-line px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-7">
+              <p className="eyebrow animate-rise">
+                {site.name} · Independent · Free · No account
+              </p>
 
-          No calculator runs here and no individual tool is named. The homepage
-          answers one question — which of these eight subjects does yours belong
-          to — and every element that offered a specific tool instead was
-          answering a question the visitor had not asked yet.
-      ------------------------------------------------------------------ */}
-      {/* No `overflow-hidden` here, unlike the other hero bands: the search
-          field's result list is absolutely positioned and has to be allowed to
-          hang past the bottom of the section. The decorative layers are all
-          `inset-0`, so nothing else can escape. */}
-      <section className="hero-bg isolate px-4 pb-12 pt-14 sm:px-6 sm:pb-14 sm:pt-20">
-        {/* Accent blobs. Three, placed asymmetrically: a single centred glow
-            reads as a vignette, while an off-balance set gives the band a
-            diagonal the eye follows down into the grid below. */}
-        <span aria-hidden className="blob -z-10 right-0 top-0 h-96 w-96 bg-brand-500/15" />
-        <span
-          aria-hidden
-          className="blob -z-10 left-1/2 top-0 h-24 w-1/3 -translate-x-1/2 bg-accent-500/10"
-        />
-        <span
-          aria-hidden
-          className="blob -z-10 -left-20 bottom-0 h-72 w-72 bg-accent-500/10"
-        />
-
-        <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center">
-          <p className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-line bg-panel px-4 py-2 shadow-panel">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" />
-            </span>
-            <span className="eyebrow">
-              {allTools.length} tools live · free · no sign-up
-            </span>
-          </p>
-
-          <h1
-            className="animate-rise mt-6 text-display-xl text-ink-900"
-            style={{ animationDelay: '60ms' }}
-          >
-            Calculators that <span className="text-gradient-accent">show their work</span>
-          </h1>
-
-          <p
-            className="animate-rise mt-6 max-w-2xl text-lg leading-relaxed text-ink-600 sm:text-xl"
-            style={{ animationDelay: '120ms' }}
-          >
-            {populated.length} categories, {allTools.length} calculators. Each one gives
-            you the answer, the{' '}
-            <strong className="font-semibold text-ink-900">formula behind it</strong>, and
-            an honest account of{' '}
-            <strong className="font-semibold text-ink-900">
-              when that answer stops being reliable
-            </strong>
-            .
-          </p>
-
-          <div
-            className="animate-rise mt-9 flex w-full justify-center"
-            style={{ animationDelay: '180ms' }}
-          >
-            {/* No shortcut chips under it. The homepage names no individual
-                calculator — search is how you reach one from here, and the
-                categories below are how you find one you cannot name. */}
-            <HeroSearch />
-          </div>
-        </div>
-
-        {/* Every category, one tap each, directly under the field.
-
-            This is the row that closes the fold. Without it the hero ran a
-            headline, a field and a byline into a large empty band — and the
-            eight things this site is actually organised around sat below it,
-            unseen. They are categories rather than tools, so the homepage still
-            names no individual calculator. */}
-        <nav
-          aria-label="Categories"
-          className="animate-rise mx-auto mt-8 flex max-w-4xl flex-wrap items-center justify-center gap-2"
-          style={{ animationDelay: '240ms' }}
-        >
-          {populated.map((category) => {
-            const accent = categoryAccent(category.slug);
-            return (
-              <Link
-                key={category.slug}
-                href={`/tools/${category.slug}`}
-                className="group inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink-700 shadow-panel transition-colors hover:border-brand-400 hover:text-ink-900"
+              <h1
+                className="animate-rise mt-6 text-display-xl text-ink-900"
+                style={{ animationDelay: '60ms' }}
               >
-                <CategoryIcon
-                  category={category.slug}
-                  className="h-4 w-4"
-                  style={{ color: accent }}
-                />
-                {category.name}
-                <span className="numeric text-xs text-ink-400">
-                  {getToolsByCategory(category.slug).length}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
+                Calculators that show their&nbsp;work.
+              </h1>
 
-        <div
-          className="animate-rise mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink-500"
-          style={{ animationDelay: '300ms' }}
-        >
-          <span className="font-medium text-ink-800">Sources cited on every tool</span>
-          <Link
-            href="/editorial-policy"
-            className="font-semibold text-brand-700 hover:underline"
-          >
-            Editorial policy
-          </Link>
-          <span aria-hidden className="text-ink-300">
-            •
-          </span>
-          <span>
-            Last updated <time dateTime={updated}>{formatDate(updated)}</time>
-          </span>
+              <p
+                className="animate-rise mt-7 max-w-xl text-lg leading-relaxed text-ink-600"
+                style={{ animationDelay: '120ms' }}
+              >
+                {allTools.length} calculators across {populated.length} subjects. Each one
+                gives you the answer, the formula behind it, and an honest account of when
+                that answer stops being reliable.
+              </p>
+
+              <div
+                className="animate-rise mt-9 flex w-full"
+                style={{ animationDelay: '180ms' }}
+              >
+                <HeroSearch />
+              </div>
+            </div>
+
+            {/* The colophon. Mono, right-hand column, rules between rows — the
+                masthead block of a reference work rather than a stat card. */}
+            <div className="animate-rise lg:col-span-5" style={{ animationDelay: '240ms' }}>
+              <dl className="border-t border-line">
+                {colophon.map((item) => (
+                  <div
+                    key={item.label}
+                    className="flex items-baseline justify-between gap-4 border-b border-line py-3.5"
+                  >
+                    <dt className="text-sm text-ink-500">{item.label}</dt>
+                    <dd className="numeric text-base font-bold text-ink-900">
+                      {item.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="mt-5 text-sm leading-relaxed text-ink-500">
+                Every formula on this site traces to the body that defines it. Where a
+                method is contested, the page says so.{' '}
+                <Link
+                  href="/editorial-policy"
+                  className="font-semibold text-brand-700 hover:underline"
+                >
+                  Editorial policy →
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Full-bleed, unlike everything below it: a strip that slides has to run
-          off both edges of the window, or it reads as a box with text moving
-          inside it. */}
-      <StatsMarquee stats={stats} />
-
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-
-        {/* ----------------------------------------------------------------
-            The categories. This is the homepage's content, not a section of
-            it — no border-top, because the marquee above already closed the
-            hero and a second rule would fence this off from it.
-        ---------------------------------------------------------------- */}
-        {populated.length > 0 && (
-          <section aria-labelledby="categories-heading" className="py-20">
-            <div className="reveal mb-12 text-center">
-              <p className="eyebrow">Browse · {populated.length} categories</p>
-              <h2 id="categories-heading" className="mt-3 text-display-md">
+      {/* ==================================================================
+          The index. This is the homepage's content.
+      ================================================================== */}
+      <section aria-labelledby="index-heading" className="px-4 py-20 sm:px-6 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">The index</p>
+              <h2 id="index-heading" className="mt-4 text-display-md">
                 Start with the subject
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-ink-600 sm:text-lg">
-                Every section opens with what its tools assume before you use them, and
-                where those assumptions stop holding. Pick the one your question belongs
-                to.
-              </p>
             </div>
-
-            <CategoryShowcase />
-          </section>
-        )}
-
-        {/* ----------------------------------------------------------------
-            Why these tools are different.
-        ---------------------------------------------------------------- */}
-        <section aria-labelledby="promises-heading" className="border-t border-line py-20">
-          <div className="reveal mb-12 text-center">
-            <p className="eyebrow">Important facts</p>
-            <h2 id="promises-heading" className="mt-3 text-display-md">
-              What makes these different
-            </h2>
+            <p className="max-w-md text-ink-600">
+              Every section opens with what its tools assume before you use them, and where
+              those assumptions stop holding.
+            </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {promises.map((promise) => (
+          <CategoryIndex />
+        </div>
+      </section>
+
+      {/* ==================================================================
+          The claims. Heading left, list right — a spread rather than a row
+          of feature cards.
+      ================================================================== */}
+      <section
+        aria-labelledby="principles-heading"
+        className="border-t border-line px-4 py-20 sm:px-6 sm:py-24"
+      >
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="reveal lg:col-span-4">
+            <p className="eyebrow">What we promise</p>
+            <h2 id="principles-heading" className="mt-4 text-display-md">
+              Four things, on every page
+            </h2>
+            <p className="mt-5 text-ink-600">
+              None of these is a claim about this site you have to take on trust. Open any
+              calculator and check.
+            </p>
+          </div>
+
+          <dl className="lg:col-span-8">
+            {principles.map((item, index) => (
               <div
-                key={promise.title}
-                className="card card-topline card-lift relative overflow-hidden p-6"
+                key={item.title}
+                className="flex gap-5 border-b border-line py-7 first:border-t sm:gap-8"
               >
-                <span className="grid h-12 w-12 place-items-center rounded-2xl border border-brand-200 bg-brand-50 text-brand-600">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-6 w-6"
-                    aria-hidden
-                  >
-                    {promise.icon}
-                  </svg>
-                </span>
-                <h3 className="mt-5 text-lg font-bold tracking-tight">{promise.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-ink-600">{promise.body}</p>
+                <dt className="numeric w-8 shrink-0 pt-1 text-sm text-ink-400 sm:w-12">
+                  {String(index + 1).padStart(2, '0')}
+                </dt>
+                <dd className="min-w-0">
+                  <p className="font-display text-xl font-extrabold tracking-tight text-ink-900">
+                    {item.title}
+                  </p>
+                  <p className="mt-2 leading-relaxed text-ink-600">{item.body}</p>
+                </dd>
               </div>
             ))}
-          </div>
-        </section>
+          </dl>
+        </div>
+      </section>
 
-
-        {/* ----------------------------------------------------------------
-            How it works. Numbered because the whole point is that it is a
-            sequence — a three-card grid without the ordinals reads as three
-            unrelated features.
-        ---------------------------------------------------------------- */}
-        <section aria-labelledby="steps-heading" className="border-t border-line py-20">
-          <div className="reveal mb-12 text-center">
+      {/* ==================================================================
+          How it works.
+      ================================================================== */}
+      <section
+        aria-labelledby="steps-heading"
+        className="border-t border-line px-4 py-20 sm:px-6 sm:py-24"
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="reveal mb-12">
             <p className="eyebrow">How it works</p>
-            <h2 id="steps-heading" className="mt-3 text-display-md">
+            <h2 id="steps-heading" className="mt-4 text-display-md">
               Three steps to an answer you can check
             </h2>
           </div>
 
-          {/* Laid out on a rule rather than as three cards. The ordinals only
-              earn their place because this genuinely is a sequence, and a line
-              running through them is what says so — three boxed numbers side by
-              side read as three features that happen to be counted. */}
-          <ol className="relative grid gap-10 sm:grid-cols-3 sm:gap-6">
-            <span
-              aria-hidden
-              className="absolute left-0 right-0 top-6 hidden h-px bg-line sm:block"
-            />
+          <ol className="grid gap-10 border-t border-line pt-10 sm:grid-cols-3 sm:gap-8">
             {steps.map((step, index) => (
-              <li key={step.title} className="relative">
-                <span className="numeric relative grid h-12 w-12 place-items-center rounded-2xl border border-brand-200 bg-brand-50 text-lg font-bold text-brand-700">
+              <li key={step.title}>
+                <span className="numeric text-sm text-ink-400">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mt-6 text-xl font-bold tracking-tight">{step.title}</h3>
+                <h3 className="mt-4 font-display text-xl font-extrabold tracking-tight text-ink-900">
+                  {step.title}
+                </h3>
                 <p className="mt-2.5 leading-relaxed text-ink-600">{step.body}</p>
               </li>
             ))}
           </ol>
-        </section>
+        </div>
+      </section>
 
-        {/* ----------------------------------------------------------------
-            Closing call to action.
-        ---------------------------------------------------------------- */}
-        <section className="border-t border-line py-20">
-          <div className="card relative isolate overflow-hidden px-6 py-20 text-center sm:px-12 sm:py-24">
-            <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-bloom" />
-            <span
-              aria-hidden
-              className="blob -z-10 -right-16 -top-16 h-72 w-72 bg-brand-500/20"
-            />
-            <span
-              aria-hidden
-              className="blob -bottom-20 -left-10 -z-10 h-64 w-64 bg-accent-500/15"
-            />
-
-            <p className="eyebrow">Get started</p>
-            {/* The one place on the page set at hero scale other than the hero
-                itself. A closing panel that whispers is not a close. */}
-            <h2 className="mx-auto mt-4 max-w-3xl text-display-lg">
-              Find the calculator you need
+      {/* ==================================================================
+          Close. The one dark band on a light site — a full stop rather than
+          another panel. It is a section, not a theme: nothing here toggles.
+      ================================================================== */}
+      <section className="bg-invert px-4 py-20 text-on-invert sm:px-6 sm:py-28">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
+          <div className="lg:col-span-8">
+            <p className="eyebrow text-brand-300">Get started</p>
+            <h2 className="mt-4 text-display-lg text-on-invert">
+              Find the calculator you need.
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-ink-600 sm:text-lg">
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">
               {allTools.length} tools across {populated.length} categories, each with its
               formula, a worked example, and the sources behind it. More are being written.
             </p>
-            <div className="mt-9 flex flex-col justify-center gap-3.5 sm:flex-row sm:gap-4">
-              <Link href="/tools" className="btn btn-primary btn-lg">
-                Browse all tools
-                <span aria-hidden>→</span>
-              </Link>
-              <Link href="/about" className="btn btn-outline btn-lg">
-                How we build them
-              </Link>
-            </div>
           </div>
-        </section>
-      </div>
+
+          <div className="flex flex-col gap-3.5 sm:flex-row lg:col-span-4 lg:justify-end">
+            <Link
+              href="/tools"
+              className="btn btn-lg bg-panel text-ink-900 hover:bg-panel-2"
+            >
+              Browse all tools
+              <span aria-hidden>→</span>
+            </Link>
+            <Link
+              href="/about"
+              className="btn btn-lg border border-white/25 text-on-invert hover:bg-white/10"
+            >
+              How we build them
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

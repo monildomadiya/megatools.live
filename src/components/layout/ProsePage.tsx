@@ -31,7 +31,7 @@ export function ProsePage({ title, path, updatedAt, intro, children }: ProsePage
     <>
       <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
 
-      <section className="hero-bg isolate overflow-hidden px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
+      <section className="border-b border-line px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
         <div className="relative z-10 mx-auto max-w-6xl">
           <Breadcrumbs crumbs={crumbs} />
 

@@ -66,7 +66,7 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
         ])}
       />
 
-      <section className="hero-bg isolate overflow-hidden px-4 pb-24 pt-6 sm:px-6 sm:pb-28 sm:pt-8">
+      <section className="px-4 pb-24 pt-6 sm:px-6 sm:pb-28 sm:pt-8">
         <div className="relative z-10 mx-auto max-w-6xl">
           <Breadcrumbs crumbs={crumbs} />
 

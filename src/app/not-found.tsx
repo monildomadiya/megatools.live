@@ -7,7 +7,7 @@ export default function NotFound() {
 
   return (
     <>
-      <section className="hero-bg isolate overflow-hidden px-4 pb-16 pt-16 sm:px-6 sm:pb-20 sm:pt-24">
+      <section className="border-b border-line px-4 pb-16 pt-16 sm:px-6 sm:pb-20 sm:pt-24">
         <div className="relative z-10 mx-auto max-w-3xl">
           <p className="eyebrow">Error 404</p>
           <h1 className="mt-3 text-display-lg text-ink-900">

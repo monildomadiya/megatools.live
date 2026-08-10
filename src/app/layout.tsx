@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Outfit } from 'next/font/google';
+import { JetBrains_Mono, Readex_Pro } from 'next/font/google';
 import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
@@ -11,22 +11,20 @@ import './globals.css';
 // Self-hosted by next/font at build time — no request to fonts.googleapis.com on
 // page load, which removes a third-party connection from the critical path.
 //
-// All three are variable fonts, so the whole weight range arrives in one file
-// each rather than one request per weight.
+// Both are variable fonts, so the whole weight range arrives in one file each
+// rather than one request per weight.
 
-// Headings only. Geometric and wide-apertured, which is what lets it hold shape
-// at the 70px the hero runs at — a text face set that large goes visibly thin.
-const outfit = Outfit({
+// Headings and body both. Two faces rather than three: Readex Pro has enough
+// width and weight range to carry a 70px headline without going thin and to
+// read comfortably at 17px, and dropping the second text face removes a font
+// file from the critical path entirely.
+//
+// It is a rounder, softer geometric than the face it replaces, which suits a
+// site of small everyday utilities better than something more austere.
+const readex = Readex_Pro({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-outfit',
-});
-
-// The reading face, and the only one used below 1.25rem outside of figures.
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-readex',
 });
 
 // Carries every figure the site outputs, plus the eyebrow labels. A
@@ -72,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={site.language}
-      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${readex.variable} ${jetbrainsMono.variable}`}
     >
       <body className="flex min-h-screen flex-col">
         <a

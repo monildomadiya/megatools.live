@@ -26,8 +26,8 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
             key={faq.question}
             className="card group overflow-hidden px-5 py-4 transition-colors open:border-brand-200 sm:px-6"
           >
-            <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left font-display font-extrabold tracking-tight text-ink-900 [&::-webkit-details-marker]:hidden">
-              <h3 className="font-display font-extrabold tracking-tight">{faq.question}</h3>
+            <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left font-display font-bold tracking-tight text-ink-900 [&::-webkit-details-marker]:hidden">
+              <h3 className="font-display font-bold tracking-tight">{faq.question}</h3>
               <span
                 aria-hidden
                 className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-panel-2 text-ink-500 transition-transform duration-200 group-open:rotate-180 group-open:bg-brand-50 group-open:text-brand-600"

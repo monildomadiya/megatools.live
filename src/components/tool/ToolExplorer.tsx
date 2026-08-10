@@ -112,7 +112,7 @@ export function ToolExplorer({
           </ul>
         ) : (
           <div className="rounded-card-lg border border-dashed border-line px-6 py-16 text-center">
-            <p className="font-display text-lg font-extrabold tracking-tight text-ink-900">
+            <p className="font-display text-lg font-bold tracking-tight text-ink-900">
               Nothing matches that filter
             </p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">

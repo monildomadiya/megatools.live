@@ -61,7 +61,7 @@ export function ToolCard({
               {category.name}
             </span>
           )}
-          <h3 className="mt-1 font-display font-extrabold leading-snug tracking-tight text-ink-900">
+          <h3 className="mt-1 font-display font-bold leading-snug tracking-tight text-ink-900">
             {tool.name}
           </h3>
         </div>

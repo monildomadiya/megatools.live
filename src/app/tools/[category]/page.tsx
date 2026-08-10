@@ -124,7 +124,7 @@ export default async function CategoryPage({ params }: PageProps) {
           <ToolGrid tools={tools} />
         ) : (
           <div className="rounded-card-lg border border-dashed border-line bg-panel px-6 py-16 text-center">
-            <p className="font-display text-xl font-extrabold tracking-tight text-ink-900">
+            <p className="font-display text-xl font-bold tracking-tight text-ink-900">
               Still being written
             </p>
             <p className="mx-auto mt-3 max-w-md leading-relaxed text-ink-500">

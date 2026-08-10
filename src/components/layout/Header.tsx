@@ -67,7 +67,7 @@ export function Header() {
   // across the dropdown trigger and the plain links, and drifting between them
   // is the kind of thing nobody notices until the bar looks subtly wrong.
   const navItem = (active: boolean) =>
-    `flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors ${
+    `flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors ${
       active ? 'bg-panel-2 text-ink-900' : 'text-ink-600 hover:bg-panel-2 hover:text-ink-900'
     }`;
 
@@ -87,11 +87,11 @@ export function Header() {
       <div className="mx-auto flex h-[72px] max-w-6xl items-center gap-3 px-4 sm:px-6">
         <Link
           href="/"
-          className="group flex shrink-0 items-center gap-2.5 font-display text-lg font-extrabold tracking-tight text-ink-900"
+          className="group flex shrink-0 items-center gap-2.5 font-display text-lg font-bold tracking-tight text-ink-900"
         >
           <span
             aria-hidden
-            className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-base font-extrabold text-white shadow-panel transition-transform duration-300 group-hover:scale-105"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-base font-bold text-white shadow-panel transition-transform duration-300 group-hover:scale-105"
           >
             M
           </span>

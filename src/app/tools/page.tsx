@@ -107,7 +107,7 @@ export default function ToolsIndexPage() {
                       >
                         <CategoryIcon category={category.slug} className="h-5 w-5" />
                       </span>
-                      <span className="font-display font-extrabold tracking-tight text-ink-900">
+                      <span className="font-display font-bold tracking-tight text-ink-900">
                         {category.name}
                       </span>
                       <span className="numeric ml-auto text-sm text-ink-500">

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { CategoryShowcase } from '@/components/home/CategoryShowcase';
 import { HeroDemo } from '@/components/home/HeroDemo';
+import { StatsMarquee } from '@/components/home/StatsMarquee';
 import { HeroSearch } from '@/components/search/HeroSearch';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -109,11 +111,17 @@ export default function HomePage() {
     .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
     .map((tool) => ({ href: tool.href, name: tool.name }));
 
+  // Facts about the build, not claims about the audience. Every one of these is
+  // checkable from the site itself, which is what lets them run in a marquee
+  // without reading as the usual "1M+ happy users" filler.
   const stats = [
     { value: String(allTools.length), label: 'Calculators live' },
     { value: String(populated.length), label: 'Categories covered' },
     { value: '$0', label: 'Cost, forever' },
     { value: '0', label: 'Bytes uploaded' },
+    { value: '100%', label: 'Runs in your browser' },
+    { value: '2+', label: 'Cited sources per tool' },
+    { value: '1,000+', label: 'Words of working per page' },
   ];
 
   return (
@@ -192,27 +200,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        {/* ----------------------------------------------------------------
-            Stat strip. Four figures on one line — the claims that used to sit
-            in the fold, now that the fold is doing something more useful.
-        ---------------------------------------------------------------- */}
-        <section aria-label="Site at a glance" className="border-t border-line py-12">
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <dt className="sr-only">{stat.label}</dt>
-                <dd>
-                  <span className="numeric block text-4xl font-bold text-ink-900 sm:text-5xl">
-                    {stat.value}
-                  </span>
-                  <span className="mt-1.5 block text-sm text-ink-500">{stat.label}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+      {/* Full-bleed, unlike everything below it: a strip that slides has to run
+          off both edges of the window, or it reads as a box with text moving
+          inside it. */}
+      <StatsMarquee stats={stats} />
 
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* ----------------------------------------------------------------
             Recently added.
         ---------------------------------------------------------------- */}
@@ -280,13 +273,13 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {promises.map((promise) => (
               <div
                 key={promise.title}
-                className="card card-topline card-lift relative overflow-hidden p-6 sm:p-7"
+                className="card card-topline card-lift relative overflow-hidden p-6"
               >
-                <span className="grid h-14 w-14 place-items-center rounded-2xl border border-brand-200 bg-brand-50 text-brand-600">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl border border-brand-200 bg-brand-50 text-brand-600">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -300,10 +293,8 @@ export default function HomePage() {
                     {promise.icon}
                   </svg>
                 </span>
-                <h3 className="mt-5 text-xl font-extrabold tracking-tight">
-                  {promise.title}
-                </h3>
-                <p className="mt-2.5 leading-relaxed text-ink-600">{promise.body}</p>
+                <h3 className="mt-5 text-lg font-bold tracking-tight">{promise.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-ink-600">{promise.body}</p>
               </div>
             ))}
           </div>
@@ -328,48 +319,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {populated.map((category) => {
-                const accent = categoryAccent(category.slug);
-                const count = getToolsByCategory(category.slug).length;
-                return (
-                  <li key={category.slug}>
-                    <Link
-                      href={`/tools/${category.slug}`}
-                      className="card card-lift group relative flex h-full flex-col overflow-hidden p-5 hover:border-ink-300"
-                    >
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          background: `radial-gradient(120% 80% at 0% 0%, color-mix(in oklab, ${accent} 10%, transparent), transparent 60%)`,
-                        }}
-                      />
-                      <span className="relative flex items-center gap-3">
-                        <span
-                          className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                          style={{
-                            color: accent,
-                            backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
-                          }}
-                        >
-                          <CategoryIcon category={category.slug} className="h-5 w-5" />
-                        </span>
-                        <span className="font-display font-extrabold tracking-tight text-ink-900">
-                          {category.name}
-                        </span>
-                        <span className="numeric ml-auto text-sm text-ink-500">
-                          {count}
-                        </span>
-                      </span>
-                      <span className="relative mt-3.5 block text-sm leading-relaxed text-ink-600">
-                        {category.metaDescription}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            <CategoryShowcase />
           </section>
         )}
 
@@ -395,7 +345,7 @@ export default function HomePage() {
                 <span className="numeric block text-4xl font-bold leading-none text-brand-600">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mt-5 text-xl font-extrabold tracking-tight">
+                <h3 className="mt-5 text-xl font-bold tracking-tight">
                   {step.title}
                 </h3>
                 <p className="mt-2.5 leading-relaxed text-ink-600">{step.body}</p>

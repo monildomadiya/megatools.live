@@ -27,7 +27,10 @@ export function StatsMarquee({ stats }: { stats: Stat[] }) {
           <span className="numeric text-2xl font-bold leading-none text-ink-900 sm:text-3xl">
             {stat.value}
           </span>
-          <span className="max-w-[9rem] text-sm leading-snug text-ink-500">{stat.label}</span>
+          {/* Never wraps. A width cap turned the longer labels into two lines,
+              which made every item a different height and the strip read as
+              ragged rather than as one continuous rule of figures. */}
+          <span className="whitespace-nowrap text-sm text-ink-500">{stat.label}</span>
           <span aria-hidden className="ml-3 h-1.5 w-1.5 rounded-full bg-brand-300" />
         </li>
       ))}

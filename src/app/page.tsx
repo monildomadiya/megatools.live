@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { CategoryShowcase } from '@/components/home/CategoryShowcase';
 import { StatsMarquee } from '@/components/home/StatsMarquee';
 import { HeroSearch } from '@/components/search/HeroSearch';
+import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { categories } from '@/lib/tools/categories';
 import { allTools, getToolsByCategory, latestUpdate } from '@/lib/tools/registry';
@@ -113,7 +114,7 @@ export default function HomePage() {
           field's result list is absolutely positioned and has to be allowed to
           hang past the bottom of the section. The decorative layers are all
           `inset-0`, so nothing else can escape. */}
-      <section className="hero-bg isolate px-4 pb-20 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
+      <section className="hero-bg isolate px-4 pb-12 pt-14 sm:px-6 sm:pb-14 sm:pt-20">
         {/* Accent blobs. Three, placed asymmetrically: a single centred glow
             reads as a vignette, while an off-balance set gives the band a
             diagonal the eye follows down into the grid below. */}
@@ -170,9 +171,43 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Every category, one tap each, directly under the field.
+
+            This is the row that closes the fold. Without it the hero ran a
+            headline, a field and a byline into a large empty band — and the
+            eight things this site is actually organised around sat below it,
+            unseen. They are categories rather than tools, so the homepage still
+            names no individual calculator. */}
+        <nav
+          aria-label="Categories"
+          className="animate-rise mx-auto mt-8 flex max-w-4xl flex-wrap items-center justify-center gap-2"
+          style={{ animationDelay: '240ms' }}
+        >
+          {populated.map((category) => {
+            const accent = categoryAccent(category.slug);
+            return (
+              <Link
+                key={category.slug}
+                href={`/tools/${category.slug}`}
+                className="group inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink-700 shadow-panel transition-colors hover:border-brand-400 hover:text-ink-900"
+              >
+                <CategoryIcon
+                  category={category.slug}
+                  className="h-4 w-4"
+                  style={{ color: accent }}
+                />
+                {category.name}
+                <span className="numeric text-xs text-ink-400">
+                  {getToolsByCategory(category.slug).length}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
         <div
           className="animate-rise mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink-500"
-          style={{ animationDelay: '240ms' }}
+          style={{ animationDelay: '300ms' }}
         >
           <span className="font-medium text-ink-800">Sources cited on every tool</span>
           <Link

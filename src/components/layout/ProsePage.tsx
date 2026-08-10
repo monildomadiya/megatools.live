@@ -32,7 +32,7 @@ export function ProsePage({ title, path, updatedAt, intro, children }: ProsePage
       <JsonLd json={jsonLdGraph([breadcrumbSchema(crumbs)])} />
 
       <section className="hero-bg isolate overflow-hidden px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
-        <div className="relative z-10 mx-auto max-w-3xl">
+        <div className="relative z-10 mx-auto max-w-6xl">
           <Breadcrumbs crumbs={crumbs} />
 
           <header className="mt-6">
@@ -54,7 +54,7 @@ export function ProsePage({ title, path, updatedAt, intro, children }: ProsePage
           page. Long-form copy needs a paper to sit on — running 60 characters of
           17px text straight onto the page background makes it read as an
           annotation rather than as the content. */}
-      <div className="mx-auto max-w-3xl px-4 pb-8 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pb-8 sm:px-6">
         <div className="card prose-content px-5 py-8 sm:px-10 sm:py-12">{children}</div>
       </div>
     </>

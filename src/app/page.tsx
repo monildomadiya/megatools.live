@@ -272,18 +272,21 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <ol className="grid gap-5 sm:grid-cols-3">
+          {/* Laid out on a rule rather than as three cards. The ordinals only
+              earn their place because this genuinely is a sequence, and a line
+              running through them is what says so — three boxed numbers side by
+              side read as three features that happen to be counted. */}
+          <ol className="relative grid gap-10 sm:grid-cols-3 sm:gap-6">
+            <span
+              aria-hidden
+              className="absolute left-0 right-0 top-6 hidden h-px bg-line sm:block"
+            />
             {steps.map((step, index) => (
-              <li key={step.title} className="card relative overflow-hidden p-6 sm:p-7">
-                {/* The ordinal is set in mono at display size rather than in a
-                    numbered circle: at three cards the sequence has to be
-                    readable at a glance from across the page. */}
-                <span className="numeric block text-4xl font-bold leading-none text-brand-600">
+              <li key={step.title} className="relative">
+                <span className="numeric relative grid h-12 w-12 place-items-center rounded-2xl border border-brand-200 bg-brand-50 text-lg font-bold text-brand-700">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mt-5 text-xl font-bold tracking-tight">
-                  {step.title}
-                </h3>
+                <h3 className="mt-6 text-xl font-bold tracking-tight">{step.title}</h3>
                 <p className="mt-2.5 leading-relaxed text-ink-600">{step.body}</p>
               </li>
             ))}
@@ -294,18 +297,36 @@ export default function HomePage() {
             Closing call to action.
         ---------------------------------------------------------------- */}
         <section className="border-t border-line py-20">
-          <div className="card relative isolate overflow-hidden px-6 py-16 text-center sm:px-12">
+          <div className="card relative isolate overflow-hidden px-6 py-20 text-center sm:px-12 sm:py-24">
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-bloom" />
+            <span
+              aria-hidden
+              className="blob -z-10 -right-16 -top-16 h-72 w-72 bg-brand-500/20"
+            />
+            <span
+              aria-hidden
+              className="blob -bottom-20 -left-10 -z-10 h-64 w-64 bg-accent-500/15"
+            />
+
             <p className="eyebrow">Get started</p>
-            <h2 className="mt-3 text-display-sm">Find the calculator you need</h2>
-            <p className="mx-auto mt-4 max-w-xl text-ink-600 sm:text-lg">
-              {allTools.length} tools so far, each with its formula, a worked example, and
-              the sources behind it. More are being written.
+            {/* The one place on the page set at hero scale other than the hero
+                itself. A closing panel that whispers is not a close. */}
+            <h2 className="mx-auto mt-4 max-w-3xl text-display-lg">
+              Find the calculator you need
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-ink-600 sm:text-lg">
+              {allTools.length} tools across {populated.length} categories, each with its
+              formula, a worked example, and the sources behind it. More are being written.
             </p>
-            <Link href="/tools" className="btn btn-primary btn-lg mt-8">
-              Browse all tools
-              <span aria-hidden>→</span>
-            </Link>
+            <div className="mt-9 flex flex-col justify-center gap-3.5 sm:flex-row sm:gap-4">
+              <Link href="/tools" className="btn btn-primary btn-lg">
+                Browse all tools
+                <span aria-hidden>→</span>
+              </Link>
+              <Link href="/about" className="btn btn-outline btn-lg">
+                How we build them
+              </Link>
+            </div>
           </div>
         </section>
       </div>

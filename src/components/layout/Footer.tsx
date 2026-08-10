@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { categories } from '@/lib/tools/categories';
-import { getToolsByCategory } from '@/lib/tools/registry';
+import { allTools, getToolsByCategory } from '@/lib/tools/registry';
 import { site } from '@/lib/site';
 
 const legalLinks = [
@@ -18,45 +18,75 @@ const siteLinks = [
   // '/blog' returns here once the guides exist.
 ];
 
-/** How many tools each category names before the column defers to its hub. */
+/** How many tools each category names before it defers to its hub. */
 const NAMED_TOOLS = 5;
 
 export function Footer() {
   const populated = categories.filter((category) => getToolsByCategory(category.slug).length > 0);
 
   return (
-    <footer className="mt-24 border-t border-line bg-panel">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="flex flex-col gap-6 border-b border-line pb-10 sm:flex-row sm:items-end sm:justify-between">
-          <div className="max-w-md">
-            <div className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-ink-900">
+    <footer className="relative mt-28 bg-panel">
+      {/* A hairline of brand colour across the very top, fading at both ends.
+          The footer is the one full-width band on the page with no border to
+          separate it from the content above; this gives it an edge without
+          drawing a hard rule under the whole site. */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, transparent, var(--color-brand-500) 50%, transparent)',
+        }}
+      />
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        {/* ----------------------------------------------------------------
+            Masthead. The wordmark set at display size rather than as another
+            16px link — this is the one place on the site where the name is the
+            subject rather than a way back to the homepage.
+        ---------------------------------------------------------------- */}
+        <div className="grid gap-10 border-b border-line py-14 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <div>
+            <Link href="/" className="group inline-flex items-center gap-3">
               <span
                 aria-hidden
-                className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-sm font-bold text-white"
+                className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-mark-from to-mark-to text-lg font-extrabold text-white shadow-panel transition-transform duration-300 group-hover:scale-105"
               >
                 M
               </span>
-              {site.name}
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-ink-600">
-              {site.tagline}. Every calculation runs in your browser — nothing you type
-              is sent to a server.
+              <span className="font-display text-display-sm text-ink-900">{site.name}</span>
+            </Link>
+
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-600">
+              {site.tagline}. Every calculation runs in your browser — nothing you type is
+              sent to a server, there is no account, and every formula on the site is
+              traced to the body that published it.
             </p>
           </div>
 
-          <Link href="/tools" className="btn btn-outline btn-md shrink-0 self-start sm:self-auto">
-            Browse every tool
-            <span aria-hidden>→</span>
-          </Link>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:justify-end">
+            <Link href="/tools" className="btn btn-primary btn-md">
+              Browse all {allTools.length} tools
+              <span aria-hidden>→</span>
+            </Link>
+            <Link href="/editorial-policy" className="btn btn-outline btn-md">
+              How we check the numbers
+            </Link>
+          </div>
         </div>
 
-        {/* The directory itself.
+        {/* ----------------------------------------------------------------
+            The directory.
 
             A footer listing eight category names is a table of contents for a
-            table of contents. Naming the tools instead makes every page on the
-            site reachable from every other page in one hop, which is worth more
-            to a reader hunting for a converter than a tidier column would be. */}
-        <nav aria-label="All tools" className="grid gap-x-8 gap-y-10 py-10 sm:grid-cols-2 lg:grid-cols-4">
+            table of contents. Naming the tools makes every page on the site
+            reachable from every other page in one hop, which is worth more to
+            someone hunting for a converter than a tidier column would be.
+        ---------------------------------------------------------------- */}
+        <nav
+          aria-label="All tools"
+          className="grid gap-x-8 gap-y-10 border-b border-line py-14 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {populated.map((category) => {
             const tools = getToolsByCategory(category.slug);
             const named = tools.slice(0, NAMED_TOOLS);
@@ -65,21 +95,26 @@ export function Footer() {
 
             return (
               <div key={category.slug}>
-                <h2 className="flex items-center gap-2">
-                  <CategoryIcon
-                    category={category.slug}
-                    className="h-4 w-4"
-                    style={{ color: accent }}
-                  />
+                <h2 className="flex items-center gap-2.5">
+                  <span
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-lg"
+                    style={{
+                      color: accent,
+                      backgroundColor: `color-mix(in oklab, ${accent} 12%, white)`,
+                    }}
+                  >
+                    <CategoryIcon category={category.slug} className="h-4 w-4" />
+                  </span>
                   <Link
                     href={`/tools/${category.slug}`}
-                    className="font-display text-sm font-bold tracking-tight text-ink-900 hover:text-brand-700"
+                    className="font-display text-sm font-extrabold tracking-tight text-ink-900 transition-colors hover:text-brand-700"
                   >
                     {category.name}
                   </Link>
+                  <span className="numeric ml-auto text-xs text-ink-400">{tools.length}</span>
                 </h2>
 
-                <ul className="mt-3.5 space-y-2">
+                <ul className="mt-4 space-y-2.5">
                   {named.map((tool) => (
                     <li key={tool.href}>
                       <Link
@@ -94,7 +129,7 @@ export function Footer() {
                     <li>
                       <Link
                         href={`/tools/${category.slug}`}
-                        className="text-sm font-semibold text-brand-700 hover:underline"
+                        className="text-sm font-bold text-brand-700 hover:underline"
                       >
                         +{remaining} more
                       </Link>
@@ -106,30 +141,35 @@ export function Footer() {
           })}
         </nav>
 
-        <div className="flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+        {/* ----------------------------------------------------------------
+            Base. Site and legal links share one row — they are the same kind
+            of thing to a reader looking for them, and two columns of four
+            short links each is more furniture than the content deserves.
+        ---------------------------------------------------------------- */}
+        <div className="flex flex-col gap-6 py-10 lg:flex-row lg:items-center lg:justify-between">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2.5">
             {[...siteLinks, ...legalLinks].map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-ink-600 transition-colors hover:text-brand-700"
+                  className="text-sm font-medium text-ink-600 transition-colors hover:text-brand-700"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
+
+          <p className="numeric text-sm text-ink-400">
+            © {new Date().getFullYear()} {site.name}
+          </p>
         </div>
 
-        <div className="mt-6 flex flex-col gap-2 text-sm text-ink-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
-          </p>
-          <p>
-            Results are for general information only and are not professional financial
-            or medical advice.
-          </p>
-        </div>
+        <p className="border-t border-line py-6 text-sm leading-relaxed text-ink-500">
+          Results are for general information only and are not professional financial,
+          medical, or legal advice. Every tool states the limits of the method it uses —
+          read that section before acting on a number.
+        </p>
       </div>
     </footer>
   );

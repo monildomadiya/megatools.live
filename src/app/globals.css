@@ -436,22 +436,60 @@
   ------------------------------------------------------------------------- */
   .glass-bar {
     border-radius: 15px;
+    /* Held at just over half opacity on purpose. Blur is only visible in what
+       shows *through* the pane — at the 0.8 alpha this started on, the fill was
+       doing all the work and the 20px blur behind it was invisible. Anything
+       below about 0.5 stops carrying dark text at 4.5:1 once a photo or a
+       coloured card passes under it, so this sits at the transparent end of
+       what stays readable. */
     background: linear-gradient(
       135deg,
-      oklch(1 0 0 / 0.8) 0%,
-      oklch(0.965 0.003 250 / 0.76) 50%,
-      oklch(1 0 0 / 0.8) 100%
+      oklch(1 0 0 / 0.58) 0%,
+      oklch(0.965 0.003 250 / 0.52) 50%,
+      oklch(1 0 0 / 0.58) 100%
     );
-    backdrop-filter: blur(20px) saturate(1.7);
-    -webkit-backdrop-filter: blur(20px) saturate(1.7);
-    border: 1px solid oklch(1 0 0 / 0.5);
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border: 1px solid oklch(1 0 0 / 0.55);
     box-shadow:
       inset 0 1px 0 oklch(1 0 0 / 0.7),
-      0 4px 24px oklch(0.19 0.012 250 / 0.06),
+      0 4px 24px oklch(0.19 0.012 250 / 0.05),
       0 0 0 1px oklch(0.19 0.012 250 / 0.03);
     transition:
-      box-shadow 0.5s var(--ease-out-soft),
-      background 0.5s var(--ease-out-soft);
+      box-shadow 0.4s var(--ease-out-soft),
+      background 0.4s var(--ease-out-soft),
+      backdrop-filter 0.4s var(--ease-out-soft);
+  }
+
+  /* Once the page has moved, there is content behind the bar and the pane has
+     something to do. It frosts harder and lifts — the change between the two
+     states is what makes it read as glass rather than as a translucent strip
+     that happens to sit at the top. */
+  .glass-bar-scrolled {
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.72) 0%,
+      oklch(0.965 0.003 250 / 0.66) 50%,
+      oklch(1 0 0 / 0.72) 100%
+    );
+    backdrop-filter: blur(32px) saturate(2);
+    -webkit-backdrop-filter: blur(32px) saturate(2);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.8),
+      0 8px 32px oklch(0.19 0.012 250 / 0.1),
+      0 2px 8px oklch(0.19 0.012 250 / 0.04),
+      0 0 0 1px oklch(0.19 0.012 250 / 0.05);
+  }
+
+  /* Safari on iOS drops backdrop-filter under memory pressure and simply stops
+     painting it, which would leave dark text on a half-transparent bar over
+     whatever is scrolling beneath. Where the filter is unsupported or dropped,
+     the bar goes nearly opaque instead. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-bar,
+    .glass-bar-scrolled {
+      background: oklch(0.985 0.002 250 / 0.97);
+    }
   }
 
   /* -------------------------------------------------------------------------

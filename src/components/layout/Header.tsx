@@ -94,7 +94,7 @@ export function Header() {
       <header
         ref={panelRef}
         className={`glass-bar pointer-events-auto relative mx-auto max-w-6xl ${
-          scrolled ? 'shadow-lift' : ''
+          scrolled ? 'glass-bar-scrolled' : ''
         }`}
       >
         <div className="flex h-[64px] items-center gap-2 px-3 sm:h-[68px] sm:gap-3 sm:px-4 md:h-[72px] md:px-5">

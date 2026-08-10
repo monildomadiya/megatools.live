@@ -12,7 +12,14 @@ const fieldBase =
   // `panel-2` rather than `panel`: the field sits inside a white card, so
   // matching the card would leave the border doing all the work of showing
   // where the input is. A half-step recess reads as a field at a glance.
-  'w-full rounded-control border bg-panel-2 px-3.5 py-3 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-4 focus:ring-brand-500/15';
+  'w-full rounded-control border bg-panel-2 px-4 py-3 text-base text-ink-900 transition-colors placeholder:text-ink-400 focus:outline-none focus:ring-4 focus:ring-brand-500/15 sm:px-5';
+
+// Numeric entry is set far larger than the rest of the form, and bold, matching
+// the sister site. The figure you type is the subject of the page — on a
+// calculator it deserves the same weight as the figure that comes back, and at
+// this size the tabular mono is what keeps the field from reflowing under the
+// cursor as digits change.
+const numericField = 'text-xl font-bold sm:text-2xl';
 
 const labelBase = 'block text-sm font-semibold text-ink-800';
 
@@ -70,7 +77,7 @@ export function NumberField({
           aria-describedby={error ? errorId : hint ? hintId : undefined}
           // Figures the reader types should look like the figures the tool
           // reports back, so the input carries the same mono face as the result.
-          className={`numeric ${fieldBase} ${unit ? 'pr-14' : ''} ${
+          className={`numeric ${fieldBase} ${numericField} ${unit ? 'pr-16' : ''} ${
             error
               ? 'border-red-400 focus:ring-red-500/20'
               : 'border-line focus:border-brand-500'
@@ -79,7 +86,7 @@ export function NumberField({
         {unit && (
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-3.5 flex items-center text-sm font-semibold text-ink-500"
+            className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm font-semibold text-ink-500 sm:right-5"
           >
             {unit}
           </span>

@@ -67,31 +67,29 @@ export function Header() {
   // across the dropdown trigger and the plain links, and drifting between them
   // is the kind of thing nobody notices until the bar looks subtly wrong.
   const navItem = (active: boolean) =>
-    `flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors ${
+    `flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold transition-colors ${
       active ? 'bg-panel-2 text-ink-900' : 'text-ink-600 hover:bg-panel-2 hover:text-ink-900'
     }`;
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-shadow duration-200 ${
-        scrolled ? 'border-b border-line shadow-panel' : 'border-b border-transparent'
-      }`}
-    >
-      {/* Separate layer for the blur so the border above can fade independently
-          of the background, which stays constant. `saturate` matters more than
-          it sounds: blurring alone drains the colour out of whatever scrolls
-          under the bar, and pushing saturation back up keeps the page beneath
-          looking like itself. */}
-      <div className="absolute inset-0 -z-10 bg-surface/80 backdrop-blur-xl backdrop-saturate-150" />
-
-      <div className="mx-auto flex h-[72px] max-w-6xl items-center gap-3 px-4 sm:px-6">
+    // The bar floats: the sticky wrapper is full width and transparent to the
+    // pointer, and the island inside it is inset from all three edges. That is
+    // what lets the page scroll visibly past the bar on both sides instead of
+    // disappearing under a full-width band.
+    <div className="pointer-events-none sticky top-0 z-50 w-full px-3 pt-3 sm:px-4 sm:pt-4 md:px-6">
+      <header
+        className={`glass-bar pointer-events-auto mx-auto max-w-6xl ${
+          scrolled ? 'shadow-lift' : ''
+        }`}
+      >
+        <div className="flex h-[64px] items-center gap-3 px-4 sm:h-[68px] sm:px-5 md:h-[72px] md:px-6">
         <Link
           href="/"
-          className="group flex shrink-0 items-center gap-2.5 font-display text-lg font-bold tracking-tight text-ink-900"
+          className="group flex shrink-0 items-center gap-2.5 font-display text-lg font-extrabold tracking-tight text-ink-900"
         >
           <span
             aria-hidden
-            className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-base font-bold text-white shadow-panel transition-transform duration-300 group-hover:scale-105"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-mark-from to-mark-to text-base font-extrabold text-white shadow-panel transition-transform duration-300 group-hover:scale-105"
           >
             M
           </span>
@@ -222,7 +220,9 @@ export function Header() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="animate-dialog-in border-t border-line bg-surface md:hidden"
+          // Rounded to match the island it hangs from, and clipped so the grid
+          // inside cannot square off the bar's bottom corners.
+          className="animate-dialog-in overflow-hidden rounded-b-[15px] border-t border-line bg-panel/95 backdrop-blur-xl md:hidden"
         >
           <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-1.5 px-4 py-3 sm:px-6">
             {navCategories.map((category) => (
@@ -257,6 +257,7 @@ export function Header() {
           </div>
         </nav>
       )}
-    </header>
+      </header>
+    </div>
   );
 }

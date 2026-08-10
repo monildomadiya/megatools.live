@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { JetBrains_Mono, Readex_Pro } from 'next/font/google';
+import { Inter, JetBrains_Mono, Outfit } from 'next/font/google';
 import { Analytics } from '@/components/Analytics';
 import { JsonLd } from '@/components/JsonLd';
 import { Footer } from '@/components/layout/Footer';
@@ -11,20 +11,26 @@ import './globals.css';
 // Self-hosted by next/font at build time — no request to fonts.googleapis.com on
 // page load, which removes a third-party connection from the critical path.
 //
-// Both are variable fonts, so the whole weight range arrives in one file each
-// rather than one request per weight.
-
-// Headings and body both. Two faces rather than three: Readex Pro has enough
-// width and weight range to carry a 70px headline without going thin and to
-// read comfortably at 17px, and dropping the second text face removes a font
-// file from the critical path entirely.
+// All three are variable fonts, so the whole weight range arrives in one file
+// each rather than one request per weight.
 //
-// It is a rounder, softer geometric than the face it replaces, which suits a
-// site of small everyday utilities better than something more austere.
-const readex = Readex_Pro({
+// This trio is the house set, shared with bruttonettocalculator.com. Two sites
+// from the same shop that pair different faces read as two unrelated products,
+// and the type is the cheapest part of that recognition to keep aligned.
+
+// Headings only. Geometric and wide-apertured, which is what lets it hold shape
+// at the 70px the hero runs at — a text face set that large goes visibly thin.
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-readex',
+  variable: '--font-outfit',
+});
+
+// The reading face, and the only one used below 1.25rem outside of figures.
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
 
 // Carries every figure the site outputs, plus the eyebrow labels. A
@@ -70,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={site.language}
-      className={`${readex.variable} ${jetbrainsMono.variable}`}
+      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="flex min-h-screen flex-col">
         <a

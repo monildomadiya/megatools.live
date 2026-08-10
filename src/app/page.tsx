@@ -138,6 +138,18 @@ export default function HomePage() {
           `inset-0`, so nothing else can escape. `z-20` on the copy column keeps
           that list above the demo card, which is a later sibling. */}
       <section className="hero-bg isolate px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
+        {/* Accent blobs, the sister site's backdrop. Two rather than one: a
+            single centred glow reads as a vignette, while an off-centre pair
+            gives the band a direction the eye can follow down to the demo. */}
+        <span
+          aria-hidden
+          className="blob -z-10 right-0 top-0 h-96 w-96 bg-brand-500/15"
+        />
+        <span
+          aria-hidden
+          className="blob -z-10 left-1/2 top-0 h-24 w-1/3 -translate-x-1/2 bg-accent-500/10"
+        />
+
         <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center">
           <p className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-line bg-panel px-4 py-2 shadow-panel">
             <span className="relative flex h-2 w-2">

@@ -23,17 +23,17 @@
    colour.
 --------------------------------------------------------------------------- */
 @theme static {
-  /* Two faces. Readex Pro carries both display and body — it has the width to
-     hold a 70px headline and the comfort to read at 17px, so a separate text
-     face was one font file with no job of its own. `mono` carries every figure
-     and every eyebrow label, which is what ties the small uppercase labels to
-     the numbers they introduce. */
-  --font-display: var(--font-readex), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-readex), ui-sans-serif, system-ui, sans-serif;
+  /* Three faces, each with one job, and the same three the sister site runs —
+     `display` is drawn for size, its wide apertures holding up at 70px where a
+     text face goes spindly; `sans` is the reading face; `mono` carries every
+     figure and every eyebrow label, which is what ties the small uppercase
+     labels to the numbers they introduce. */
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
 
   /* Tighter than Tailwind's defaults (-0.025em / -0.05em).
-     Tracking that looks correct at 16px reads loose at 70px, and Readex Pro is
+     Tracking that looks correct at 16px reads loose at 70px, and Outfit is
      drawn with enough sidebearing to take the reduction. Overriding the theme
      value rather than adding a rule keyed on font size matters: every heading
      already carries `tracking-tight`, and a utility always beats a base-layer
@@ -50,31 +50,32 @@
   --text-display-xl: clamp(2.25rem, 1.1rem + 5.4vw, 4.4rem);
   --text-display-xl--line-height: 1.05;
   --text-display-xl--letter-spacing: -0.03em;
-  --text-display-xl--font-weight: 700;
+  --text-display-xl--font-weight: 800;
 
   --text-display-lg: clamp(1.875rem, 1rem + 3.6vw, 3.25rem);
   --text-display-lg--line-height: 1.08;
   --text-display-lg--letter-spacing: -0.03em;
-  --text-display-lg--font-weight: 700;
+  --text-display-lg--font-weight: 800;
 
   --text-display-md: clamp(1.625rem, 1.1rem + 2.2vw, 2.5rem);
   --text-display-md--line-height: 1.12;
   --text-display-md--letter-spacing: -0.03em;
-  --text-display-md--font-weight: 700;
+  --text-display-md--font-weight: 800;
 
   --text-display-sm: clamp(1.375rem, 1.05rem + 1.3vw, 1.875rem);
   --text-display-sm--line-height: 1.2;
   --text-display-sm--letter-spacing: -0.025em;
-  --text-display-sm--font-weight: 700;
+  --text-display-sm--font-weight: 800;
 
   /* -------------------------------------------------------------------------
-     Radii. Cards are deliberately large-radius (20px) and controls small
-     (10px), with buttons fully round. The contrast between the three is what
-     reads as a considered system rather than one blanket corner value.
+     Radii, matched to the sister site: 24px cards, 16px controls and buttons.
+     Softer than the 20/10 this site started with, and the gap between the two
+     values is what keeps a field legible as a field inside a card rather than
+     reading as a smaller card.
   ------------------------------------------------------------------------- */
-  --radius-card: 1.25rem;
+  --radius-card: 1.5rem;
   --radius-card-lg: 1.5rem;
-  --radius-control: 0.625rem;
+  --radius-control: 1rem;
 
   --color-brand-50: oklch(0.97 0.02 254);
   --color-brand-100: oklch(0.93 0.04 254);
@@ -294,16 +295,18 @@
   }
 
   /* -------------------------------------------------------------------------
-     Buttons. Pill-shaped throughout. The two variants are a filled brand
-     primary and an outlined white secondary — never two filled buttons side by
-     side, which leaves the reader with no primary action at all.
+     Buttons. Rounded-rectangle rather than pill, matching the sister site: at
+     16px the corner still reads as soft, but the shape keeps a long label from
+     turning into a lozenge. The two variants are a filled brand primary and an
+     outlined white secondary — never two filled buttons side by side, which
+     leaves the reader with no primary action at all.
   ------------------------------------------------------------------------- */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 9999px;
+    border-radius: 1rem;
     font-weight: 600;
     line-height: 1.2;
     white-space: nowrap;
@@ -417,6 +420,53 @@
      of several layers that would be unreadable as utility soup.
   ------------------------------------------------------------------------- */
 
+  /* -------------------------------------------------------------------------
+     The floating header island, lifted from the sister site.
+
+     A glass bar inset from all three edges rather than a full-width band. The
+     three-stop gradient is what stops it reading as flat frosted plastic —
+     white at the ends, a half-step darker in the middle, so the bar appears to
+     catch light across its length. `saturate` matters more than it sounds:
+     blurring alone drains the colour out of whatever scrolls under the bar, and
+     pushing saturation back up keeps the page beneath looking like itself.
+
+     The inset white line along the top edge is the detail doing most of the
+     work — it is the highlight that makes the surface read as glass rather than
+     as a translucent rectangle.
+  ------------------------------------------------------------------------- */
+  .glass-bar {
+    border-radius: 15px;
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.8) 0%,
+      oklch(0.965 0.003 250 / 0.76) 50%,
+      oklch(1 0 0 / 0.8) 100%
+    );
+    backdrop-filter: blur(20px) saturate(1.7);
+    -webkit-backdrop-filter: blur(20px) saturate(1.7);
+    border: 1px solid oklch(1 0 0 / 0.5);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.7),
+      0 4px 24px oklch(0.19 0.012 250 / 0.06),
+      0 0 0 1px oklch(0.19 0.012 250 / 0.03);
+    transition:
+      box-shadow 0.5s var(--ease-out-soft),
+      background 0.5s var(--ease-out-soft);
+  }
+
+  /* -------------------------------------------------------------------------
+     Accent blobs. Big, soft, off-canvas circles of brand colour behind the
+     hero — the sister site's signature backdrop. Circular and heavily blurred
+     rather than a radial gradient, because the falloff of a blurred disc is
+     rounder than a gradient's and reads as light rather than as a stain.
+  ------------------------------------------------------------------------- */
+  .blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+    pointer-events: none;
+  }
+
   /* Hero backdrop: a fine grid plus a soft brand bloom, both faded out radially
      so neither ever reaches an edge and turns into a visible rectangle. */
   .hero-bg {
@@ -445,7 +495,9 @@
     background-image:
       radial-gradient(ellipse 55% 45% at 50% -5%, var(--color-brand-500), transparent 70%),
       radial-gradient(ellipse 40% 40% at 88% 5%, var(--color-accent-500), transparent 70%);
-    opacity: 0.13;
+    /* Halved now that the blobs carry the colour. Both layers at full strength
+       turned the top of the page into one flat wash, which lost the grid. */
+    opacity: 0.07;
   }
 
   /* Standalone bloom, for CTA panels that want the colour without the grid. */

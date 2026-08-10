@@ -18,7 +18,7 @@ export function RelatedTools({ tools }: { tools: ToolWithHref[] }) {
               href={tool.href}
               className="card card-lift group flex h-full flex-col p-5 hover:border-ink-300"
             >
-              <span className="font-display font-bold tracking-tight text-ink-900 group-hover:text-brand-700">
+              <span className="font-display font-extrabold tracking-tight text-ink-900 group-hover:text-brand-700">
                 {tool.name}
               </span>
               <span className="mt-2 block flex-1 text-sm leading-relaxed text-ink-600">

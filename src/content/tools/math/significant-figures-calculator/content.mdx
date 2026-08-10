@@ -1,0 +1,88 @@
+## What a significant figure actually claims
+
+A measurement is a claim about precision as well as about quantity. When a lab reports a mass as 4.560 grams it is saying two things: the mass is about four and a half grams, and the instrument could resolve thousandths. Report the same mass as 4.6 grams and the second claim disappears.
+
+Significant figures are the notation for that second claim. They are the digits that carry information about how well something was measured, as opposed to the digits that are only there to hold the decimal point in place.
+
+This is why the rules look fussy. They are not arbitrary conventions to be memorised for an exam — each one exists to separate a measured digit from a placeholder.
+
+## The four rules
+
+**Every non-zero digit is significant.** There is no case where a 7 in a measurement is meaningless. 45.6 has three significant figures.
+
+**Zeros between non-zero digits are significant.** In 4005 the two middle zeros sit between measured digits, so they must have been measured too — you cannot know the 4 and the 5 without having resolved everything in between. Four significant figures.
+
+**Leading zeros are never significant.** In 0.00340 the zeros before the 3 are pure placeholders; they position the decimal point and say nothing about precision. Change the units from grams to milligrams and they vanish without the measurement changing. Three significant figures: 3, 4 and the trailing 0.
+
+**Trailing zeros are significant only with a decimal point.** This is the rule that causes all the trouble, and it gets its own section.
+
+## The trailing zero problem
+
+Consider 1500.
+
+If it came from a ruler marked in hundreds, only the 1 and the 5 were measured and the zeros are placeholders: two significant figures. If it came from an instrument resolving single units, all four digits were measured: four significant figures. The number as written is identical in both cases.
+
+Ordinary decimal notation simply cannot express the difference, which is a genuine defect in the notation rather than something a calculator can resolve. This tool flags the ambiguity and lets you say which you meant, rather than quietly assuming.
+
+Two ways to write it unambiguously:
+
+- **Add a decimal point.** 1500. and 1500.0 both signal that the zeros were measured.
+- **Use scientific notation.** 1.5 × 10³ is unmistakably two figures. 1.500 × 10³ is unmistakably four. The mantissa states exactly which digits were measured and the exponent handles the magnitude separately, which is why every standards body recommends it for reported measurements.
+
+Once a decimal point is present the ambiguity is gone in both directions. 0.500 has three significant figures — nobody writes those zeros unless they mean them.
+
+## Carrying figures through a calculation
+
+An answer cannot be more precise than the measurements it came from, and the rule for enforcing that depends on the operation.
+
+### Multiplication and division — count figures
+
+The result carries as many significant figures as the least precise input.
+
+Multiply 4.56 by 1.4:
+
+- Raw arithmetic: 6.384
+- 4.56 has three figures, 1.4 has two
+- Answer: **6.4**
+
+The extra digits are not wrong so much as unearned. Writing 6.384 claims a precision that the 1.4 never supported.
+
+### Addition and subtraction — count decimal places
+
+Here the rule is about position rather than about count.
+
+Add 12.11 and 0.3:
+
+- Raw arithmetic: 12.41
+- 12.11 is good to two decimal places, 0.3 to one
+- Answer: **12.4**
+
+Applying the multiplication rule here would give 12, which throws away a digit that was genuinely measured. Applying the addition rule to a multiplication does the opposite. Keeping the two straight is most of the skill.
+
+### Round once, at the end
+
+Round intermediate steps and the errors compound. Carry the full precision through the working and round only the final answer — which is also how this calculator behaves, and why the rounded row and the raw value can differ in the last digit from a hand calculation that rounded early.
+
+## Where the traps are
+
+**Exact numbers have no significant figures.** If you measured 3 samples, that 3 is a count, not a measurement, and it does not limit anything. Defined constants behave the same way: an inch is exactly 25.4 mm, and converting a three-figure measurement in inches gives a three-figure answer in millimetres, not a two-figure one. Only measured inputs constrain the result.
+
+**Round-half-to-even.** Most people round halves upward. Standards bodies, including NIST, specify rounding to the nearest even digit instead — 2.5 becomes 2, 3.5 becomes 4. On one number the choice is invisible. Across a long column, always rounding up biases the total upward, which is exactly what the even rule removes. This calculator uses round-half-up, matching ordinary calculators; if you are producing figures for a standards-compliant report, check which rule applies.
+
+**Significant figures are not error bars.** Writing 4.560 g implies precision to about a thousandth of a gram, but it does not state the uncertainty. Serious measurement work reports the uncertainty explicitly — 4.560 ± 0.002 g — because significant figures can only express precision in whole powers of ten, and real instruments do not have that courtesy.
+
+**Percentages and ratios inherit their inputs.** A percentage calculated from two-figure inputs is a two-figure percentage. Reporting 66.67% from 2 out of 3 measured items claims a precision that counting three things cannot support.
+
+**Trailing zeros in currency are not measurements.** £15.00 is an exact amount, not a measurement good to four figures. Money is a counted quantity in the smallest unit, and significant figure rules do not apply to it at all.
+
+## When this tool is the wrong one
+
+Significant figures are a shorthand, and they run out in serious metrology. When precision genuinely matters — calibration, published experimental results, anything with a tolerance attached — the correct approach is a stated uncertainty with a coverage factor, following the guidance NIST publishes on expressing measurement uncertainty. Significant figures approximate that in a form that fits on a page, which is why they survive in teaching and in engineering shorthand.
+
+The other case is pure mathematics. π has infinitely many digits and none of them is a measurement; a result computed from exact numbers is limited only by the arithmetic, not by any rule about figures.
+
+## A note on precision and trust
+
+The rules on this page are the ones set out in NIST Special Publication 811, the guide for using the SI in the United States, and in the SI Brochure published by the BIPM. Both are linked below and both are short in the sections that matter here.
+
+Where this page and a textbook disagree, it will usually be about the trailing zero convention or about which rounding rule to apply at a half. Those are the two places where practice genuinely varies, and this calculator says which it is doing rather than presenting one convention as the only one.

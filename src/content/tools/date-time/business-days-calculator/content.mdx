@@ -1,0 +1,86 @@
+## Why no holiday list is built in
+
+Most business day calculators ship with a holiday list. This one deliberately does not, and the reason is worth stating up front because it looks like a missing feature.
+
+Public holidays are not a global constant. They are not even a national one. England and Wales, Scotland, and Northern Ireland keep three different bank holiday lists. In the United States, the federal holiday schedule binds federal employees and nobody else — a private employer is free to work through Columbus Day, and many do. Several holidays move: Easter shifts by more than a month across the calendar, Thanksgiving is the fourth Thursday of November rather than a date, and observed dates roll to the Monday when a fixed holiday lands on a weekend.
+
+A built-in list would therefore be right for one reader, wrong for the next, and silently out of date within a year. That is worse than having no list, because a wrong answer wearing the appearance of authority is one nobody checks.
+
+Paste the dates that apply to you and the count is exact for your situation rather than approximately right for someone else's.
+
+## What counts as a business day
+
+The working definition almost everywhere: a weekday that is not a public holiday.
+
+That leaves three things the arithmetic cannot decide for you, and this calculator turns each into a visible choice rather than a hidden assumption.
+
+**Which days are the weekend.** Saturday and Sunday is the default across Europe, the Americas and much of Asia. Friday and Saturday is standard across much of the Middle East, though several countries have changed pattern in recent years — the United Arab Emirates moved its public sector to a Saturday and Sunday weekend in 2022 while neighbours kept the older arrangement. Some sectors run six days with Sunday alone off.
+
+**Whether the start date counts.** Both conventions are in use and they differ by one, which is exactly the size of error nobody notices until a deadline is missed.
+
+**Which non-working days are yours.** Company shutdowns, Christmas Eve half days and local observances never appear on a national list but do affect a real deadline.
+
+## Counting from a date: the off-by-one
+
+This is the single most common source of disagreement between two calculators, and it is not a bug in either of them.
+
+Take Monday to Friday of the same week.
+
+- **Five** weekdays, if you count both Monday and Friday.
+- **Four** days of difference, if you count Friday but not Monday.
+- **Three** clear days between them, if you count neither.
+
+All three are correct answers to slightly different questions. The prevailing convention for deadlines — and the one most contracts and courts follow — is that a period runs from the day *after* the triggering event. A notice served on Monday with a ten business day deadline starts running on Tuesday.
+
+The add mode on this page follows that convention: counting begins the day after the start date. The between mode makes it a checkbox, because a question like "how many working days is this project" genuinely does want both endpoints counted.
+
+Where a deadline carries consequences, read the clause. Contracts routinely define the term themselves, and a definition in a document beats a convention in a calculator every time.
+
+## Worked examples
+
+### Ten business days from a Friday
+
+Start on Friday 14 August 2026, adding ten business days, Saturday and Sunday weekend, no holidays.
+
+- Counting starts Monday 17 August — the weekend is skipped, and the start date itself does not count.
+- Ten working days later, skipping two further weekend days, lands on **Friday 28 August 2026**.
+- Calendar days elapsed: 14. Non-working days skipped: 4.
+
+The gap between ten business days and fourteen calendar days is the whole reason the distinction exists in contracts.
+
+### A month of working days
+
+From Monday 3 August 2026 to Monday 31 August 2026, counting both endpoints, with a bank holiday on 31 August.
+
+- Calendar days: 29
+- Weekend days: 8
+- Holidays excluded: 1
+- **Working days: 20**
+
+Note the shape of that answer. A calendar month is roughly 30 days and roughly 20 working days, which is where the rule of thumb that a working month is 20 days comes from — but it varies between 19 and 23 depending on where the weekends fall and how many holidays land in it. Budgeting a project on a flat 20 is fine; billing on it is not.
+
+## Where the traps are
+
+**Banking days are narrower than business days.** A banking day is a day the payment system settles. A transfer initiated on Friday afternoon may not clear until Monday, and a cross-border payment needs both countries to have a banking day in common — which the two holiday calendars can prevent for a week at a time around Christmas or Eid. When a term is written in banking days, the settlement calendar governs.
+
+**"Working day" can be contractually defined.** Commercial contracts frequently define it as a day when banks are open for business in a named city. That excludes local holidays in that city and includes national holidays elsewhere, which can give a result no general calculator would produce.
+
+**Observed dates roll.** When a fixed-date holiday falls on a weekend, most jurisdictions observe it on the adjacent Monday or Friday. The observed date is the one that removes a working day, not the nominal date, so that is the one to paste in.
+
+**Half days are a judgement call.** Christmas Eve, New Year's Eve and the day before a major holiday are frequently half days by custom rather than by law. The arithmetic here has no half-day concept, so treating one as working or non-working is a decision you have to make deliberately.
+
+**Time zones.** A deadline expressed in business days is usually silent about which time zone ends the day. For a filing or a payment cut-off that silence matters more than the day count does.
+
+## When this tool is the wrong one
+
+If you need elapsed calendar time rather than working time — an age, a term of notice expressed in months, a duration in days — the date difference calculator on this site is the right tool, because it counts every day rather than filtering them.
+
+If you need hours rather than days, the work hours calculator handles shift length, breaks and overtime, which is a different question again: five business days is not 40 hours for anyone on part-time or shift work.
+
+And if the question is really "when will this actually be delivered", no calendar tool answers it. Business days are a contractual unit, not a prediction.
+
+## A note on sources
+
+The two authoritative holiday lists most readers of this page will need are linked below: GOV.UK publishes the bank holidays for each UK nation, and the US Office of Personnel Management publishes the federal holiday schedule with observed dates. Both are the primary publication rather than a summary of one, and both list dates several years ahead, which is what you need when a deadline runs into next year.
+
+For anywhere else, the national government's own publication is the source to use. Aggregator sites carry the same dates with an extra step where an error can enter.

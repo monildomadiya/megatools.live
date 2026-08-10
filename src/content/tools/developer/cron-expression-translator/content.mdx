@@ -1,0 +1,112 @@
+## Five fields, in order
+
+A standard cron expression is five whitespace-separated fields. Their order never changes, and almost every mistake starts with getting it wrong.
+
+| Position | Field | Allowed values |
+| --- | --- | --- |
+| 1 | Minute | 0–59 |
+| 2 | Hour | 0–23 |
+| 3 | Day of month | 1–31 |
+| 4 | Month | 1–12, or JAN–DEC |
+| 5 | Day of week | 0–7, or SUN–SAT (0 and 7 both mean Sunday) |
+
+Each field accepts four forms:
+
+- **A value.** `5` in the minute field means minute five.
+- **A range.** `1-5` in the day-of-week field means Monday to Friday.
+- **A list.** `0,15,30,45` means all four.
+- **A step.** `*/15` steps through the whole range from its start; `10-50/10` steps within a range.
+
+An asterisk means every value the field allows, and that is not merely a shorthand — it also marks the field as *unrestricted*, which turns out to change the meaning of the expression.
+
+## The rule that catches everyone
+
+When both the day-of-month and the day-of-week fields are restricted, cron combines them with **OR**, not AND.
+
+Read `0 0 1 * MON` and the natural interpretation is "midnight on the first of the month, if that day is a Monday". What it actually means is "midnight on the first of the month, **and also** midnight every Monday".
+
+That is roughly five times more runs than intended.
+
+The behaviour is specified rather than accidental. It comes from Vixie cron, it is documented in the crontab manual page, and it is inherited by nearly every implementation in use. The reasoning is that both fields describe days, so restricting either one should be able to add days rather than only remove them.
+
+The rule only applies when *both* fields are restricted. If either is an asterisk, the other simply governs:
+
+- `0 0 1 * *` — the first of the month only. Day-of-week is unrestricted.
+- `0 0 * * MON` — every Monday only. Day-of-month is unrestricted.
+- `0 0 1 * MON` — the first of the month **or** any Monday. Both restricted, so OR.
+
+There is no way to express AND in standard cron. If you need "the first Monday of the month", the usual approach is to schedule the broader condition in cron and test the narrower one at the top of the job itself — run every Monday, and exit immediately unless the date is in the first seven days.
+
+This page flags the OR case whenever both fields are set, because it is the single most expensive misreading in the syntax.
+
+## Steps are not quite intervals
+
+`*/15` in the minute field fires at 0, 15, 30 and 45. That looks like "every 15 minutes" and behaves like it, because 15 divides 60.
+
+`*/7` does not. It fires at 0, 7, 14, 21, 28, 35, 42, 49 and 56 — then the hour ends and the sequence restarts at 0. The gap between 56 and the next run is four minutes, not seven.
+
+Steps walk through a field's range from its start. They are regular *within* the field and reset at its boundary. Any step that does not divide the range evenly produces a short interval at the wrap, and the same applies to hours: `*/5` in the hour field fires at 0, 5, 10, 15 and 20, leaving a four-hour gap to midnight.
+
+If you need a genuinely even interval that does not divide its range, cron is the wrong tool — a scheduler with interval semantics, such as a systemd timer with `OnUnitActiveSec`, expresses it directly.
+
+## Time zones and the hours that do not exist
+
+Cron runs in the time zone of the machine executing it. Not yours, unless they happen to match.
+
+That is a much larger problem than it appears when a schedule is written on a laptop in one zone and deployed to a server in another. Managed schedulers commonly default to UTC regardless of account settings. Some cron implementations honour a `CRON_TZ` variable at the top of the crontab; not all do.
+
+Daylight saving makes it worse, and the behaviour is genuinely inconsistent between implementations:
+
+- **Clocks forward.** An hour vanishes. A job set for 02:30 has no 02:30 to run at. Some implementations skip that day, some run the job as soon as the clock passes the gap.
+- **Clocks back.** An hour repeats. A job scheduled inside it may run twice.
+
+The durable fix is to run schedules in UTC and convert only for display, which is what removes the problem rather than working around it. Failing that, avoid scheduling anything between roughly 01:00 and 03:00 local time, which is where transitions happen in most jurisdictions.
+
+The run times previewed on this page use your browser's time zone, and it is labelled above them for exactly this reason. Compare it against wherever the job actually executes.
+
+## The shorthand strings
+
+Most implementations accept a set of named schedules:
+
+| Shorthand | Equivalent |
+| --- | --- |
+| `@yearly`, `@annually` | `0 0 1 1 *` |
+| `@monthly` | `0 0 1 * *` |
+| `@weekly` | `0 0 * * 0` |
+| `@daily`, `@midnight` | `0 0 * * *` |
+| `@hourly` | `0 * * * *` |
+
+`@reboot` is a different kind of thing: it runs once at start-up rather than on any schedule, and support for it is patchy — many container and managed environments do not implement it at all.
+
+## Dialects that are not standard cron
+
+If your expression has six fields, it is not the syntax on this page.
+
+**Quartz, Spring and several cloud schedulers** put a seconds field at the front, and some add an optional year at the end. Pasting a six-field expression into a five-field parser does not fail loudly — the seconds get read as minutes and everything shifts one position, producing a schedule that is valid and wrong. This translator rejects six fields rather than guessing.
+
+Those dialects also add characters standard cron does not have:
+
+- `?` — no specific value, used in whichever day field is not being constrained
+- `L` — last, as in the last day of the month or the last Friday
+- `W` — the nearest weekday to a given date
+- `#` — the nth weekday of the month, so `FRI#3` is the third Friday
+
+Several of these exist precisely because standard cron cannot express AND between the two day fields. If you need "the third Friday", a Quartz-style scheduler expresses it directly and cron does not.
+
+## Where the traps are
+
+**Missed runs are not made up.** Standard cron queues nothing. If the machine is off or asleep when a job was due, that run does not happen. `anacron` exists to cover this on machines that are not always on; managed schedulers usually have their own retry policy. If a missed run matters, the job needs to be idempotent and work out for itself what it still owes.
+
+**Overlapping runs.** Cron starts a job on schedule whether or not the previous run has finished. A five-minute schedule running a seven-minute job accumulates processes until something falls over. Cron has no built-in locking — use `flock` or an equivalent.
+
+**Impossible dates.** `0 0 30 2 *` is syntactically valid and will never run. This tool reports finding no runs in four years rather than pretending otherwise.
+
+**`%` in a command.** In a crontab, a percent sign is special: it becomes a newline and everything after the first one is fed to the job on standard input. A `date` format string in a cron command needs its percent signs escaped, which is a classic silent breakage.
+
+**The environment is nearly empty.** Cron jobs run with a minimal `PATH` and none of a login shell's setup. A command that works in a terminal and fails under cron is almost always this.
+
+## A note on sources
+
+The syntax on this page follows the POSIX specification for `crontab` and the `crontab(5)` manual page that documents the widely deployed Vixie-derived implementations, including the day-of-month and day-of-week OR rule. Both are linked below, along with the systemd timer documentation for the cases where a calendar expression is a better fit than a cron one.
+
+Where your scheduler is a managed cloud product, read its own documentation as well — the field count, the time zone default and the catch-up behaviour are all places where products diverge from the standard without saying so prominently.

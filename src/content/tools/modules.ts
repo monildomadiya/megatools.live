@@ -20,6 +20,8 @@ import WeightConverter from './conversion/weight-converter/Calculator';
 import WeightConverterContent from './conversion/weight-converter/content.mdx';
 import AgeCalculator from './date-time/age-calculator/Calculator';
 import AgeCalculatorContent from './date-time/age-calculator/content.mdx';
+import BusinessDaysCalculator from './date-time/business-days-calculator/Calculator';
+import BusinessDaysContent from './date-time/business-days-calculator/content.mdx';
 import DateDifferenceCalculator from './date-time/date-difference-calculator/Calculator';
 import DateDifferenceContent from './date-time/date-difference-calculator/content.mdx';
 import TimeZoneConverter from './date-time/time-zone-converter/Calculator';
@@ -32,6 +34,8 @@ import CaseConverter from './developer/case-converter/Calculator';
 import CaseConverterContent from './developer/case-converter/content.mdx';
 import ColorConverter from './developer/color-converter/Calculator';
 import ColorConverterContent from './developer/color-converter/content.mdx';
+import CronExpressionTranslator from './developer/cron-expression-translator/Calculator';
+import CronExpressionContent from './developer/cron-expression-translator/content.mdx';
 import JsonFormatter from './developer/json-formatter/Calculator';
 import JsonFormatterContent from './developer/json-formatter/content.mdx';
 import PasswordGenerator from './developer/password-generator/Calculator';
@@ -66,6 +70,8 @@ import IdealWeightCalculator from './health/ideal-weight-calculator/Calculator';
 import IdealWeightContent from './health/ideal-weight-calculator/content.mdx';
 import TdeeCalculator from './health/tdee-calculator/Calculator';
 import TdeeContent from './health/tdee-calculator/content.mdx';
+import WaistToHeightRatioCalculator from './health/waist-to-height-ratio-calculator/Calculator';
+import WaistToHeightRatioContent from './health/waist-to-height-ratio-calculator/content.mdx';
 import WaterIntakeCalculator from './health/water-intake-calculator/Calculator';
 import WaterIntakeContent from './health/water-intake-calculator/content.mdx';
 import AverageCalculator from './math/average-calculator/Calculator';
@@ -76,10 +82,14 @@ import PercentageCalculator from './math/percentage-calculator/Calculator';
 import PercentageContent from './math/percentage-calculator/content.mdx';
 import RatioCalculator from './math/ratio-calculator/Calculator';
 import RatioContent from './math/ratio-calculator/content.mdx';
+import SignificantFiguresCalculator from './math/significant-figures-calculator/Calculator';
+import SignificantFiguresContent from './math/significant-figures-calculator/content.mdx';
 import StandardDeviationCalculator from './math/standard-deviation-calculator/Calculator';
 import StandardDeviationContent from './math/standard-deviation-calculator/content.mdx';
 import DiscountCalculator from './lifestyle/discount-calculator/Calculator';
 import DiscountContent from './lifestyle/discount-calculator/content.mdx';
+import ElectricityCostCalculator from './lifestyle/electricity-cost-calculator/Calculator';
+import ElectricityCostContent from './lifestyle/electricity-cost-calculator/content.mdx';
 import FuelCostCalculator from './lifestyle/fuel-cost-calculator/Calculator';
 import FuelCostContent from './lifestyle/fuel-cost-calculator/content.mdx';
 import TipCalculator from './lifestyle/tip-calculator/Calculator';
@@ -181,6 +191,26 @@ export const toolModules: Record<string, ToolModule> = {
   'conversion/pressure-converter': {
     Calculator: PressureConverter,
     Content: PressureConverterContent,
+  },
+  'math/significant-figures-calculator': {
+    Calculator: SignificantFiguresCalculator,
+    Content: SignificantFiguresContent,
+  },
+  'health/waist-to-height-ratio-calculator': {
+    Calculator: WaistToHeightRatioCalculator,
+    Content: WaistToHeightRatioContent,
+  },
+  'date-time/business-days-calculator': {
+    Calculator: BusinessDaysCalculator,
+    Content: BusinessDaysContent,
+  },
+  'developer/cron-expression-translator': {
+    Calculator: CronExpressionTranslator,
+    Content: CronExpressionContent,
+  },
+  'lifestyle/electricity-cost-calculator': {
+    Calculator: ElectricityCostCalculator,
+    Content: ElectricityCostContent,
   },
   'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
   'date-time/date-difference-calculator': {

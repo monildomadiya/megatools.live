@@ -1,0 +1,95 @@
+## The whole calculation, in one line
+
+Electricity is sold by the kilowatt-hour. One kilowatt-hour is one kilowatt of power drawn for one hour, and it is the only unit on your bill that costs money.
+
+**Cost = (watts ÷ 1000) × hours × unit rate**
+
+A 2,000 W heater, on for 5 hours, at 25p per kWh:
+
+- Power in kilowatts: 2000 ÷ 1000 = 2 kW
+- Energy: 2 × 5 = 10 kWh
+- Cost: 10 × 0.25 = **£2.50**
+
+That is the arithmetic in full, and if every appliance drew its rated power continuously it would also be the answer. Most do not, which is where estimates and bills part company.
+
+## Rated power is a maximum, not a habit
+
+The number on the rating plate is what the appliance draws when everything inside it is running. How often that happens varies enormously by appliance, and it is the single largest source of error in a running-cost estimate.
+
+**A fridge** is rated for its compressor. The compressor cycles on and off to hold temperature, and across a day it might run a third of the time. Calculating 24 hours at rated power overstates the cost by roughly three times.
+
+**A thermostatic heater** behaves the same way. It draws full power warming a cold room and then cycles to maintain it. A 2 kW heater in a well-insulated room may average well under 1 kW over an evening.
+
+**An oven** draws heavily to reach temperature and intermittently to hold it.
+
+**A lamp, a phone charger under load, a hair dryer** — these genuinely do draw close to rated power the whole time they are on.
+
+The duty cycle field on this page is where that goes. Set it to the fraction of running time the appliance is really drawing power: 100% for the lamp, nearer 30% for the fridge. It is an estimate rather than a measurement, but an estimate that acknowledges cycling beats an exact calculation of the wrong thing.
+
+## Standby is small and constant, which is the problem
+
+Standby is what an appliance draws while apparently off: the clock, the network chip listening for a remote or an app, the LED. A single device drawing 2 W is not worth thinking about per hour.
+
+Per year it is 17.5 kWh, because it never stops.
+
+Multiply that across a television, a set-top box, a games console, a microwave, a printer, a couple of speakers and a handful of chargers, and the always-on load in a typical home becomes a real line on the bill. This is why energy agencies publish guidance on it and why smart plugs sell.
+
+The standby field applies to every hour of every day that the appliance is not in active use, including days it is not used at all — which is exactly how standby behaves and exactly why it adds up.
+
+## Worked examples
+
+### A fridge-freezer
+
+Rated 150 W, on continuously, duty cycle 35%, at 25p per kWh.
+
+- Effective draw: 0.15 kW × 35% = 0.0525 kW
+- Per day: 0.0525 × 24 = 1.26 kWh
+- Per year: 460 kWh
+- **£115 a year**
+
+Calculated at 100% duty cycle instead, the same fridge appears to cost £328 a year. The duty cycle is not a refinement here; it is most of the answer.
+
+### An electric shower
+
+8.5 kW, 10 minutes a day, every day, at 25p per kWh.
+
+- Per use: 8.5 × (10 ÷ 60) = 1.42 kWh
+- Cost per shower: **35p**
+- Per year: 517 kWh, **£129**
+
+High power, short duration. The opposite shape to the fridge, and the reason wattage alone tells you nothing about running cost.
+
+### A television left on standby
+
+120 W in use, 4 hours a day; 1.5 W on standby the other 20 hours.
+
+- Active: 0.48 kWh a day, 175 kWh a year, £43.80
+- Standby: 0.03 kWh a day, 11 kWh a year, £2.74
+
+Standby is 6% of this television's annual cost. Worth knowing, not worth losing sleep over — and that proportion is exactly the kind of thing worth checking rather than assuming in either direction.
+
+## Where the traps are
+
+**The unit rate is not the annual estimate.** Bills quote both, and they are different numbers doing different jobs. Take the per-kWh figure, in pounds or dollars rather than pence or cents — 25p is 0.25, and entering 25 gives an answer a hundred times too large.
+
+**Standing charges are not included here.** A standing charge is a fixed daily fee for the connection, payable whether you use anything or not. It belongs to the bill, not to an appliance. Work out appliance costs here and add the standing charge once at the end.
+
+**Time-of-use tariffs break the average.** On Economy 7, a time-of-use or a dynamic tariff, the same dishwasher cycle costs different amounts depending on the hour. Run the calculation once per rate band with the hours that fall in each, because averaging the rate conceals precisely the decision the tariff is asking you to make.
+
+**Tax may or may not be in the rate.** In the UK, domestic energy carries VAT at 5% and the rate quoted on a bill usually includes it. Elsewhere, sales tax may be added at the end. Check which your figure is before comparing tariffs.
+
+**Higher wattage is not automatically more expensive.** A 3 kW kettle draws twice the power of a 1.5 kW one and boils the same water in about half the time, so both use roughly the same energy. Power is a rate; energy is what you buy. The distinction only collapses when run time is fixed regardless of power, as it is with heating.
+
+## When this tool is the wrong one
+
+For anything that cycles unpredictably — a fridge in a warm kitchen, a heat pump across a season, a house rather than an appliance — a plug-in energy monitor or your smart meter's own readings will beat any calculation from a rating plate. They measure kilowatt-hours actually consumed rather than inferring them.
+
+For heating and cooling specifically, running cost depends on insulation, outside temperature and thermostat setting far more than on the appliance rating, and none of those fit in a formula this size.
+
+And for comparing two appliances before buying, the energy label's annual consumption figure is a better starting point than the rating plate: it is measured under a standard test cycle, which is at least a consistent basis for comparison even where it does not match your household.
+
+## Sources
+
+The US Department of Energy publishes the standard method for estimating appliance energy use, which is the calculation on this page. The EIA publishes average retail electricity prices for the United States, and Ofgem publishes the unit rates and standing charges under the Great Britain price cap. All three are linked below.
+
+Use your own bill for the rate wherever possible. National averages are useful for a sanity check and are nobody's actual tariff.

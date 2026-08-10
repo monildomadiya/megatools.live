@@ -20,10 +20,13 @@ import weightConverter from '@/content/tools/conversion/weight-converter/meta';
 import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
 import dateDifferenceCalculator from '@/content/tools/date-time/date-difference-calculator/meta';
 import timeZoneConverter from '@/content/tools/date-time/time-zone-converter/meta';
+import workHoursCalculator from '@/content/tools/date-time/work-hours-calculator/meta';
 import base64Encoder from '@/content/tools/developer/base64-encoder/meta';
 import caseConverter from '@/content/tools/developer/case-converter/meta';
+import colorConverter from '@/content/tools/developer/color-converter/meta';
 import jsonFormatter from '@/content/tools/developer/json-formatter/meta';
 import passwordGenerator from '@/content/tools/developer/password-generator/meta';
+import unixTimestampConverter from '@/content/tools/developer/unix-timestamp-converter/meta';
 import compoundInterestCalculator from '@/content/tools/finance/compound-interest-calculator/meta';
 import loanEmiCalculator from '@/content/tools/finance/loan-emi-calculator/meta';
 import mortgageCalculator from '@/content/tools/finance/mortgage-calculator/meta';
@@ -31,20 +34,24 @@ import salaryCalculator from '@/content/tools/finance/salary-calculator/meta';
 import salesTaxCalculator from '@/content/tools/finance/sales-tax-calculator/meta';
 import simpleInterestCalculator from '@/content/tools/finance/simple-interest-calculator/meta';
 import sipCalculator from '@/content/tools/finance/sip-calculator/meta';
+import vatCalculator from '@/content/tools/finance/vat-calculator/meta';
 import bmiCalculator from '@/content/tools/health/bmi-calculator/meta';
 import bmrCalculator from '@/content/tools/health/bmr-calculator/meta';
 import bodyFatCalculator from '@/content/tools/health/body-fat-calculator/meta';
 import calorieCalculator from '@/content/tools/health/calorie-calculator/meta';
 import idealWeightCalculator from '@/content/tools/health/ideal-weight-calculator/meta';
 import tdeeCalculator from '@/content/tools/health/tdee-calculator/meta';
+import waterIntakeCalculator from '@/content/tools/health/water-intake-calculator/meta';
 import averageCalculator from '@/content/tools/math/average-calculator/meta';
 import fractionCalculator from '@/content/tools/math/fraction-calculator/meta';
 import percentageCalculator from '@/content/tools/math/percentage-calculator/meta';
 import ratioCalculator from '@/content/tools/math/ratio-calculator/meta';
 import standardDeviationCalculator from '@/content/tools/math/standard-deviation-calculator/meta';
+import discountCalculator from '@/content/tools/lifestyle/discount-calculator/meta';
 import fuelCostCalculator from '@/content/tools/lifestyle/fuel-cost-calculator/meta';
 import tipCalculator from '@/content/tools/lifestyle/tip-calculator/meta';
 import characterCounter from '@/content/tools/seo/character-counter/meta';
+import keywordDensityCalculator from '@/content/tools/seo/keyword-density-calculator/meta';
 import readabilityCalculator from '@/content/tools/seo/readability-calculator/meta';
 import slugGenerator from '@/content/tools/seo/slug-generator/meta';
 import wordCounter from '@/content/tools/seo/word-counter/meta';
@@ -57,12 +64,14 @@ const toolMetas: ToolMeta[] = [
   salesTaxCalculator,
   simpleInterestCalculator,
   sipCalculator,
+  vatCalculator,
   bmiCalculator,
   bmrCalculator,
   bodyFatCalculator,
   calorieCalculator,
   idealWeightCalculator,
   tdeeCalculator,
+  waterIntakeCalculator,
   averageCalculator,
   fractionCalculator,
   percentageCalculator,
@@ -77,13 +86,18 @@ const toolMetas: ToolMeta[] = [
   ageCalculator,
   dateDifferenceCalculator,
   timeZoneConverter,
+  workHoursCalculator,
   base64Encoder,
   caseConverter,
+  colorConverter,
   jsonFormatter,
   passwordGenerator,
+  unixTimestampConverter,
+  discountCalculator,
   fuelCostCalculator,
   tipCalculator,
   characterCounter,
+  keywordDensityCalculator,
   readabilityCalculator,
   slugGenerator,
   wordCounter,

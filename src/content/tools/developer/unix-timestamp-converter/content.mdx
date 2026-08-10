@@ -1,0 +1,100 @@
+## Count the digits first
+
+Before anything else: is your number in seconds or milliseconds? Almost every timestamp bug starts here.
+
+| Unit | Digits today | Example |
+| --- | --- | --- |
+| Seconds | 10 | 1770000000 |
+| Milliseconds | 13 | 1770000000000 |
+| Microseconds | 16 | 1770000000000000 |
+| Nanoseconds | 19 | 1770000000000000000 |
+
+JavaScript's `Date.now()` and `new Date().getTime()` return **milliseconds**. Almost everything else in the Unix world — `date +%s`, PostgreSQL's `extract(epoch from …)`, most JSON APIs, most log formats — uses **seconds**. Passing one where the other is expected is the single most common time bug in web software.
+
+The failure is loud, at least. Feed seconds to something expecting milliseconds and you get a date in **January 1970**. Feed milliseconds to something expecting seconds and you get a date around the year **57,000**. Both are unmistakable once you know what they mean, and both are the same mistake seen from opposite ends.
+
+This converter detects the unit from the magnitude of the value and tells you which one it picked, so a 1970 result is visibly a unit problem rather than a mystery.
+
+## What the number actually means
+
+A Unix timestamp is the count of seconds since **00:00:00 UTC on 1 January 1970**, a moment known as the epoch. Nothing about that date is significant; it was chosen for convenience when Unix time was first specified in the early 1970s, and it stuck.
+
+Its value is that it is a single integer in a single reference frame. Two timestamps can be compared with `<`. A duration is a subtraction. There is no ambiguity about format, no locale, no zone, no daylight saving. Every one of those problems appears only when the number is rendered for a human — which is exactly the right place for them to appear.
+
+That is the design rule worth taking from this: **store instants, format at the edge**. A timestamp in the database and a formatted string in the response is nearly always correct. A formatted string in the database is nearly always trouble.
+
+## Leap seconds, and why the count is not what it looks like
+
+POSIX defines seconds since the epoch by a formula that treats every day as exactly **86,400 seconds**. The specification is explicit that the value is computed from the calendar date, not measured by counting.
+
+Since 1972, **27 leap seconds** have been inserted into UTC to keep it aligned with the Earth's rotation, which is gradually and irregularly slowing. None of them appear in Unix time. A Unix timestamp is therefore about 27 seconds short of the true count of SI seconds elapsed since the epoch.
+
+The practical consequence is that during a leap second, Unix time either repeats a value or is smeared across the surrounding hours — Google, Amazon and Meta all use smearing, with slightly different smear windows, which is why timestamps from different clouds can disagree by a fraction of a second around one.
+
+For almost all software this does not matter: what you want is an unambiguous label for a calendar instant, and that is exactly what Unix time gives you. For anything measuring intervals precisely — financial sequencing, scientific timing, distributed consensus — use a monotonic clock instead, which is what `performance.now()` and `CLOCK_MONOTONIC` exist for.
+
+This is on its way to becoming a historical footnote. In 2022 the General Conference on Weights and Measures resolved to stop inserting leap seconds by 2035 at the latest, allowing UTC to drift from solar time instead.
+
+## The year 2038
+
+A signed 32-bit integer holds a maximum of 2,147,483,647. As a count of seconds from 1970 that runs out at **03:14:07 UTC on 19 January 2038**, at which point the value overflows to negative and the date becomes **13 December 1901**.
+
+This is not a theoretical concern. It is a real, dated deadline, and unlike Y2K it cannot be patched by widening a display format — the storage itself is too narrow.
+
+Modern 64-bit platforms are fine; a signed 64-bit count of seconds reaches roughly 292 billion years. The exposure is elsewhere:
+
+- **Embedded systems and firmware** with 32-bit `time_t`, many of which will still be running in 2038.
+- **File formats and protocols** with a fixed 32-bit time field, where the width is part of the specification.
+- **Database columns typed too narrowly** — MySQL's `TIMESTAMP` type famously tops out in 2038, while `DATETIME` does not.
+- **Any code that casts a timestamp to a 32-bit int** somewhere in the middle of an otherwise 64-bit system.
+
+Systems that calculate 15-year mortgages or 20-year certificates have been hitting this since around 2018. If you own long-horizon date arithmetic, it is worth testing now with a date past the boundary — this converter will show you the exact instant.
+
+## Before 1970, and the negative side
+
+Negative timestamps represent times before the epoch. −86400 is 31 December 1969; −2208988800 is 1 January 1900.
+
+Support is patchy. Most languages handle them correctly, but plenty of libraries, APIs and validation layers assume a non-negative integer and either reject the value or truncate it to zero. If you are storing birth dates, historical records, or anything else that reaches back past 1970, a proper date type is a safer choice than an epoch integer.
+
+Dates far enough back have a second problem that no integer can solve: the Gregorian calendar reform. Different countries adopted it between 1582 and 1923, so a "date" in 1700 depends on where you were standing. Most date libraries apply a proleptic Gregorian calendar and quietly ignore this.
+
+## ISO 8601, RFC 3339, and which one to emit
+
+These are often used interchangeably and are not the same thing.
+
+**ISO 8601** is a broad standard covering many representations: `2026-08-10`, `2026-W32-1`, `2026-222`, `20260810T143000`, durations like `P3Y6M4D`, intervals, and times with no offset at all.
+
+**RFC 3339** is a narrow profile of it for internet protocols. It requires a complete date and time, a `T` (or space) separator, and an **explicit offset** — `Z` for UTC, or `+05:30`. It forbids week dates, ordinal dates, and offsetless times.
+
+The two overlap but neither contains the other. The practical rule: **emit RFC 3339 and you are valid under both**, and every parser worth using will accept it.
+
+```
+2026-08-10T14:30:00Z          RFC 3339, UTC
+2026-08-10T20:00:00+05:30     RFC 3339, with offset
+2026-08-10 14:30:00           ISO 8601-ish, no offset — ambiguous
+2026-W32-1T14:30:00Z          ISO 8601 week date — not RFC 3339
+```
+
+The third line is the dangerous one. Without an offset the string is not an instant, and different parsers make different assumptions about it — some assume UTC, some assume local time. That is a bug that appears only for users in other zones, which is to say, late.
+
+## Offsets are not time zones
+
+`+01:00` is an offset. `Europe/London` is a time zone. The difference matters more than it looks.
+
+An offset is a fixed number. A zone is a set of rules over time — including when daylight saving starts, and how those rules have changed historically. The IANA Time Zone Database maintains these rules and releases updates several times a year, because governments keep changing them, often with a few weeks' notice.
+
+For a past event, an offset is enough: the instant is fixed and the rules cannot change retroactively. For a **future** event, store the local wall-clock time and the **IANA zone name**. If you store `2027-03-28T09:00:00+00:00` for a London meeting and the UK changes its clock rules before then, your meeting silently moves. If you store `2027-03-28 09:00` plus `Europe/London`, it stays at nine in the morning, which is what the person who scheduled it meant.
+
+## Precision, and where the extra digits come from
+
+Seconds are enough for most application logic. Milliseconds are the JavaScript default. Microseconds appear in database engines and tracing systems; nanoseconds in kernel interfaces, Go's `time.Time`, and high-resolution profilers.
+
+One caveat for the JavaScript path: `Number` is an IEEE-754 double, exact only up to 2^53. Millisecond timestamps are comfortably inside that. **Nanosecond** timestamps are not — 1.77e18 exceeds 9.0e15, so a nanosecond value passed through a JavaScript number silently loses its last few digits. Use `BigInt` or a string if those digits matter. This converter accepts nanoseconds and converts them for display, but the sub-millisecond part is not preserved.
+
+## What this converter does not do
+
+It converts between epoch values and calendar instants, in UTC and in your browser's zone. It does not convert between arbitrary named zones — the time zone converter on this site does that — and it does not parse free-text dates, which are ambiguous by nature. Is `03/04/2026` March or April? The answer depends on which side of the Atlantic wrote it, and no parser can know.
+
+It does not represent leap seconds, because Unix time does not. And it applies the current time zone rules to historical dates in your local zone, which is what every browser does; for dates before the tz database's coverage begins, treat local renderings as approximate.
+
+Everything runs in your browser. Nothing you type is sent anywhere, which matters when the timestamp came out of a production log.

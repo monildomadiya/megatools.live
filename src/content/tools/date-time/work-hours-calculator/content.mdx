@@ -1,0 +1,105 @@
+## 7.45 is not seven hours forty-five minutes
+
+The most expensive mistake on a timesheet is a decimal point.
+
+Payroll runs on decimal hours. A clock runs on base 60. Seven hours and forty-five minutes is **7.75** hours, because 45 ÷ 60 = 0.75. Written as 7.45, it pays eighteen minutes short — every shift, every week.
+
+> Decimal hours = hours + (minutes ÷ 60)
+
+The conversions worth memorising, because they cover most rota patterns:
+
+| Minutes | Decimal | Minutes | Decimal |
+| --- | --- | --- | --- |
+| 5 | 0.083 | 35 | 0.583 |
+| 10 | 0.167 | 40 | 0.667 |
+| 15 | 0.25 | 45 | 0.75 |
+| 20 | 0.333 | 50 | 0.833 |
+| 30 | 0.5 | 55 | 0.917 |
+
+Only the quarters come out clean. Everything else recurs, which is why a timesheet totalled in minutes and converted once at the end is more accurate than one converted row by row and then added.
+
+This calculator shows both forms for exactly that reason: the decimal figure for payroll, the hours-and-minutes figure for the conversation with your manager.
+
+## Shifts that cross midnight
+
+If the finish time is earlier on the clock than the start, the shift ran into the next day. Subtracting directly gives a negative number; the fix is to add 24 hours to the finish first.
+
+A 22:00 to 06:30 shift: 06:30 becomes 30:30, minus 22:00 is **8 hours 30 minutes**. This tool applies that automatically whenever the end time is at or before the start, so a night rota can be typed in as it appears without any mental arithmetic.
+
+The one case it cannot resolve is a shift of exactly 24 hours, which looks identical to a shift of zero. If you work those, split the row.
+
+Note also that a night shift crossing a daylight saving change is genuinely 23 or 25 hours long. Clock times are what the timesheet records, but the hours actually worked differ, and payroll practice on this varies by employer — it is worth asking rather than assuming.
+
+## Which breaks come off
+
+The distinction that matters is between a rest break and a meal period, and it is not about length alone.
+
+Under the US hours-worked regulations, short rest breaks of roughly **5 to 20 minutes are counted as hours worked and must be paid**. Employers cannot offer a coffee break and then deduct it. Bona fide **meal periods, generally 30 minutes or more with the employee relieved of all duty**, are not hours worked and are properly unpaid.
+
+"Relieved of all duty" is the operative phrase. A lunch break spent at a desk covering the phone, watching a till, or waiting for a delivery is not a bona fide meal period. It is working time, and it is payable, however it is labelled on the rota.
+
+In the UK and the EU, the Working Time Directive frames breaks as a health and safety entitlement rather than a pay question: a worker is entitled to a rest break where the working day exceeds six hours. Whether that break is paid is a matter for the contract.
+
+Enter only genuinely unpaid, duty-free breaks in the break column. Anything else belongs in the worked hours.
+
+### Worked example — a standard week
+
+| Day | Start | Finish | Break | Hours |
+| --- | --- | --- | --- | --- |
+| Monday | 09:00 | 17:30 | 30 | 8.00 |
+| Tuesday | 09:00 | 17:30 | 30 | 8.00 |
+| Wednesday | 09:00 | 18:15 | 30 | 8.75 |
+| Thursday | 09:00 | 17:30 | 30 | 8.00 |
+| Friday | 09:00 | 16:00 | 30 | 6.50 |
+
+Total: **39.25 hours**, or 39h 15m. Under a 40-hour weekly threshold, none of it is overtime — Wednesday's extra 45 minutes was absorbed by Friday's early finish, which is exactly what a weekly threshold does and why a daily one produces a different answer on the same timesheet.
+
+## Overtime, and the threshold that decides it
+
+Under the US **Fair Labor Standards Act**, covered non-exempt employees must receive at least **one and a half times their regular rate for hours worked over 40 in a workweek**. A workweek is a fixed, recurring period of 168 hours; it does not have to start on Monday, but it has to be consistent.
+
+Two things about that rule surprise people:
+
+**There is no federal daily overtime.** Working twelve hours on Monday and four on Tuesday triggers nothing federally, as long as the week stays at or under 40. Some states impose their own daily rules — California's premium after 8 hours in a day is the best known — and where a state rule is more generous, it applies.
+
+**Averaging across weeks is not allowed.** Fifty hours one week and thirty the next is ten hours of overtime, not zero. Each workweek stands alone.
+
+Elsewhere the model differs. The EU and UK approach long hours through the Working Time Directive's **48-hour average week**, measured over a reference period of normally 17 weeks, with rest entitlements rather than a mandated premium rate. Overtime pay in those jurisdictions is generally a matter of contract. UK workers can opt out of the 48-hour limit in writing; they cannot opt out of the daily and weekly rest requirements.
+
+Set the threshold field to whatever your contract or jurisdiction actually uses. Forty is a default, not a law of nature.
+
+## Rounding has to be neutral
+
+US federal regulations permit clock times to be rounded, commonly to the nearest quarter hour. The condition is that the practice must be **neutral over time** — rounding down as often as it rounds up, so that over a period it averages out.
+
+A system that rounds a 08:57 arrival forward to 09:00 and a 17:04 departure back to 17:00 is not neutral. It takes seven minutes a day, roughly 30 hours a year, in one direction only. That has been the subject of repeated litigation, and it is not lawful merely because it is automated.
+
+If your employer rounds, check which way it goes over a month. The pattern is easy to see once you look for it and invisible if you do not.
+
+## What counts as hours worked beyond the shift
+
+The clock times on a rota are not the whole of working time. The US regulations at 29 CFR Part 785 are unusually specific, and the principles travel well:
+
+- **Travel between work sites** during the day counts. The ordinary commute from home to the first site does not.
+- **Waiting time counts when you are engaged to wait** — sitting idle because the work has not arrived — but not when you are genuinely free to use the time for yourself.
+- **On-call time counts** when the constraints are tight enough that you cannot use the time effectively for your own purposes. Carrying a phone at home usually does not count; being required to stay on site does.
+- **Preparation and cleanup** integral to the job — putting on required protective equipment, opening up, cashing out — is generally working time.
+- **Training** counts unless it is genuinely voluntary, outside hours, unrelated to the job, and involves no productive work.
+
+None of this is captured by start and finish times, so if any of it applies regularly, add it as its own row rather than letting it disappear.
+
+## Hours in a month, and why salaried pay ignores them
+
+A 40-hour week across a 52-week year is **2,080 hours**, which is 173.33 hours a month on average. No individual month contains that number. Depending on how the weekdays fall, a month holds between about 160 and 184 working hours.
+
+This is why monthly salaried pay is an annual figure divided by twelve rather than hours times a rate — it would otherwise change every month for no reason. It is also why converting a salary to an hourly equivalent needs the annual hours, not the hours in whichever month you happen to be in.
+
+## What this calculator does not do
+
+It applies a **weekly** overtime threshold only. If your jurisdiction or contract has a daily rule, a seventh-consecutive-day rule, or double time above some second threshold, the split here will not match your payslip.
+
+It does not handle shift premiums for nights, weekends or public holidays, which are usually flat uplifts negotiated in a contract rather than anything derivable from the clock. It does not know about paid leave, sick pay or time off in lieu, and it treats every row as time actually worked.
+
+The pay figure is **gross**. Income tax, national insurance or FICA, pension contributions and student loan repayments all come off after this point, and they are what turn a gross weekly figure into the number that reaches your account.
+
+Where this tool and a payslip disagree, the useful first check is the break column, followed by the rounding rule. Between them they account for most timesheet disputes.

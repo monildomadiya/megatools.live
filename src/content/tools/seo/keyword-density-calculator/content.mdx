@@ -1,0 +1,97 @@
+## The formula, and what it leaves out
+
+Keyword density is arithmetic so simple it barely needs a tool:
+
+> Density = (occurrences ÷ total words) × 100
+
+A phrase used 9 times in a 1,200-word article has a density of 0.75%. Used 24 times, 2%. That is the whole calculation.
+
+What it cannot see is everything that actually makes a page relevant. Density treats an occurrence in the `<title>` as identical to one in the last line of a footnote. It cannot tell a heading from body copy, a first-paragraph mention from the ninth repetition, or a genuine use from a stuffed one. It counts strings, and relevance is not a property of strings.
+
+That is worth saying at the top, because this metric is the most over-interpreted number in SEO.
+
+## "1 to 3%" is folklore
+
+Search for a target density and you will find the same range everywhere, stated with total confidence and never with a source. There isn't one. No search engine has ever published a target density, a threshold, or a recommended range.
+
+What Google does publish is the opposite: guidance to write for people, and a spam policy that names **keyword stuffing** explicitly — filling pages with repeated words or phrases to manipulate rankings, including lists of cities or numbers that add nothing for a reader. That is one of a small number of practices the documentation calls out by name, and it can attract a manual action rather than a quiet ranking adjustment.
+
+So the only official signal about density is a warning about the top end. There is no floor to hit.
+
+## Why repetition stops paying
+
+The reason is in the retrieval models themselves, and it predates any of the modern machine-learned ranking systems.
+
+Classical scoring uses term frequency, but never linearly. **BM25**, the standard baseline since the 1990s and still a component of many production systems, passes term frequency through a saturation function:
+
+> score contribution ≈ tf ÷ (tf + k)
+
+With a typical *k* around 1.2, the first occurrence of a term does most of the work, the second adds substantially less, the fifth adds very little, and the twentieth is essentially free of effect. The curve flattens by design, because the model's authors observed that a document mentioning a term twenty times is not ten times more about it than one mentioning it twice.
+
+BM25 also applies **length normalisation**, so a long document cannot accumulate relevance by sheer volume. Density is implicitly handled inside the model, which is exactly why an external density target adds nothing.
+
+Then there is everything layered on top: semantic matching that recognises paraphrase and synonym, passage-level analysis, and quality signals that have nothing to do with term counts at all. A page can rank for phrases it never uses verbatim, which by itself falsifies the density theory of ranking.
+
+## What the number is genuinely useful for
+
+Three things, all of them editorial rather than algorithmic.
+
+**Catching unintentional repetition.** Writers repeat stock phrases without noticing — "in order to", "it's important to note", a product name in every second sentence. Seeing a term at 4% when you thought you had used it lightly is a useful prompt to reread.
+
+**Checking phrase coverage.** A page can use "insurance" often and "travel insurance" never. Single-word counts hide that; two and three-word groupings expose it immediately.
+
+**Spotting stuffed content you did not write.** Text that arrived from a content mill, an old page nobody has read in five years, or something generated to a density target reads badly in a specific, recognisable way. High density on a phrase plus low vocabulary variety is the fingerprint.
+
+### Worked example
+
+A 1,500-word article. The target phrase appears 12 times.
+
+- Density: 12 ÷ 1,500 = **0.8%**
+- Average gap: 1,500 ÷ 12 = one mention roughly every **125 words**
+
+That is about one use every two or three paragraphs, which reads naturally. Push it to 45 uses and density hits 3% — a mention every 33 words, or roughly once per paragraph. Read that aloud and the strain is audible long before any algorithm has an opinion.
+
+The read-aloud test is the reliable one. If it sounds like a person wrote it for another person, the density is fine, whatever the number says.
+
+## Why two tools give two answers
+
+Density figures vary between tools by a surprising margin, and every difference traces to a counting rule nobody agrees on:
+
+- **HTML.** Is alt text counted? Meta description? Navigation and footer? A tool measuring the rendered page and one measuring the article body will differ substantially.
+- **Stop words.** Some tools drop them from the denominator, which raises every density figure by roughly 40% for ordinary English prose.
+- **Hyphens.** Is "long-term" one word or two? Word processors say one; several SEO tools say two.
+- **The phrase denominator.** For a two-word phrase, some tools divide by total words and some by the number of two-word slots, which is total words minus one. The difference is negligible on long text and noticeable on short.
+- **Stemming.** Do "calculate", "calculates" and "calculating" count as the same term? Retrieval systems generally collapse them; most density tools do not.
+
+**This tool's rules**, stated so results are reproducible: text is lowercased, punctuation stripped, apostrophes and hyphens kept, and words split on whitespace. The denominator is **every word, stop words included**. Stop words are excluded from the single-word frequency list only, and phrases are excluded when they begin or end with one — so "rate of return" survives and "of the" does not. No stemming is applied. The target phrase is matched as a contiguous run of words, so the phrase is counted rather than its parts used apart.
+
+Compare a page against itself over time using one tool. Comparing across tools measures the tools.
+
+## Vocabulary variety is the more interesting number
+
+Alongside density, this tool reports unique words as a share of the total. It is a crude type-token ratio, and it says something density cannot.
+
+Ordinary English prose runs somewhere around 40–50% unique on a page of a few hundred words, falling as length grows because common words recur. Text well below that for its length is repetitive in a way no single-term density will reveal — the repetition is spread across many terms rather than concentrated in one.
+
+Very low variety with high density on a commercial phrase is what stuffed content looks like from the outside. It is also what a page assembled from a template looks like, which is why thin programmatic pages tend to score badly on both at once.
+
+## What to do instead of hitting a target
+
+Use the phrase where it belongs and stop counting:
+
+- Once in the **title**, near the front if it reads naturally.
+- Once in the **first paragraph**, because that is where a reader confirms they are in the right place.
+- In a **heading** where a section genuinely covers it.
+- Wherever it is the natural way to say the thing, in the body.
+
+Then cover the subject rather than the string. Related terms, the questions people actually ask, the specifics only someone who has done the thing would include — those do more for relevance than any number of repetitions, and they are the difference between a page that gets linked to and one that gets skimmed.
+
+If a phrase is awkward — the kind of clumsy noun stack search data throws up — use it once where it has to appear and write around it everywhere else. Contorting sentences to hit a density target produces exactly the writing the guidelines warn about.
+
+## What this calculator does not do
+
+It analyses text you paste, not a live URL, so it sees your copy without navigation, boilerplate or markup — usually what you want, but not identical to what a crawler processes.
+
+It does not stem or lemmatise, so plurals and inflections count separately. It does not recognise synonyms or related concepts, which is precisely the dimension modern ranking cares most about. It does not weight by position, markup, or link text, all of which carry more signal than raw frequency.
+
+And it cannot tell you whether your page deserves to rank. Density is one narrow measurement of one narrow property of a text. Treat it as a proofreading aid, which is a real use, rather than a lever, which it is not.

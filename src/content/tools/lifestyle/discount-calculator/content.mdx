@@ -1,0 +1,109 @@
+## The arithmetic, in one line
+
+A percentage discount is a multiplication, not a subtraction.
+
+> Sale price = original × (1 − discount ÷ 100)
+
+For 25% off £80: 80 × 0.75 = **£60**. You can get there by working out the £20 saving and subtracting it, but the one-step version has fewer places to slip, and it generalises to the cases below where the two-step version falls apart.
+
+Going the other way — *what percentage off is this?* — divide the saving by the **original** price:
+
+> Discount % = (original − sale) ÷ original × 100
+
+A jacket down from £120 to £78 saves £42, and 42 ÷ 120 = 35% off. Dividing by £78 instead gives 53.8%, which is a real number but a different one: it is the mark-up needed to get from the sale price back to the original. Discounts and mark-ups are not symmetric, and this is where most of the confusion about them starts.
+
+## Stacked discounts never add up
+
+This is the part worth internalising, because retailers rely on people getting it wrong.
+
+Take 30% off, then a further 20% off at checkout. The instinct says 50%. The reality:
+
+- After 30% off you pay 0.70 of the original.
+- The extra 20% comes off *that*, leaving 0.80 of it.
+- 0.70 × 0.80 = 0.56, so you pay 56% and save **44%**.
+
+Six percentage points went missing, because the second discount applied to a smaller number than the first. The general rule is to multiply the remaining fractions:
+
+> Total remaining = (1 − d₁) × (1 − d₂) × …
+
+Three stacked 20% discounts come to 48.8% off, not 60%. Ten stacked 10% discounts come to 65.1% off, not 100% — which is the clearest demonstration that they cannot possibly add, because if they did you would eventually be paid to take the item.
+
+The gap widens as the discounts get bigger. Two 50% discounts are 75% off, not "free".
+
+## Order does not matter, and that is worth knowing
+
+If you apply a 20% discount and then add 20% tax, you get exactly what you get by adding the tax and then discounting. Multiplication commutes, so 0.80 × 1.20 and 1.20 × 0.80 are the same number.
+
+The same is true of stacked discounts: 30% then 20% gives the same total as 20% then 30%. If a shop tells you the order of your codes matters, either the codes have different bases — one applies to the whole basket and one to a single line — or something else is going on.
+
+Where order genuinely does matter is exclusions. A 20% code that excludes sale items, applied on top of a sale price, gives nothing at all; applied to a full-price basket it gives 20%. That is not arithmetic, it is terms and conditions, and it is the usual explanation when a checkout total does not match a mental estimate.
+
+### Worked example — a real basket
+
+A £220 coat, 30% off in the sale, an extra 15% newsletter code, VAT already included in the ticket price:
+
+- After 30%: 220 × 0.70 = £154.00
+- After a further 15%: 154 × 0.85 = **£130.90**
+- Saving: £89.10, which is **40.5% off** — not 45%.
+
+That 4.5-point gap on this one item is £9.90. Across a full basket in a seasonal sale it is the difference between the budget you planned and the total you pay.
+
+## Multi-buy offers, converted to percentages
+
+Multi-buys are discounts wearing a costume. Converting them makes them comparable:
+
+| Offer | Effective discount | On how many items |
+| --- | --- | --- |
+| Buy one get one free | 50% | 2 |
+| Buy one get one half price | 25% | 2 |
+| Three for two | 33.3% | 3 |
+| Three for the price of 2.5 | 16.7% | 3 |
+| Buy two get 20% off both | 20% | 2 |
+
+Every one of these is conditional on quantity, and that is the catch. Buy one get one free is 50% off only if the second item is worth having. If it is not, the offer is 0% off one item and a bin bag with an extra thing in it. The honest way to judge a multi-buy is to ask what you would have bought at the plain price, and count only that.
+
+Supermarket multi-buys on perishables are the sharpest version of this. A three-for-two on fresh produce that goes off before you eat the third is a price rise.
+
+## "Up to 70% off"
+
+A headline like this is a statement about the maximum of a distribution, not its centre. Somewhere in the sale, at least one item is 70% off. Nothing is promised about anything else.
+
+In practice the deepest reductions concentrate where demand is thinnest — the sizes at the ends of the range, the colours that did not sell, last season's variants. That is not a trick; it is what clearance is for. But it means the headline number is close to useless for predicting what you will find, and the modal discount in an "up to 70%" sale is often 20–30%.
+
+The same reading applies to "was £X, now £Y" on a single item, where the interesting question is what £X ever was.
+
+## What a "was" price is allowed to be
+
+Reference prices are regulated, because a discount from a fictitious original is just a price with a story attached.
+
+In the **EU**, Article 6a of the Price Indication Directive — added by the 2019 Omnibus Directive and in force since 2022 — requires that any announced price reduction states the **lowest price the trader applied during at least the previous 30 days**. That closed a well-worn loophole in which a price was raised for a week specifically so it could be cut for a month.
+
+In the **United States**, the FTC's Guides Against Deceptive Pricing require a former price to have been a bona fide offering price — one at which the item was openly and actively offered for a reasonably substantial period — rather than a fictitious higher price set up to be marked down.
+
+In the **UK**, misleading price comparisons fall under the unfair commercial practices regime, now carried by the Digital Markets, Competition and Consumers Act 2024, with the Competition and Markets Authority enforcing it.
+
+The practical consequence for a shopper: a "was" price that has never been paid by anyone is not a saving, and in most of these jurisdictions it is not lawful either. Price history tools exist for exactly this, and they are worth a glance before a large purchase during a sale event.
+
+## Comparing offers that are not the same size
+
+Two discounts on two different pack sizes cannot be compared as percentages at all. Reduce both to a unit price after the discount:
+
+> Unit price = discounted price ÷ quantity
+
+A 500 g jar at £4.20 with 30% off is £2.94, or 58.8p per 100 g. A 750 g jar at £5.60 with 15% off is £4.76, or 63.5p per 100 g. The smaller discount on the bigger jar loses here, and there is no way to see that from the percentages.
+
+This is why unit pricing on shelf labels is mandatory for most pre-packed goods in the UK and the EU. Where it is displayed, use it — it is the only figure on the label that is directly comparable across products.
+
+## Rounding, and the penny you were not expecting
+
+Discounts rarely land on whole pennies. 33% off £14.99 is £10.0433, which a till has to round somewhere. Different retailers round the line, the discount, or the basket, and each choice can shift a total by a penny or two.
+
+This calculator rounds each displayed figure to two decimal places and derives everything from the price you typed, so the parts always reconcile. A one-penny disagreement with a receipt is normal.
+
+## What this calculator does not do
+
+It handles one item at a time. A basket with different discounts on different lines has to be run per line and added up, since there is no single blended percentage that gives the right total unless the lines happen to be equal.
+
+It does not model conditional offers — spend thresholds, free delivery over a limit, loyalty points that are worth something later, or cashback that arrives in three months. Points and cashback are genuinely worth counting, but at their realistic redemption value rather than their face value.
+
+And it cannot tell you whether the original price was real. That is the one input it takes entirely on trust, and it is the one most worth checking.

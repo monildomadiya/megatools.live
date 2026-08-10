@@ -1,0 +1,104 @@
+## Hex is just three bytes
+
+`#4F46E5` is not a colour name. It is three pairs of base-16 digits, one byte per channel, in the order red, green, blue.
+
+- `4F` = 4×16 + 15 = **79** red
+- `46` = 4×16 + 6 = **70** green
+- `E5` = 14×16 + 5 = **229** blue
+
+So `#4F46E5` is exactly `rgb(79 70 229)`. The two notations carry identical information; hex is compact and RGB is readable, and neither can express anything the other cannot.
+
+Three-digit hex is shorthand in which each digit is doubled: `#F60` means `#FF6600`, not `#F06000`. That is why `#FFF` is white and why the shorthand can only reach 4,096 of the 16.7 million available colours — it is a convenience for round values, not a compression.
+
+An eight-digit hex adds an alpha byte: `#4F46E580` is the same colour at 50% opacity. This converter reads it and reports the opaque colour, because alpha has no meaning until it composites against something.
+
+## HSL is the same colour, described differently
+
+RGB tells a screen what to do. HSL tells a person what the colour is.
+
+- **Hue** is an angle on the colour wheel, 0–360°. Red is 0, green 120, blue 240.
+- **Saturation** is 0% for grey through 100% for the pure hue.
+- **Lightness** is 0% for black, 50% for the pure hue, 100% for white.
+
+The advantage is that it is manipulable by hand. A palette of related shades is the same hue and saturation at different lightness values. A complementary colour is the hue plus 180°. Neither operation has an obvious form in hex.
+
+The catch is that lightness in HSL is not perceived brightness. `hsl(60 100% 50%)` is a blazing yellow and `hsl(240 100% 50%)` is a dark blue, yet both claim 50% lightness. That is the single biggest reason a palette built by rotating hue at fixed lightness looks uneven — and the reason the newer perceptual spaces exist.
+
+**HSV** (also called HSB) uses the same hue but redefines the third axis: 100% value is the brightest form of the hue, and white requires saturation at zero as well. Design tools tend to expose HSV; CSS uses HSL. Mixing them up produces colours that are close but consistently wrong.
+
+## Contrast is about luminance, not about the numbers
+
+Two colours can have similar hex values and wildly different visual weight, because human vision is not equally sensitive across the spectrum. WCAG's contrast formula is built on that fact.
+
+First each channel is normalised to 0–1 and linearised, undoing the sRGB transfer curve:
+
+> C = c/12.92 if c ≤ 0.03928, otherwise ((c + 0.055) / 1.055)^2.4
+
+Then the three linear channels are weighted into a single relative luminance:
+
+> L = 0.2126·R + 0.7152·G + 0.0722·B
+
+Those coefficients are the whole story. **Green carries 71.5% of perceived brightness, red 21.3%, blue 7.2%.** Pure blue on black gives a contrast ratio of about 2.4:1 and fails for text. Pure yellow on black gives about 19.6:1 and passes everything. Both are fully saturated primaries at maximum channel values.
+
+Finally the ratio:
+
+> Contrast = (L_lighter + 0.05) ÷ (L_darker + 0.05)
+
+The 0.05 term models ambient light reflecting off the screen, which is why the scale tops out at 21:1 for black on white rather than running to infinity.
+
+### The thresholds worth memorising
+
+| Requirement | Ratio | Applies to |
+| --- | --- | --- |
+| WCAG 2.2 AA, normal text | 4.5:1 | Body copy below the large-text size |
+| WCAG 2.2 AA, large text | 3:1 | 18.66px bold or 24px regular and above |
+| WCAG 2.2 AA, non-text | 3:1 | UI component boundaries, meaningful graphics |
+| WCAG 2.2 AAA, normal text | 7:1 | Enhanced conformance |
+| WCAG 2.2 AAA, large text | 4.5:1 | Enhanced conformance |
+
+Large text is defined by rendered size, not by heading level. An `<h3>` set at 16px is normal text and needs 4.5:1.
+
+## The failures that survive a design review
+
+**Placeholder text.** Almost every default placeholder colour fails. It is still text, and the criterion still applies.
+
+**Disabled controls.** WCAG exempts inactive components from the contrast requirements, which is why so many disabled buttons are unreadable. Exempt is not the same as good; if a user has to read the label to know what they cannot do, it needs contrast.
+
+**Text over images.** The ratio depends on which pixel the letter lands on. A photograph with a bright patch will fail somewhere even if the average passes. A scrim — a semi-transparent overlay between image and text — is the usual fix, and its effect must be measured on the composited result.
+
+**Brand colours on white.** A large share of corporate palettes fail at body-text sizes. The standard workaround is a darker variant of the brand colour reserved for text, with the original kept for large display use and non-text elements.
+
+**Semi-transparent colours.** `rgba(0 0 0 / 0.5)` over white is `#808080`, and that is the value to test. Testing the declared colour instead reports a ratio the user never actually sees.
+
+**Focus indicators.** These are non-text UI and need 3:1 against the adjacent background — including in whichever state the component happens to be in when focused.
+
+## CMYK, and why the figure here is only a guide
+
+The CMYK values this tool reports come from the standard naive conversion: subtract each channel from one, extract the common black, and scale what remains.
+
+That conversion knows nothing about the press, the ink set, the paper stock or the colour profile — all of which move the result substantially. A colour that looks right on a coated sheet can look muddy on uncoated stock with the same numbers.
+
+RGB is also a fundamentally larger space than CMYK for saturated colours. Vivid greens, oranges and blues that a screen shows happily are simply not printable, and the profile has to decide what to substitute. That decision is what an ICC profile encodes and what no formula can supply.
+
+Use the figure here to sanity-check a colour, not to specify one for print. For real print work, convert in software with the profile for the actual press and stock.
+
+## Beyond sRGB
+
+Everything above assumes sRGB, the colour space the web was built on and the one hex and `rgb()` can describe. CSS Color Level 4 goes further, and the additions are worth knowing about:
+
+- **`oklch()`** — a perceptual space where lightness means what it looks like. Rotating hue at fixed lightness produces colours of genuinely equal weight, which sRGB and HSL do not.
+- **`display-p3`** — a wider gamut supported by most recent screens, reaching saturated reds and greens sRGB cannot express at all.
+- **`lab()` and `lch()`** — device-independent spaces derived from CIELAB, useful for colour matching across media.
+- **`color-mix()`** — mixing in a named space, so a blend can be specified in OKLCH and rendered correctly rather than being averaged channel by channel in sRGB.
+
+The practical payoff shows up in gradients. A blue-to-yellow gradient in sRGB passes through a desaturated grey in the middle, because the channel-wise average of two opposing colours is grey. The same gradient in OKLCH stays saturated the whole way. If a gradient in your design looks dead in the middle, that is what happened.
+
+Support is now broad, but a fallback in sRGB is still the safe pattern for anything critical.
+
+## What this converter does
+
+It reads hex — with or without a leading hash, three, six or eight digits — as well as `rgb()` and `hsl()` in comma or space-separated form. It reports the same colour as HEX, RGB, HSL, HSV and approximate CMYK, gives the WCAG relative luminance, and computes contrast against white, against black, and against any background you enter.
+
+It does not convert to or from OKLCH, Lab or display-p3, all of which need a working colour-management path to be meaningful rather than decorative. It ignores alpha, for the reason given above: an alpha value has no colour until it composites.
+
+Everything runs in your browser. Nothing you paste is sent anywhere.

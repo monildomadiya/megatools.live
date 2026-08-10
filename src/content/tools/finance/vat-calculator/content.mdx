@@ -1,0 +1,94 @@
+## The one mistake that makes VAT arithmetic wrong
+
+If you take £120 and subtract 20%, you get £96. That is not the net price of a £120 item at 20% VAT. The net price is £100.
+
+The reason is that the percentage was never applied to £120. It was applied to £100, the net figure, and the result was added on. Working backwards from the total therefore means undoing a multiplication, not performing a subtraction:
+
+> Gross = Net × (1 + rate)
+>
+> Net = Gross ÷ (1 + rate)
+
+At 20% that is a multiply by 1.2 going forwards and a divide by 1.2 coming back. The £4 gap between £96 and £100 is 20% of the £20 of tax — the tax on the tax, which the subtraction method invents.
+
+This is the single most common error in VAT arithmetic, and it gets worse as the rate rises. At Hungary's 27%, subtracting the percentage from the gross under-reports the net by nearly 6%.
+
+## The VAT fraction
+
+There is a shortcut for pulling the tax straight out of a VAT-inclusive figure without computing the net first:
+
+> VAT = Gross × rate ÷ (100 + rate)
+
+At 20%, that fraction is 20/120, which simplifies to **1/6**. So £120 × 1/6 = £20. At the UK reduced rate of 5% it is 5/105, or **1/21**. At 23% it is 23/123.
+
+Retailers and bookkeepers use these constantly, because a till roll gives you the gross and the accounts need the split. Both this shortcut and the division method give the same answer; the fraction is just faster in your head.
+
+### Worked example — adding VAT
+
+A consultant quotes £2,400 for a piece of work, exclusive of tax, and is registered at the UK standard rate.
+
+- VAT: 2,400 × 0.20 = **£480**
+- Invoice total: 2,400 + 480 = **£2,880**
+
+The client, if VAT-registered, reclaims the £480 as input tax. The real cost to them is £2,400. This is why business-to-business prices are almost always quoted net — the tax is a cash-flow item rather than a cost.
+
+### Worked example — removing VAT
+
+A receipt shows £47.94 for office supplies, VAT inclusive at 20%.
+
+- Net: 47.94 ÷ 1.2 = **£39.95**
+- VAT: 47.94 − 39.95 = **£7.99**
+
+Or straight to the tax with the fraction: 47.94 ÷ 6 = £7.99. Both routes agree, which is the point of the check.
+
+## What VAT actually is
+
+VAT is charged at every stage of a supply chain, but only on the value added at that stage — which is what stops it compounding into a tax on a tax on a tax the way a naive turnover tax would.
+
+A timber merchant sells wood to a furniture maker for £1,000 plus £200 VAT. The furniture maker sells a table to a shop for £1,800 plus £360. The shop sells it to a customer for £3,000 plus £600.
+
+Each business pays the tax authority the difference between the VAT it charged and the VAT it paid: £200, then £160, then £240. Total collected: £600 — exactly the tax on the final consumer price, and nothing more. The businesses in the middle were collectors, not payers.
+
+That mechanism is why the distinction between zero-rated and exempt matters so much:
+
+- **Zero-rated** supplies are taxable, at a rate of 0%. No VAT is charged to the customer, but the business can still reclaim the VAT on its own inputs. Most food, books, newspapers and children's clothing sit here in the UK.
+- **Exempt** supplies are outside the system. No VAT is charged, and none of the input tax attributable to them can be reclaimed. Insurance, postage stamps, most financial services and some education and health supplies are exempt.
+
+To a shopper the two look identical. To the supplier, one leaves the input tax recoverable and the other leaves it stuck as a cost.
+
+## The UK rates, and how often they move
+
+The standard rate has been **20%** since 4 January 2011. It was 17.5% for most of the two decades before that, briefly 15% during the 2008–09 recession, and 8% when it was introduced in 1973.
+
+The **reduced rate of 5%** covers domestic fuel and power, children's car seats, mobility aids for older people, and certain energy-saving materials installed in homes. The **zero rate** covers most food (but not catering, confectionery, crisps, or hot takeaway), books and newspapers including their digital editions, children's clothing and footwear, and new-build residential construction.
+
+The headline rate is stable; the lists are not. Categories move between rates in Budgets, and the boundaries within them generate a steady stream of tribunal cases — the long-running arguments over whether particular snacks are cakes or biscuits are about exactly this, because one is zero-rated and the other is not.
+
+If the answer matters for a filing rather than an estimate, check HMRC's current rate guidance for the specific good or service. Do not infer it from a similar product.
+
+## Registration, and the threshold
+
+A UK business must register for VAT once its VAT-taxable turnover exceeds the threshold in any rolling twelve-month period — not a tax year, a rolling twelve months — or when it expects to exceed it in the next thirty days alone. That threshold was set at **£90,000 from 1 April 2024**, having sat at £85,000 for the seven years before.
+
+Voluntary registration below the threshold is common and often sensible. If your customers are themselves VAT-registered, the VAT you charge costs them nothing, and registering lets you reclaim the tax on your own purchases. If your customers are consumers, registering means either raising prices by a fifth or absorbing the tax out of your margin — which is why the threshold produces a visible cluster of small businesses whose turnover stops just below it.
+
+## Outside the UK
+
+The EU VAT system is set by Council Directive 2006/112/EC, which harmonises the structure but not the numbers. The Directive requires a standard rate of at least 15% and permits reduced rates no lower than 5% on a defined list of categories.
+
+Within that, member states diverge widely. Luxembourg's standard rate is 17%; Hungary's is 27%. Ireland runs 23% standard with 13.5% and 9% reduced rates. Germany is 19% with 7% reduced. The rate that applies is the rate of the country where the supply is treated as taking place, which for digital services sold to consumers is the customer's country, not the seller's.
+
+The United States has no VAT at all. It uses retail sales tax, charged once at the final sale rather than at each stage, and set by states and localities rather than nationally. If you are working with US figures, the sales tax calculator is the right tool — the arithmetic looks similar but the mechanism, and everything that follows from it, is not.
+
+## Rounding, and why your total may differ by a penny
+
+VAT rarely divides into whole pennies. HMRC's guidance permits VAT calculated on the total of an invoice to be rounded down to the nearest penny — a concession, because rounding up on every line would systematically over-collect. Retailers calculating line by line may instead round to the nearest penny, or work from the gross using the VAT fraction.
+
+Different accounting packages make different legitimate choices here. This calculator rounds each figure to two decimal places and derives net, VAT and gross from a single input so they always reconcile to each other. On a multi-line invoice, a one-penny difference against your software is normal and is not an error in either.
+
+## What this calculator does not do
+
+It handles one rate at a time. An invoice mixing standard-rated and zero-rated lines has to be split and run separately — there is no single blended rate that gives the right answer.
+
+It does not implement the Flat Rate Scheme, under which a small business pays a fixed percentage of its gross turnover instead of the difference between output and input tax. It does not handle the reverse charge, where the customer accounts for the VAT rather than the supplier, which applies to most construction services and to many cross-border business supplies. It does not deal with margin schemes for second-hand goods, partial exemption, or the place-of-supply rules that decide which country's VAT applies in the first place.
+
+Those are the situations where a general calculator stops being useful and an accountant starts. What is here is the arithmetic — reliable, and the part people get wrong most often.

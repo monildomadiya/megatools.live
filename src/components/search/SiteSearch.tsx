@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
-import { countFor, populatedCategories, searchTools } from '@/lib/tools/search';
+import { countFor, populatedCategories, searchTools, toolCount } from '@/lib/tools/search';
 
 /**
  * Site-wide search, opened with the header button or Cmd/Ctrl-K.
@@ -120,10 +120,15 @@ export function SiteSearch() {
           restoreFocusTo.current = event.currentTarget;
           setOpen(true);
         }}
-        className="group flex h-10 items-center gap-2 rounded-full border border-line bg-panel px-3 text-sm text-ink-500 transition-colors hover:border-brand-400 hover:text-ink-700 sm:w-60"
+        // Shaped like the field it opens rather than like a button. At a
+        // thousand tools this is the primary way in, and an icon gives no clue
+        // that the whole catalogue is behind it.
+        className="group flex h-10 w-10 min-w-0 items-center gap-2.5 rounded-2xl border border-line bg-panel px-2.5 text-sm text-ink-500 transition-colors hover:border-brand-400 hover:text-ink-700 sm:h-11 sm:w-full sm:max-w-sm sm:px-3.5"
       >
         <SearchGlyph className="h-4 w-4 shrink-0" />
-        <span className="hidden sm:inline">Search tools</span>
+        <span className="hidden truncate sm:inline">
+          Search {toolCount} calculators…
+        </span>
         <kbd className="ml-auto hidden shrink-0 rounded-md border border-line bg-panel-2 px-1.5 py-0.5 font-mono text-[11px] font-medium text-ink-500 sm:inline">
           ⌘K
         </kbd>

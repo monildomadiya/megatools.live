@@ -35,6 +35,9 @@ export function countFor(slug: string): number {
   return countByCategory.get(slug) ?? 0;
 }
 
+/** Total published tools, for the labels that quote it. */
+export const toolCount = allTools.length;
+
 /** Categories that actually have tools on them — the browse fallback. */
 export const populatedCategories = categories.filter((c) => countFor(c.slug) > 0);
 

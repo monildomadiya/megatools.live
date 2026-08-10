@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { categories } from '@/lib/tools/categories';
 import { allTools, getToolsByCategory } from '@/lib/tools/registry';
-import { site } from '@/lib/site';
+import { network, site } from '@/lib/site';
 
 const legalLinks = [
   { href: '/privacy-policy', label: 'Privacy Policy' },
@@ -140,6 +140,38 @@ export function Footer() {
             );
           })}
         </nav>
+
+        {/* ----------------------------------------------------------------
+            Sister sites. Set apart from the site and legal links below rather
+            than mixed in with them, because they leave the site and a reader
+            is owed that signal before they click. The label says "us" for the
+            same reason — these are ours, and pretending otherwise would be the
+            one dishonest thing in the footer.
+        ---------------------------------------------------------------- */}
+        <div className="flex flex-col gap-4 border-b border-line py-9 sm:flex-row sm:items-center sm:gap-8">
+          <p className="eyebrow eyebrow-muted shrink-0">Also from us</p>
+
+          <ul className="flex flex-wrap gap-x-8 gap-y-3">
+            {network.map((entry) => (
+              <li key={entry.url}>
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="group inline-flex flex-wrap items-baseline gap-x-2 text-sm"
+                >
+                  <span className="font-bold text-ink-900 transition-colors group-hover:text-brand-700">
+                    {entry.name}
+                    <span aria-hidden className="ml-1 text-ink-400">
+                      ↗
+                    </span>
+                  </span>
+                  <span className="text-ink-500">{entry.blurb}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* ----------------------------------------------------------------
             Base. Site and legal links share one row — they are the same kind

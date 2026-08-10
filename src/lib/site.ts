@@ -18,6 +18,31 @@ export const site = {
   founded: '2024',
 } as const;
 
+/**
+ * Other sites run by the same person.
+ *
+ * Labelled as ours wherever they appear rather than dressed up as neutral
+ * recommendations. That is the honest framing and also the durable one: an
+ * undisclosed ring of cross-linked sites is what search engines treat as a link
+ * scheme, whereas a named "also from us" row is ordinary practice for anyone
+ * running more than one site.
+ *
+ * Followed links, deliberately — same reasoning as the citations on tool pages.
+ * A link we would not vouch for should not be here at all.
+ */
+export const network = [
+  {
+    name: 'BruttoNettoCalculator.com',
+    url: 'https://bruttonettocalculator.com/',
+    blurb: 'German gross-to-net salary and tax calculators',
+  },
+  {
+    name: 'PromptKing',
+    url: 'https://promptking.in/',
+    blurb: 'A tested library of AI prompts',
+  },
+] as const;
+
 /** Absolute URL builder. Every canonical, OG url, and sitemap entry goes through this. */
 export function absoluteUrl(path = '/'): string {
   const clean = path.startsWith('/') ? path : `/${path}`;

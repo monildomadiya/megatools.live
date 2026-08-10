@@ -645,7 +645,15 @@
   ------------------------------------------------------------------------- */
   .prose-content {
     color: var(--color-ink-700);
-    font-size: 1.0625rem;
+    /* 18px rather than 17.
+
+       The body column runs the site's full 72rem now, which puts a 17px line at
+       roughly 125 characters — well past the 60-75 that reads comfortably, and
+       long enough that the eye starts losing the line on the return sweep. The
+       measure is a deliberate choice and is staying, so the type does the
+       correcting instead: a point of size takes it back to about 113 without
+       narrowing anything or changing a single layout. */
+    font-size: 1.125rem;
     line-height: 1.75;
   }
 

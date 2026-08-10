@@ -96,6 +96,19 @@ export function Header() {
         className={`glass-bar pointer-events-auto relative mx-auto max-w-6xl ${
           scrolled ? 'glass-bar-scrolled' : ''
         }`}
+        // Inline rather than in the stylesheet, and this is not a style choice.
+        // Declared in a `@layer components` rule the filter was being dropped —
+        // the bar kept its fill, its radius and its shadow while the blur never
+        // painted, which is why the headline stayed crisp through the glass.
+        // Inline styles sit outside the cascade layers entirely and cannot be
+        // stripped by a build step, which is also how the sister site declares
+        // it. The class still carries everything else.
+        style={{
+          backdropFilter: scrolled ? 'blur(32px) saturate(2)' : 'blur(24px) saturate(1.8)',
+          WebkitBackdropFilter: scrolled
+            ? 'blur(32px) saturate(2)'
+            : 'blur(24px) saturate(1.8)',
+        }}
       >
         <div className="flex h-[64px] items-center gap-2 px-3 sm:h-[68px] sm:gap-3 sm:px-4 md:h-[72px] md:px-5">
           <Link

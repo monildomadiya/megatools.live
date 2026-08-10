@@ -11,7 +11,10 @@ export function RelatedTools({ tools }: { tools: ToolWithHref[] }) {
         Related calculators
       </h2>
 
-      <ul className="mt-7 grid gap-4 sm:grid-cols-2">
+      {/* Four across at desktop now that this sits in the full-width column —
+          at two, the cards stretch to half of 72rem and the description line
+          runs longer than the card is tall. */}
+      <ul className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {tools.map((tool) => (
           <li key={tool.href}>
             <Link

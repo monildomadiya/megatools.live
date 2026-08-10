@@ -67,10 +67,14 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
       />
 
       <section className="hero-bg isolate overflow-hidden px-4 pb-24 pt-6 sm:px-6 sm:pb-28 sm:pt-8">
-        <div className="relative z-10 mx-auto max-w-3xl">
+        {/* The band runs to the site's full container width so the header's
+            left edge lines up with the calculator below it, but the text inside
+            stays at reading width — a 70-character measure does not become a
+            better one because the panel under it got wider. */}
+        <div className="relative z-10 mx-auto max-w-6xl">
           <Breadcrumbs crumbs={crumbs} />
 
-          <header className="mt-6">
+          <header className="mt-6 max-w-3xl">
             {category && (
               <span className="inline-flex items-center gap-2.5">
                 <span
@@ -119,19 +123,39 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+      {/* Two widths on this page, and the split is deliberate.
+
+          The calculator runs to the site's full container width, the same
+          max-w-6xl the header, the hubs and the homepage use, so a tool page
+          stops looking like a narrower page than the one that linked to it. It
+          is also the part that benefits: fields sit side by side instead of
+          stacking, and a results table gets room for its columns.
+
+          The prose does not follow it. Long-form body copy has an optimal
+          measure of roughly 60-75 characters, and a 1,200-word explanation set
+          across 72rem is materially harder to read than the same words set
+          across 48. Widening it would be copying the container, not the intent. */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="relative z-20 -mt-16 sm:-mt-20">{calculator}</div>
 
-        <AdSlot slotId="tool-below-calculator" format="in-article" />
+        {/* Left-aligned rather than centred, so the body copy starts on the
+            same vertical line as the H1 above it and the panel beside it. A
+            centred column under a full-width panel reads as a different page
+            pasted in. */}
+        <div className="max-w-3xl">
+          <AdSlot slotId="tool-below-calculator" format="in-article" />
 
-        <div className="prose-content mt-14">{children}</div>
+          <div className="prose-content mt-14">{children}</div>
 
-        <FaqAccordion faqs={tool.faqs} />
+          <FaqAccordion faqs={tool.faqs} />
 
-        <AdSlot slotId="tool-below-faq" format="in-article" />
+          <AdSlot slotId="tool-below-faq" format="in-article" />
 
-        <SourcesList sources={tool.sources} />
+          <SourcesList sources={tool.sources} />
+        </div>
 
+        {/* Related tools are cards, not prose, so they take the full width and
+            lay out as a row rather than a stack. */}
         <RelatedTools tools={related} />
       </div>
     </>

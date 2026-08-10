@@ -18,7 +18,13 @@ import { searchTools } from '@/lib/tools/search';
  * that needs a page of its own here — every answer is a single tool, so an
  * extra navigation would only put a list between the reader and the calculator.
  */
-export function HeroSearch({ suggestions }: { suggestions: { href: string; name: string }[] }) {
+export function HeroSearch({
+  suggestions = [],
+}: {
+  /** Optional one-tap shortcuts under the field. Omitted on the homepage,
+   *  which deliberately names no individual calculator. */
+  suggestions?: { href: string; name: string }[];
+}) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
   const [focused, setFocused] = useState(false);

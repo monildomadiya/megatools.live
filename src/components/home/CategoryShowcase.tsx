@@ -4,102 +4,84 @@ import { categories } from '@/lib/tools/categories';
 import { getToolsByCategory } from '@/lib/tools/registry';
 
 /**
- * Category cards that list the tools inside them.
+ * The eight categories, as the homepage's main content.
  *
- * A card that says only "Finance — 8 tools" asks the reader to take a second
- * navigation on faith. Naming the tools on the card answers the question the
- * click was going to ask, and it puts every tool one hop from the homepage
- * instead of two, which is worth something to a crawler as well as to a person.
+ * These cards name no individual tool on purpose. The homepage's job is to get
+ * a visitor into the right section — which of eight subjects their question
+ * belongs to — and a card that also lists five calculators makes that choice
+ * out of forty rather than out of eight. Naming the tools is the hub page's
+ * job, and it does it on a page where that is the only question being asked.
  *
- * The header band is tinted with the category's own accent rather than a shared
- * brand colour: on a page showing eight of these at once, the tint is what makes
- * the grid scannable before any word has been read.
+ * Each card opens with a filled band in the category's own accent, carrying an
+ * oversized watermark of its icon. That band is what makes a grid of eight read
+ * as eight distinct places rather than eight instances of one card: the colour
+ * is recognisable before a single word has been read, and it is the same colour
+ * the reader will meet again on the hub, on the tool page header, and on every
+ * card belonging to that category.
  */
-
-/** How many tools each card names before it falls back to a count. */
-const NAMED_TOOLS = 5;
-
 export function CategoryShowcase() {
-  const populated = categories.filter((category) => getToolsByCategory(category.slug).length > 0);
+  const shown = categories.filter((category) => getToolsByCategory(category.slug).length > 0);
 
   return (
-    <ul className="grid gap-5 lg:grid-cols-2">
-      {populated.map((category) => {
+    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {shown.map((category) => {
         const tools = getToolsByCategory(category.slug);
         const accent = categoryAccent(category.slug);
-        const named = tools.slice(0, NAMED_TOOLS);
-        const remaining = tools.length - named.length;
 
         return (
           <li key={category.slug}>
-            <div className="card group flex h-full flex-col overflow-hidden p-0 transition-colors duration-300 hover:border-ink-300">
+            <Link
+              href={`/tools/${category.slug}`}
+              className="card card-lift group flex h-full flex-col overflow-hidden p-0 hover:border-ink-300"
+            >
               <div
-                className="flex items-center gap-3.5 border-b border-line px-5 py-4"
+                className="relative h-28 overflow-hidden"
                 style={{
-                  backgroundColor: `color-mix(in oklab, ${accent} 7%, transparent)`,
+                  backgroundImage: `linear-gradient(135deg, ${accent}, color-mix(in oklab, ${accent} 62%, black))`,
                 }}
               >
-                <span
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                  style={{
-                    color: accent,
-                    backgroundColor: `color-mix(in oklab, ${accent} 14%, white)`,
-                  }}
-                >
-                  <CategoryIcon category={category.slug} className="h-5 w-5" />
-                </span>
+                {/* Oversized, cropped, and low-contrast — a texture on the band
+                    rather than a second icon competing with the one below it. */}
+                <CategoryIcon
+                  category={category.slug}
+                  className="absolute -bottom-6 -right-5 h-32 w-32 text-white/20 transition-transform duration-500 group-hover:scale-110"
+                />
 
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-display text-lg font-bold leading-tight tracking-tight text-ink-900">
-                    {category.name}
-                  </h3>
+                <div className="relative flex h-full flex-col justify-between p-5">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/20 text-white backdrop-blur-sm">
+                    <CategoryIcon category={category.slug} className="h-5 w-5" />
+                  </span>
                 </div>
-
-                <span
-                  className="numeric shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold"
-                  style={{
-                    color: accent,
-                    backgroundColor: `color-mix(in oklab, ${accent} 12%, white)`,
-                  }}
-                >
-                  {tools.length} {tools.length === 1 ? 'tool' : 'tools'}
-                </span>
               </div>
 
               <div className="flex flex-1 flex-col p-5">
-                <p className="text-sm leading-relaxed text-ink-600">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="font-display text-lg font-extrabold leading-tight tracking-tight text-ink-900">
+                    {category.name}
+                  </h3>
+                  <span
+                    className="numeric shrink-0 text-sm font-bold"
+                    style={{ color: accent }}
+                  >
+                    {tools.length}
+                  </span>
+                </div>
+
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-ink-600">
                   {category.metaDescription}
                 </p>
 
-                <ul className="mt-4 flex-1 space-y-0.5">
-                  {named.map((tool) => (
-                    <li key={tool.href}>
-                      <Link
-                        href={tool.href}
-                        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-ink-700 transition-colors hover:bg-panel-2 hover:text-ink-900"
-                      >
-                        <span
-                          aria-hidden
-                          className="h-1.5 w-1.5 shrink-0 rounded-full"
-                          style={{ backgroundColor: accent }}
-                        />
-                        <span className="truncate">{tool.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href={`/tools/${category.slug}`}
-                  className="mt-4 inline-flex items-center gap-1.5 self-start border-t border-transparent pt-1 text-sm font-bold text-brand-700 hover:underline"
-                >
-                  {remaining > 0
-                    ? `All ${tools.length} ${category.name.toLowerCase()} tools`
-                    : `Explore ${category.name.toLowerCase()}`}
-                  <span aria-hidden>→</span>
-                </Link>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-brand-700">
+                  Explore {category.name.toLowerCase()}
+                  <span
+                    aria-hidden
+                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </span>
               </div>
-            </div>
+            </Link>
           </li>
         );
       })}

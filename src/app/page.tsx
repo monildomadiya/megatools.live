@@ -1,19 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CategoryShowcase } from '@/components/home/CategoryShowcase';
-import { HeroDemo } from '@/components/home/HeroDemo';
 import { StatsMarquee } from '@/components/home/StatsMarquee';
 import { HeroSearch } from '@/components/search/HeroSearch';
-import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { categories } from '@/lib/tools/categories';
-import {
-  allTools,
-  getToolByKey,
-  getToolsByCategory,
-  latestUpdate,
-  recentTools,
-} from '@/lib/tools/registry';
+import { allTools, getToolsByCategory, latestUpdate } from '@/lib/tools/registry';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
@@ -90,26 +82,9 @@ const steps = [
   },
 ];
 
-/**
- * The four tools the hero offers as one-tap shortcuts. Hand-picked rather than
- * derived from a popularity metric the site does not collect — these are the
- * queries people arrive with, one from each of the largest categories.
- */
-const POPULAR_KEYS = [
-  'health/bmi-calculator',
-  'finance/mortgage-calculator',
-  'math/percentage-calculator',
-  'finance/vat-calculator',
-];
-
 export default function HomePage() {
   const populated = categories.filter((c) => getToolsByCategory(c.slug).length > 0);
-  const latest = recentTools.slice(0, 5);
   const updated = latestUpdate();
-
-  const popular = POPULAR_KEYS.map((key) => getToolByKey(key))
-    .filter((tool): tool is NonNullable<typeof tool> => tool !== undefined)
-    .map((tool) => ({ href: tool.href, name: tool.name }));
 
   // Facts about the build, not claims about the audience. Every one of these is
   // checkable from the site itself, which is what lets them run in a marquee
@@ -127,27 +102,29 @@ export default function HomePage() {
   return (
     <>
       {/* ------------------------------------------------------------------
-          Hero. Search first, then a working calculator — the two things a
-          visitor actually came for, both above the fold. Everything that used
-          to occupy this space (stats, recently added) moved below it: none of
-          it helps someone who arrived wanting to convert a number.
+          Hero. A statement, a search field, and nothing else.
+
+          No calculator runs here and no individual tool is named. The homepage
+          answers one question — which of these eight subjects does yours belong
+          to — and every element that offered a specific tool instead was
+          answering a question the visitor had not asked yet.
       ------------------------------------------------------------------ */}
       {/* No `overflow-hidden` here, unlike the other hero bands: the search
           field's result list is absolutely positioned and has to be allowed to
           hang past the bottom of the section. The decorative layers are all
-          `inset-0`, so nothing else can escape. `z-20` on the copy column keeps
-          that list above the demo card, which is a later sibling. */}
-      <section className="hero-bg isolate px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
-        {/* Accent blobs, the sister site's backdrop. Two rather than one: a
-            single centred glow reads as a vignette, while an off-centre pair
-            gives the band a direction the eye can follow down to the demo. */}
-        <span
-          aria-hidden
-          className="blob -z-10 right-0 top-0 h-96 w-96 bg-brand-500/15"
-        />
+          `inset-0`, so nothing else can escape. */}
+      <section className="hero-bg isolate px-4 pb-20 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
+        {/* Accent blobs. Three, placed asymmetrically: a single centred glow
+            reads as a vignette, while an off-balance set gives the band a
+            diagonal the eye follows down into the grid below. */}
+        <span aria-hidden className="blob -z-10 right-0 top-0 h-96 w-96 bg-brand-500/15" />
         <span
           aria-hidden
           className="blob -z-10 left-1/2 top-0 h-24 w-1/3 -translate-x-1/2 bg-accent-500/10"
+        />
+        <span
+          aria-hidden
+          className="blob -z-10 -left-20 bottom-0 h-72 w-72 bg-accent-500/10"
         />
 
         <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center">
@@ -172,7 +149,8 @@ export default function HomePage() {
             className="animate-rise mt-6 max-w-2xl text-lg leading-relaxed text-ink-600 sm:text-xl"
             style={{ animationDelay: '120ms' }}
           >
-            Finance, health, math, and conversions. Each tool gives you the answer, the{' '}
+            {populated.length} categories, {allTools.length} calculators. Each one gives
+            you the answer, the{' '}
             <strong className="font-semibold text-ink-900">formula behind it</strong>, and
             an honest account of{' '}
             <strong className="font-semibold text-ink-900">
@@ -181,34 +159,34 @@ export default function HomePage() {
             .
           </p>
 
-          <div className="animate-rise mt-9 flex w-full justify-center" style={{ animationDelay: '180ms' }}>
-            <HeroSearch suggestions={popular} />
+          <div
+            className="animate-rise mt-9 flex w-full justify-center"
+            style={{ animationDelay: '180ms' }}
+          >
+            {/* No shortcut chips under it. The homepage names no individual
+                calculator — search is how you reach one from here, and the
+                categories below are how you find one you cannot name. */}
+            <HeroSearch />
           </div>
         </div>
 
-        {/* The demo sits in the hero rather than below it. Wider than the copy
-            above so it reads as the subject of the page, not a footnote to it. */}
         <div
-          className="animate-rise relative z-10 mx-auto mt-12 max-w-5xl text-left sm:mt-14"
-          style={{ animationDelay: '260ms' }}
+          className="animate-rise mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink-500"
+          style={{ animationDelay: '240ms' }}
         >
-          <HeroDemo />
-
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink-500">
-            <span className="font-medium text-ink-800">Sources cited on every tool</span>
-            <Link
-              href="/editorial-policy"
-              className="font-semibold text-brand-700 hover:underline"
-            >
-              Editorial policy
-            </Link>
-            <span aria-hidden className="text-ink-300">
-              •
-            </span>
-            <span>
-              Last updated <time dateTime={updated}>{formatDate(updated)}</time>
-            </span>
-          </div>
+          <span className="font-medium text-ink-800">Sources cited on every tool</span>
+          <Link
+            href="/editorial-policy"
+            className="font-semibold text-brand-700 hover:underline"
+          >
+            Editorial policy
+          </Link>
+          <span aria-hidden className="text-ink-300">
+            •
+          </span>
+          <span>
+            Last updated <time dateTime={updated}>{formatDate(updated)}</time>
+          </span>
         </div>
       </section>
 
@@ -218,61 +196,29 @@ export default function HomePage() {
       <StatsMarquee stats={stats} />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        {/* ----------------------------------------------------------------
-            Recently added.
-        ---------------------------------------------------------------- */}
-        <section aria-labelledby="recent-heading" className="border-t border-line py-20">
-          <div className="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow">Recently added</p>
-              <h2 id="recent-heading" className="mt-3 text-display-md">
-                The newest calculators
-              </h2>
-            </div>
-            <Link href="/tools" className="btn btn-outline btn-md">
-              All {allTools.length} tools
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
 
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((tool) => {
-              const accent = categoryAccent(tool.category);
-              return (
-                <li key={tool.href}>
-                  <Link
-                    href={tool.href}
-                    className="card card-lift group flex h-full items-center gap-3.5 p-4"
-                  >
-                    <span
-                      className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                      style={{
-                        color: accent,
-                        backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`,
-                      }}
-                    >
-                      <CategoryIcon category={tool.category} className="h-5 w-5" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold text-ink-900">
-                        {tool.name}
-                      </span>
-                      <span className="mt-0.5 block truncate text-sm text-ink-500">
-                        {tool.shortDescription}
-                      </span>
-                    </span>
-                    <span
-                      aria-hidden
-                      className="shrink-0 text-brand-600 opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100"
-                    >
-                      →
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        {/* ----------------------------------------------------------------
+            The categories. This is the homepage's content, not a section of
+            it — no border-top, because the marquee above already closed the
+            hero and a second rule would fence this off from it.
+        ---------------------------------------------------------------- */}
+        {populated.length > 0 && (
+          <section aria-labelledby="categories-heading" className="py-20">
+            <div className="reveal mb-12 text-center">
+              <p className="eyebrow">Browse · {populated.length} categories</p>
+              <h2 id="categories-heading" className="mt-3 text-display-md">
+                Start with the subject
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-ink-600 sm:text-lg">
+                Every section opens with what its tools assume before you use them, and
+                where those assumptions stop holding. Pick the one your question belongs
+                to.
+              </p>
+            </div>
+
+            <CategoryShowcase />
+          </section>
+        )}
 
         {/* ----------------------------------------------------------------
             Why these tools are different.
@@ -312,28 +258,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ----------------------------------------------------------------
-            Category hubs.
-        ---------------------------------------------------------------- */}
-        {populated.length > 0 && (
-          <section
-            aria-labelledby="categories-heading"
-            className="border-t border-line py-20"
-          >
-            <div className="reveal mb-12 text-center">
-              <p className="eyebrow">Browse</p>
-              <h2 id="categories-heading" className="mt-3 text-display-md">
-                Pick a category
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-ink-600 sm:text-lg">
-                Every category page explains what its tools assume before you use them,
-                and where those assumptions stop holding.
-              </p>
-            </div>
-
-            <CategoryShowcase />
-          </section>
-        )}
 
         {/* ----------------------------------------------------------------
             How it works. Numbered because the whole point is that it is a

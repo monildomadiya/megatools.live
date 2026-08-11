@@ -97,13 +97,19 @@ function tinPlan(needed: number, sizes: readonly number[]): { size: number; coun
 
 export default function PaintCalculator() {
   const [system, setSystem] = useState<System>('metric');
-  const [length, setLength] = useState(DEFAULTS.metric.length);
-  const [width, setWidth] = useState(DEFAULTS.metric.width);
-  const [height, setHeight] = useState(DEFAULTS.metric.height);
+  // Annotated `<string>` deliberately. `DEFAULTS` is `as const`, so
+  // `DEFAULTS.metric.length` has the literal type "4" — and an unannotated
+  // useState would infer a state that can only ever hold "4", rejecting both
+  // the US defaults and anything the reader types. The literal types are worth
+  // keeping on DEFAULTS for the unit labels; they just have no business
+  // reaching the state.
+  const [length, setLength] = useState<string>(DEFAULTS.metric.length);
+  const [width, setWidth] = useState<string>(DEFAULTS.metric.width);
+  const [height, setHeight] = useState<string>(DEFAULTS.metric.height);
   const [doors, setDoors] = useState('1');
   const [windows, setWindows] = useState('1');
   const [coats, setCoats] = useState('2');
-  const [coverage, setCoverage] = useState(DEFAULTS.metric.coverage);
+  const [coverage, setCoverage] = useState<string>(DEFAULTS.metric.coverage);
   const [includeCeiling, setIncludeCeiling] = useState(false);
 
   const units = DEFAULTS[system];

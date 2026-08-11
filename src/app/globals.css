@@ -536,6 +536,58 @@
     opacity: 0.07;
   }
 
+  /* -------------------------------------------------------------------------
+     Category hub masthead.
+
+     A variant of `.hero-bg` tinted with the section's own accent instead of
+     brand blue. That tint is doing real work: eight hubs share one layout, one
+     type scale and one grid, so the hue is the fastest signal a returning
+     reader has for which section they are in — faster than reading the H1.
+
+     The hue arrives as `--cat`, set per-instance on the element. Nothing here
+     names a category, so adding one needs no change to this rule.
+
+     Ruled rather than washed: the horizontal lines fade out downward and stop
+     well before the copy, so the band reads as ledger paper the index is
+     printed on rather than as a coloured header.
+  ------------------------------------------------------------------------- */
+  .cat-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface);
+  }
+
+  .cat-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--color-line) 0 1px,
+      transparent 1px 28px
+    );
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 65%);
+    mask-image: linear-gradient(to bottom, #000, transparent 65%);
+    opacity: 0.65;
+  }
+
+  .cat-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+      ellipse 45% 60% at 88% 0%,
+      var(--cat),
+      transparent 70%
+    );
+    /* Low, and deliberately so. At anything stronger the six accents that sit
+       near the middle of the ramp stop being a hint and start competing with
+       the heading for the eye. */
+    opacity: 0.1;
+  }
+
   /* Standalone bloom, for CTA panels that want the colour without the grid. */
   .bg-bloom {
     background-image:

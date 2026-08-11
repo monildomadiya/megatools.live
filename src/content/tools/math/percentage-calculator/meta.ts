@@ -74,7 +74,7 @@ const meta: ToolMeta = {
       url: 'https://style.ons.gov.uk/category/house-style/numbers-and-measurements/',
     },
   ],
-  relatedSlugs: [],
+  relatedSlugs: ['lifestyle/discount-calculator', 'finance/compound-interest-calculator'],
   publishedAt: '2026-08-07',
   updatedAt: '2026-08-09',
 };

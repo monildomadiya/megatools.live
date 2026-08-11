@@ -79,7 +79,7 @@ const meta: ToolMeta = {
       url: 'https://www.federalreserve.gov/releases/h15/',
     },
   ],
-  relatedSlugs: [],
+  relatedSlugs: ['math/percentage-calculator', 'date-time/date-calculator'],
   publishedAt: '2026-08-07',
   updatedAt: '2026-08-09',
   featured: true,

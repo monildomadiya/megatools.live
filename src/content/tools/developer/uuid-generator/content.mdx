@@ -1,0 +1,82 @@
+## What a UUID actually guarantees
+
+A UUID is a 128-bit number written as 32 hexadecimal characters in five hyphenated groups. The point of it is not that it is random. The point is that any machine can produce one on its own — with no network call, no database round trip, no coordination with anything else — and still be entitled to assume nobody else has produced the same one.
+
+That is a weaker promise than it sounds, and it is worth being precise about. Nothing in the format prevents a collision. What the specification provides is a layout with enough entropy that a collision is less likely than the hardware silently corrupting the value in memory. You are not being given a guarantee; you are being given a probability small enough to design around.
+
+The consequence is that a UUID is only as good as the random source behind it. A generator built on a weak or predictable source produces something that still looks like a UUID, still validates, and no longer carries the property anyone wanted from it. This is the failure that matters in practice, and it is invisible from the outside — the output is 32 hex characters either way.
+
+Generation on this page uses `crypto.getRandomValues`, the Web Crypto interface to your operating system's cryptographically secure random number generator. On Linux that is ultimately the kernel's `getrandom` facility; on Windows and on Apple platforms it is the equivalent system source. These are the same generators that produce TLS session keys. Nothing is sent anywhere: the page keeps working with the network disconnected, and you can confirm that by watching your browser's network tools while you generate.
+
+## Version 4: 122 bits of randomness
+
+Version 4 is the one most people mean when they say UUID. Sixteen random bytes are drawn, and then six of those bits are overwritten with fixed values that identify the format:
+
+- Four bits in the third group record the version. This is why every version 4 UUID has a literal `4` as the first character of its third group.
+- Two bits at the start of the fourth group record the variant. This is why that character is always `8`, `9`, `a` or `b`.
+
+That leaves 122 bits carrying actual randomness, not 128. The distinction matters when you want to reason about collisions honestly.
+
+By the birthday bound, the number of values you need before an even chance of one collision is roughly the square root of the size of the space. For 122 bits that works out at about 2.7 × 10¹⁸ UUIDs. Generating a million every second, you would reach that figure in about 87,000 years. For any system that is not deliberately trying to break it, the arithmetic simply is not the risk. A broken random source is the risk.
+
+## Version 7: the same uniqueness, in time order
+
+Version 7 was standardised in RFC 9562 in 2024, and it addresses the one real complaint about version 4: the values have no order. Two UUIDs created a second apart are as unrelated as two created a decade apart.
+
+Version 7 keeps the same 128-bit shape and spends the leading 48 bits on a Unix timestamp in milliseconds, big-endian. The version and variant fields stay exactly where they were, and the remaining 74 bits are random. The result still needs no coordination between machines, and it now sorts.
+
+Sorting matters more than it first appears. Because the timestamp occupies the most significant bits, ordinary lexicographic sorting of the text form gives you creation order for free — no parsing, no separate column, no index on a timestamp field. A list of version 7 UUIDs sorted as strings is a list sorted by when they were made.
+
+The trade is that the creation time is now public. Anyone holding the identifier can read the leading 48 bits and recover, to the millisecond, when the record was created. If your identifiers appear in URLs and the creation time is something you would not publish — how old an account is, which of two documents came first, how fast your order numbers are climbing — then version 4 is the correct choice, because it discloses nothing at all.
+
+## Why version 7 matters for database indexes
+
+The usual reason to reach for version 7 is not sorting for its own sake. It is write performance on a large table.
+
+Most relational databases store rows in a B-tree ordered by the primary key. Inserting a random key means each new row belongs in a randomly chosen place in that tree, so nearly every insert touches a different page. On a table large enough that the index does not fit in memory, that becomes a read from disk before the write, the page cache stops helping, and the index fragments as pages split in the middle rather than filling from the end.
+
+A monotonically increasing key does not have this problem: inserts land at the right-hand edge of the tree, pages fill completely, and the working set stays small. That is why auto-incrementing integers perform well, and why random UUID primary keys have a reputation for degrading as tables grow.
+
+Version 7 gives you the insert pattern of an auto-increment key while keeping the property that made UUIDs attractive — a client, a background job, or an offline device can mint a valid identifier without asking the database for one. If you are choosing a UUID primary key today, this is usually the version you want.
+
+Two caveats. In PostgreSQL the heap is not clustered by primary key, so the effect is on index locality rather than row placement, and the benefit is real but smaller than in a database that clusters. And ordering is at millisecond resolution: several UUIDs created inside the same millisecond are ordered only by chance. RFC 9562 describes an optional monotonic counter in the random bits to fix that, which this generator does not implement — if you need strict ordering within a millisecond, use a library that does.
+
+## How to read a UUID
+
+The five groups are not arbitrary. Reading a UUID from left to right in the canonical form:
+
+```
+0189d6e0-9c4a-7f31-b8c2-4a91d7e6f0a3
+└──────┘ └──┘ └──┘ └──┘ └──────────┘
+   8      4    4    4        12
+```
+
+The first character of the third group is the version — `4` or `7` for everything on this page. The first character of the fourth group is the variant, and on any UUID following the standard layout it is `8`, `9`, `a` or `b`. If you are looking at a UUID whose variant character is something else, you are either looking at a value from a different scheme wearing the same shape, or at something a non-conforming generator produced.
+
+Hyphens carry no information and neither does letter case. The specification requires lowercase on output and requires readers to accept either, so a UUID from a system that emits uppercase is the same value — normalise it before you compare two as strings. Both options are on the tool above so you can match whatever format the system you are pasting into expects.
+
+## Where UUIDs are the wrong choice
+
+**As a short public identifier.** Thirty-six characters in a URL is a lot, and they are not memorable, not dictatable over the phone, and not checkable by eye. If the identifier is going to be read by a human, a shorter random token from a restricted alphabet is a better fit.
+
+**As a secret.** A version 4 UUID has 122 bits of entropy, which is plenty, but a version 7 UUID has 74 and half of it is a guessable timestamp. Neither is designed to be an access token, and treating an identifier as a capability is a pattern that fails the moment one leaks into a log or a referrer header.
+
+**Where you already have a natural key.** An ISBN, a country code or an email address identifies the thing better than a synthetic 128-bit number does, and does not need a second lookup to mean anything.
+
+**As a sort key on its own, for version 4.** Sorting version 4 UUIDs produces a stable order, but it is not chronological and it is not meaningful. If code depends on that order, it depends on nothing.
+
+## The versions this tool does not generate
+
+RFC 9562 defines eight versions. Two are here because they are the two anyone reaches for. The others are worth knowing about so you can recognise them.
+
+**Versions 1 and 6** combine a timestamp with the machine's MAC address. Version 1 puts the timestamp fields in an order that does not sort; version 6 rearranges the same information so that it does. Both broadcast the network hardware address of the machine that generated them, which is a privacy problem that version 7 exists partly to avoid.
+
+**Versions 3 and 5** are not random at all. They hash a namespace and a name — version 3 with MD5, version 5 with SHA-1 — so the same input always produces the same UUID. That is genuinely useful when you need a stable identifier derived from something you already have, and it is a different job from the one this page does.
+
+**Version 8** is deliberately open: the specification reserves it for custom layouts that need to be recognisable as UUIDs without pretending to follow one of the defined schemes.
+
+## A note on the specification
+
+Almost every article about UUIDs still cites RFC 4122, published in 2005. That document was obsoleted in May 2024 by RFC 9562, which is the current specification and the one this page follows. RFC 9562 keeps versions 1 through 5 intact and adds versions 6, 7 and 8, so nothing you already had stopped being valid — but if you are reading guidance that does not mention version 7, it predates the current standard.
+
+Both are linked in full below. Where this page states a bit layout, a field position, or the definition of a version, it comes from RFC 9562 rather than from convention.

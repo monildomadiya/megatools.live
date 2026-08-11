@@ -1,0 +1,89 @@
+## What a hash function is for
+
+A cryptographic hash function takes an input of any length and returns a fixed-length digest. SHA-256 returns 256 bits whether you feed it one character or a gigabyte. The same input always produces the same digest, and there is no practical way to work backwards from the digest to the input.
+
+That combination is what makes a digest useful as a stand-in for the thing itself. You can publish a digest without publishing the data. You can compare two digests to decide whether two files are identical without transferring either of them. You can record a digest now and prove later that a document has not been altered since.
+
+Three separate properties are being claimed, and it is worth keeping them apart because algorithms fail at them one at a time:
+
+**Preimage resistance.** Given a digest, you cannot find an input that produces it.
+
+**Second-preimage resistance.** Given one input, you cannot find a different input with the same digest.
+
+**Collision resistance.** You cannot find *any* two inputs that share a digest. This is the weakest of the three to attack, because an attacker gets to choose both inputs, and it is the property that has fallen first in every hash function that has been broken.
+
+MD5 and SHA-1 are collision-broken while remaining preimage-resistant. That is why you will still see SHA-1 in places where nobody can choose both inputs, and why it is nonetheless unsafe for signatures, where an attacker can.
+
+## The avalanche property
+
+Change one character of the input above and the digest changes completely — not slightly, completely. About half of the output bits flip, and there is no relationship between how similar two inputs are and how similar their digests are.
+
+This is designed in, and it is what makes a digest usable for detecting tampering. There is no such thing as a nearly-matching digest, so you are never in the position of judging how close two values are. They match exactly or they do not, and the failure mode is unambiguous.
+
+It also means a digest tells you nothing about its input. Two digests of two customer records reveal nothing about whether the records are similar, which is what allows a digest to be logged, published or transmitted where the data itself could not be.
+
+## The algorithms on this page
+
+All four come from FIPS 180-4, the NIST Secure Hash Standard, and all four are implemented by the browser itself through the Web Crypto API rather than by any code shipped with this page.
+
+**SHA-256** is the default and the right choice for almost everything. It is the hash behind TLS certificate signatures, Bitcoin, most package checksums, and file integrity verification generally.
+
+**SHA-512** is the same design widened: it works on 64-bit words instead of 32-bit ones and produces a 512-bit digest. On 64-bit hardware it is frequently *faster* than SHA-256 despite doing more work, because it processes more data per round.
+
+**SHA-384** is SHA-512 computed with a different initial state and then truncated to 384 bits. The truncation is not just cosmetic — it is what makes SHA-384 immune to the length-extension weakness described further down.
+
+**SHA-1** is here for compatibility and nothing else. You will meet it in Git object identifiers, in older certificates and in existing checksums that you may need to reproduce exactly. It should not be chosen for new work.
+
+SHA-3 is not offered because browsers do not implement it. It is a genuinely different construction — a sponge rather than the Merkle–Damgård chain the SHA-2 family uses — and it was standardised as an alternative in case SHA-2 fell, not as a replacement for it. SHA-2 has not fallen.
+
+## Why MD5 is not here
+
+MD5 is probably the hash people search for most often, and its absence is deliberate rather than an oversight.
+
+The Web Crypto API does not implement MD5, and that too is deliberate on the browser vendors' part. Adding it would mean shipping a hand-written implementation of a broken algorithm on the same menu as working ones, with nothing but a footnote to distinguish them.
+
+MD5 collisions became practical in 2004 and are now trivial: two different files with the same MD5 digest can be produced on a laptop in seconds. That is not a theoretical weakening, it is a complete failure of the property that makes a hash useful for integrity. MD5 continues to have a legitimate narrow use as a fast checksum for detecting *accidental* corruption — a truncated download, a bad disk sector — where nobody is trying to fool you. For anything where someone might be, it provides no protection at all.
+
+If you need an MD5 digest to match an existing system, use a command-line tool. Do not treat the result as evidence of anything.
+
+## Hashing is not encryption
+
+This is the most common confusion about the whole subject, and it matters because acting on it goes wrong quietly.
+
+Encryption is reversible by design: it takes a key, and with that key the original comes back exactly. Hashing has no key and no way back. A digest is a fixed size, so infinitely many inputs map to each possible output, and the original is not recoverable even in principle.
+
+"Decrypting a hash" is therefore not a thing, and any site offering to do it is doing something else: looking the digest up in a large table of digests it has already computed for common inputs. That works, and it works well, against short and predictable inputs — common passwords, four-digit PINs, email addresses, phone numbers. Hashing a value from a small or guessable set does not make it private, because the attacker does not need to reverse anything. They only need to hash their guesses and compare.
+
+The practical rule: a hash protects data that an attacker cannot enumerate. It does nothing for data they can.
+
+## Never use a plain hash for passwords
+
+SHA-256 is designed to be fast. Fast is the correct property for verifying a download and precisely the wrong one for storing a password.
+
+Commodity hardware can compute billions of SHA-256 digests per second. Against a stolen database of plain SHA-256 password hashes, an attacker works through common passwords, then dictionary words with substitutions, then everything short, and recovers most of the accounts in hours.
+
+Salting each password with a unique random value is necessary but not sufficient. A salt stops one precomputed table from cracking every account at once, forcing the attacker to attack each row separately. It does nothing about speed, and speed is the problem.
+
+Password storage needs a function that is deliberately slow and deliberately memory-hungry, so that an attacker's specialised hardware advantage shrinks. OWASP's current guidance is Argon2id where available, with scrypt and bcrypt as accepted alternatives. All three take a work factor you raise as hardware gets faster. None of them are on this page, because a page that hashes on keystroke is the wrong place for a function whose entire purpose is to be slow.
+
+## Length extension, and when to use HMAC
+
+SHA-1, SHA-256 and SHA-512 share a structural property worth knowing: they process the input in blocks, carrying state forward, and the final state *is* the digest. This means someone who knows the digest of a message, and the message's length, can compute the digest of that message with extra data appended — without knowing the original message at all.
+
+That is harmless for file checksums. It is a real vulnerability in one specific pattern: authenticating a message by hashing a secret key concatenated with the message. An attacker who sees one valid pair can extend the message and produce a valid digest for the longer version.
+
+The fix is not a different hash but a different construction. HMAC nests two hash operations with the key mixed in on both passes, which closes the extension. If you are authenticating a message rather than checksumming a file, use HMAC-SHA-256, not SHA-256 of key-plus-message. SHA-384 avoids the weakness for a different reason — the digest is a truncation of a wider internal state, so knowing it does not give you the state.
+
+## Verifying a file you downloaded
+
+The everyday use of a hash is confirming that a download arrived intact and unmodified. The mechanics are simple: the publisher states the digest, you compute the digest of what you received, and the two match or they do not.
+
+The part that gets skipped is where the published digest came from. If you fetch the file and the digest from the same page over the same connection, an attacker able to replace one can replace the other, and the check confirms nothing beyond the absence of accidental corruption. The digest has to come from somewhere the file did not — a signed release, a separate domain, a repository you already trust, a key you have verified before.
+
+Note also that this page hashes text, not files. Pasting the contents of a binary into the box will not reproduce its checksum: the box gives the bytes to the hash as UTF-8, and a binary is not UTF-8. Use your operating system's own tool for files.
+
+## Where this runs
+
+Everything happens in your browser. The text you type is passed to `crypto.subtle.digest`, which is implemented inside the browser, and the digest comes back without a byte leaving the machine. No request is made, nothing is logged, and the page keeps working with the network disconnected — which you can verify by opening your browser's network tools and watching while you type.
+
+One consequence is worth flagging: `crypto.subtle` is only exposed in a secure context, meaning HTTPS or localhost. Over plain http the API is simply absent, and the page will say so rather than silently returning nothing.

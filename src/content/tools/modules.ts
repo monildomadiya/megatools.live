@@ -36,12 +36,16 @@ import ColorConverter from './developer/color-converter/Calculator';
 import ColorConverterContent from './developer/color-converter/content.mdx';
 import CronExpressionTranslator from './developer/cron-expression-translator/Calculator';
 import CronExpressionContent from './developer/cron-expression-translator/content.mdx';
+import HashGenerator from './developer/hash-generator/Calculator';
+import HashGeneratorContent from './developer/hash-generator/content.mdx';
 import JsonFormatter from './developer/json-formatter/Calculator';
 import JsonFormatterContent from './developer/json-formatter/content.mdx';
 import PasswordGenerator from './developer/password-generator/Calculator';
 import PasswordGeneratorContent from './developer/password-generator/content.mdx';
 import UnixTimestampConverter from './developer/unix-timestamp-converter/Calculator';
 import UnixTimestampContent from './developer/unix-timestamp-converter/content.mdx';
+import UuidGenerator from './developer/uuid-generator/Calculator';
+import UuidGeneratorContent from './developer/uuid-generator/content.mdx';
 import CompoundInterestCalculator from './finance/compound-interest-calculator/Calculator';
 import CompoundInterestContent from './finance/compound-interest-calculator/content.mdx';
 import LoanEmiCalculator from './finance/loan-emi-calculator/Calculator';
@@ -228,6 +232,7 @@ export const toolModules: Record<string, ToolModule> = {
   'developer/base64-encoder': { Calculator: Base64Encoder, Content: Base64EncoderContent },
   'developer/case-converter': { Calculator: CaseConverter, Content: CaseConverterContent },
   'developer/color-converter': { Calculator: ColorConverter, Content: ColorConverterContent },
+  'developer/hash-generator': { Calculator: HashGenerator, Content: HashGeneratorContent },
   'developer/json-formatter': { Calculator: JsonFormatter, Content: JsonFormatterContent },
   'developer/password-generator': {
     Calculator: PasswordGenerator,
@@ -237,6 +242,7 @@ export const toolModules: Record<string, ToolModule> = {
     Calculator: UnixTimestampConverter,
     Content: UnixTimestampContent,
   },
+  'developer/uuid-generator': { Calculator: UuidGenerator, Content: UuidGeneratorContent },
   'lifestyle/discount-calculator': { Calculator: DiscountCalculator, Content: DiscountContent },
   'lifestyle/fuel-cost-calculator': { Calculator: FuelCostCalculator, Content: FuelCostContent },
   'lifestyle/tip-calculator': { Calculator: TipCalculator, Content: TipCalculatorContent },

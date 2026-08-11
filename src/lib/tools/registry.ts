@@ -29,9 +29,11 @@ import base64Encoder from '@/content/tools/developer/base64-encoder/meta';
 import caseConverter from '@/content/tools/developer/case-converter/meta';
 import cronExpressionTranslator from '@/content/tools/developer/cron-expression-translator/meta';
 import colorConverter from '@/content/tools/developer/color-converter/meta';
+import hashGenerator from '@/content/tools/developer/hash-generator/meta';
 import jsonFormatter from '@/content/tools/developer/json-formatter/meta';
 import passwordGenerator from '@/content/tools/developer/password-generator/meta';
 import unixTimestampConverter from '@/content/tools/developer/unix-timestamp-converter/meta';
+import uuidGenerator from '@/content/tools/developer/uuid-generator/meta';
 import compoundInterestCalculator from '@/content/tools/finance/compound-interest-calculator/meta';
 import loanEmiCalculator from '@/content/tools/finance/loan-emi-calculator/meta';
 import mortgageCalculator from '@/content/tools/finance/mortgage-calculator/meta';
@@ -105,9 +107,11 @@ const toolMetas: ToolMeta[] = [
   caseConverter,
   colorConverter,
   cronExpressionTranslator,
+  hashGenerator,
   jsonFormatter,
   passwordGenerator,
   unixTimestampConverter,
+  uuidGenerator,
   discountCalculator,
   electricityCostCalculator,
   fuelCostCalculator,

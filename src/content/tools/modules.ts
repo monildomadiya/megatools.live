@@ -26,6 +26,8 @@ import DateCalculator from './date-time/date-calculator/Calculator';
 import DateCalculatorContent from './date-time/date-calculator/content.mdx';
 import DateDifferenceCalculator from './date-time/date-difference-calculator/Calculator';
 import DateDifferenceContent from './date-time/date-difference-calculator/content.mdx';
+import TimeDurationCalculator from './date-time/time-duration-calculator/Calculator';
+import TimeDurationContent from './date-time/time-duration-calculator/content.mdx';
 import TimeZoneConverter from './date-time/time-zone-converter/Calculator';
 import TimeZoneConverterContent from './date-time/time-zone-converter/content.mdx';
 import WorkHoursCalculator from './date-time/work-hours-calculator/Calculator';
@@ -52,6 +54,8 @@ import UuidGenerator from './developer/uuid-generator/Calculator';
 import UuidGeneratorContent from './developer/uuid-generator/content.mdx';
 import CompoundInterestCalculator from './finance/compound-interest-calculator/Calculator';
 import CompoundInterestContent from './finance/compound-interest-calculator/content.mdx';
+import CreditCardPayoffCalculator from './finance/credit-card-payoff-calculator/Calculator';
+import CreditCardPayoffContent from './finance/credit-card-payoff-calculator/content.mdx';
 import LoanEmiCalculator from './finance/loan-emi-calculator/Calculator';
 import LoanEmiContent from './finance/loan-emi-calculator/content.mdx';
 import MortgageCalculator from './finance/mortgage-calculator/Calculator';
@@ -76,6 +80,8 @@ import CalorieCalculator from './health/calorie-calculator/Calculator';
 import CalorieContent from './health/calorie-calculator/content.mdx';
 import IdealWeightCalculator from './health/ideal-weight-calculator/Calculator';
 import IdealWeightContent from './health/ideal-weight-calculator/content.mdx';
+import PregnancyDueDateCalculator from './health/pregnancy-due-date-calculator/Calculator';
+import PregnancyDueDateContent from './health/pregnancy-due-date-calculator/content.mdx';
 import TdeeCalculator from './health/tdee-calculator/Calculator';
 import TdeeContent from './health/tdee-calculator/content.mdx';
 import WaistToHeightRatioCalculator from './health/waist-to-height-ratio-calculator/Calculator';
@@ -108,6 +114,8 @@ import PaintCalculator from './lifestyle/paint-calculator/Calculator';
 import PaintCalculatorContent from './lifestyle/paint-calculator/content.mdx';
 import TipCalculator from './lifestyle/tip-calculator/Calculator';
 import TipCalculatorContent from './lifestyle/tip-calculator/content.mdx';
+import UnitPriceCalculator from './lifestyle/unit-price-calculator/Calculator';
+import UnitPriceContent from './lifestyle/unit-price-calculator/content.mdx';
 import CharacterCounter from './seo/character-counter/Calculator';
 import CharacterCounterContent from './seo/character-counter/content.mdx';
 import DomainAgeChecker from './seo/domain-age-checker/Calculator';
@@ -116,6 +124,8 @@ import KeywordDensityCalculator from './seo/keyword-density-calculator/Calculato
 import KeywordDensityContent from './seo/keyword-density-calculator/content.mdx';
 import ReadabilityCalculator from './seo/readability-calculator/Calculator';
 import ReadabilityContent from './seo/readability-calculator/content.mdx';
+import ReadingTimeCalculator from './seo/reading-time-calculator/Calculator';
+import ReadingTimeContent from './seo/reading-time-calculator/content.mdx';
 import SlugGenerator from './seo/slug-generator/Calculator';
 import SlugGeneratorContent from './seo/slug-generator/content.mdx';
 import WordCounter from './seo/word-counter/Calculator';
@@ -141,6 +151,10 @@ export const toolModules: Record<string, ToolModule> = {
     Calculator: CompoundInterestCalculator,
     Content: CompoundInterestContent,
   },
+  'finance/credit-card-payoff-calculator': {
+    Calculator: CreditCardPayoffCalculator,
+    Content: CreditCardPayoffContent,
+  },
   'finance/loan-emi-calculator': { Calculator: LoanEmiCalculator, Content: LoanEmiContent },
   'finance/mortgage-calculator': { Calculator: MortgageCalculator, Content: MortgageContent },
   'finance/salary-calculator': { Calculator: SalaryCalculator, Content: SalaryContent },
@@ -152,6 +166,10 @@ export const toolModules: Record<string, ToolModule> = {
   'finance/sip-calculator': { Calculator: SipCalculator, Content: SipContent },
   'finance/vat-calculator': { Calculator: VatCalculator, Content: VatContent },
   'health/bmi-calculator': { Calculator: BmiCalculator, Content: BmiContent },
+  'health/pregnancy-due-date-calculator': {
+    Calculator: PregnancyDueDateCalculator,
+    Content: PregnancyDueDateContent,
+  },
   'health/bmr-calculator': { Calculator: BmrCalculator, Content: BmrContent },
   'health/body-fat-calculator': { Calculator: BodyFatCalculator, Content: BodyFatContent },
   'health/calorie-calculator': { Calculator: CalorieCalculator, Content: CalorieContent },
@@ -232,6 +250,7 @@ export const toolModules: Record<string, ToolModule> = {
   },
   'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
   'date-time/date-calculator': { Calculator: DateCalculator, Content: DateCalculatorContent },
+  'date-time/time-duration-calculator': { Calculator: TimeDurationCalculator, Content: TimeDurationContent },
   'date-time/date-difference-calculator': {
     Calculator: DateDifferenceCalculator,
     Content: DateDifferenceContent,
@@ -263,6 +282,7 @@ export const toolModules: Record<string, ToolModule> = {
   'lifestyle/fuel-cost-calculator': { Calculator: FuelCostCalculator, Content: FuelCostContent },
   'lifestyle/paint-calculator': { Calculator: PaintCalculator, Content: PaintCalculatorContent },
   'lifestyle/tip-calculator': { Calculator: TipCalculator, Content: TipCalculatorContent },
+  'lifestyle/unit-price-calculator': { Calculator: UnitPriceCalculator, Content: UnitPriceContent },
   'seo/character-counter': {
     Calculator: CharacterCounter,
     Content: CharacterCounterContent,
@@ -279,6 +299,7 @@ export const toolModules: Record<string, ToolModule> = {
     Calculator: ReadabilityCalculator,
     Content: ReadabilityContent,
   },
+  'seo/reading-time-calculator': { Calculator: ReadingTimeCalculator, Content: ReadingTimeContent },
   'seo/slug-generator': { Calculator: SlugGenerator, Content: SlugGeneratorContent },
   'seo/word-counter': { Calculator: WordCounter, Content: WordCounterContent },
 };

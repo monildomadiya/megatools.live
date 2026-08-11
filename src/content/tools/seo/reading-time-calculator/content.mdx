@@ -1,0 +1,118 @@
+## The arithmetic is trivial; the rate is not
+
+Reading time is one division:
+
+```
+minutes = word count ÷ words per minute
+```
+
+Nobody gets that wrong. What almost every tool doing this gets wrong is the second number, and it is the only one that matters.
+
+Search for a reading time calculator and you will find 200 words per minute used almost universally, cited to nothing. It is not a crazy figure — it sits inside the range of real readers — but it is a round number that acquired authority by being copied, and for most adults reading English non-fiction it is about 15 percent too slow.
+
+This page defaults to **238 words per minute**, and that figure has a source.
+
+## Where 238 comes from
+
+In 2019 Marc Brysbaert published a meta-analysis in the *Journal of Memory and Language* pulling together 190 studies covering more than 18,000 participants. It is the most thorough answer to the question that exists.
+
+The headline findings:
+
+- **Silent reading of non-fiction in English: about 238 words per minute.**
+- **Silent reading of fiction: about 260.** Fiction runs faster because the language is more predictable and the reader is not stopping to hold onto facts.
+- **Reading aloud: about 183**, though comfortable presentation delivery is slower still, usually 150 or below.
+
+The spread matters as much as the midpoint. The middle 95 percent of readers fall roughly between 175 and 300 words per minute for non-fiction. That is a wide band, and it means any single figure is a midpoint rather than a prediction about a particular person. The tool shows the fast and slow ends alongside the estimate for exactly that reason.
+
+## Reading aloud is a different problem
+
+The gap between silent reading and speech is bigger than most people expect, and it changes how you write.
+
+Silently, comprehension sets the pace. Aloud, your mouth does — and the limit is far lower. Comfortable delivery is around 150 words per minute. Past about 160 an audience starts losing content, and past 180 you are simply talking at people.
+
+So:
+
+```
+1,000 words silently  ≈ 4 min 10 sec
+1,000 words aloud     ≈ 6 min 40 sec
+```
+
+A script and an article of identical length are not the same amount of material. Writing for the ear needs a word budget of roughly two thirds what the page would take.
+
+Working backwards for a talk:
+
+```
+5 minutes  ≈ 750 words
+10 minutes ≈ 1,500 words
+20 minutes ≈ 3,000 words
+```
+
+Two practical notes. Almost everyone speeds up under nerves, so writing to 140 and delivering calmly is safer than writing to 160 and hoping. And these figures assume continuous speech — pauses, slides, laughter and questions all add real time that no word count predicts.
+
+## Speed reading, and what the research actually says
+
+The claim that you can be trained to read at 1,000 words a minute with full comprehension does not survive contact with the evidence.
+
+The 2016 review by Rayner and colleagues in *Psychological Science in the Public Interest* is the standard reference. The finding is consistent: beyond roughly 400 to 500 words per minute, what is happening is not reading. It is skimming — sampling parts of the text and inferring the rest — and measured comprehension falls in step with the speed gained.
+
+The physical constraint is the eye. Reading requires fixations on the words, and only a narrow window around each fixation is sharp enough to identify text. Techniques that suppress eye movement do not remove that limit; they just stop you noticing that you have crossed from reading into guessing.
+
+None of which makes skimming useless. It is a genuinely valuable skill and most competent readers already switch between modes without thinking about it. The honest framing is that skimming is a different activity with a different trade, not reading made faster.
+
+Where speed does improve legitimately: familiarity with the subject, a larger vocabulary, and practice. Someone who already knows a field reads about it faster because they are predicting more accurately, not because their eyes move differently.
+
+## What a word count does not capture
+
+The estimate assumes uniform prose. Real pages are not, and the number gets less reliable the further from plain paragraphs you go.
+
+**Technical and unfamiliar material is slower.** Dense subject matter, unfamiliar terminology and long sentences all cost time that the word count does not see. A thousand words of legal drafting is not a thousand words of blog post.
+
+**Code, tables and formulas break the model completely.** Reading a code block is closer to studying than to reading, and a word count of it means nothing.
+
+**Images and charts add time.** A reader stopping to interpret a diagram is spending time no word counted.
+
+**Skimming is the normal behaviour online.** Most people scan headings, read the parts that look relevant and skip the rest. The calculated figure is the time for someone reading every word, which is a minority.
+
+If your page is largely code, tables or diagrams, treat the estimate as a floor and add judgement on top.
+
+## What counts as a word
+
+The estimate rests on a word count, and word counts are less standardised than they look. Two tools measuring the same paragraph routinely disagree, which means two reading time estimates of the same article can differ without either being broken.
+
+This page counts runs of non-whitespace, which is the most common rule and the one the [word counter](/tools/seo/word-counter) on this site uses. It has known edge cases, and they all move the number in the same direction — up:
+
+**Hyphenated compounds.** "State-of-the-art" is one word to a reader and one token here, but tools that split on punctuation count four.
+
+**Numbers and symbols.** "£1,250" and "2026" are counted. Whether they should be depends on whether you think a reader spends a word's worth of time on them, and mostly they spend less.
+
+**URLs and code identifiers.** A pasted link is one token and takes far longer than a word to read, or is skipped entirely. Either way the count is a poor proxy.
+
+**Contractions.** "Don't" is one token in every common rule, which matches how it is read.
+
+For ordinary prose the differences are small enough to ignore — a percent or two, well inside the variation between individual readers. They matter when your text is unusual: heavy on numbers, full of technical identifiers, or largely hyphenated compounds. In those cases the count is inflated and the reading time with it.
+
+If you need two figures to agree — a CMS estimate against this one, say — check that both are using the same counting rule before assuming one is wrong.
+
+## Whether to show a reading time on your pages
+
+Generally worth it, with one condition attached.
+
+The argument for is straightforward: a reader is deciding whether to start now, save it, or skip it, and they are making that decision whether or not you help them. A visible estimate makes it an informed one, and it manages expectations — someone who knows they are twelve minutes in is less likely to abandon a long piece halfway.
+
+The condition is honesty. The number is a promise, and an obviously wrong one costs you more than no number at all. Label a fifteen minute article as four and you have not gained a reader; you have irritated one at minute five. Round up rather than down, and if your content is code-heavy or reference material, say so instead of implying a straight read.
+
+On the question people usually mean when they ask this: a reading time label is not a ranking factor, and no search engine has ever said otherwise. It is a usability feature. It may reduce people bouncing off a long page they were not ready for, which is a real benefit that happens to look like an SEO one.
+
+## Choosing the right rate for your audience
+
+The defaults here are a starting point, not a verdict.
+
+**238 wpm** for general adult non-fiction — articles, documentation, reports.
+
+**260 wpm** for narrative and fiction.
+
+**200 wpm** if you want to be deliberately conservative, or to match the convention every other site is using so your figures are comparable to theirs.
+
+**150 wpm** for anything that will be spoken — scripts, presentations, video voiceover, podcasts.
+
+Adjust downward for technical, academic or legal material, for audiences reading in a second language, and for older readers, where average rates are measurably lower. Adjust upward only if you have actual evidence about your own readers, which almost nobody does.

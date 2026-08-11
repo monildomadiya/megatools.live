@@ -1,0 +1,114 @@
+## The calculation
+
+Converting a clock time to a single number makes the whole thing trivial. Express both times as minutes since midnight, subtract, and convert back:
+
+```
+09:15 → 9 × 60 + 15 = 555 minutes
+17:45 → 17 × 60 + 45 = 1065 minutes
+1065 − 555 = 510 minutes = 8 hours 30 minutes
+```
+
+Doing it directly in hours and minutes is where people slip, because the minutes column carries at sixty and the brain is trained on ten. 17:45 minus 09:15 is fine; 17:15 minus 09:45 catches almost everyone, because you have to borrow an hour as sixty minutes rather than as a hundred.
+
+The minutes-since-midnight approach removes the borrow entirely. It is also what every payroll system does internally, for the same reason.
+
+## 8.5 is not 8.30, and this costs people money
+
+This is the single most consequential thing on the page, so it is worth being blunt about.
+
+A decimal hour is a **fraction of an hour**. Thirty minutes is half of one, so eight hours and thirty minutes is **8.5**.
+
+Writing **8.30** on a timesheet does not mean eight hours and thirty minutes. It means eight and three tenths of an hour, which is eight hours and **eighteen** minutes. You have just given away twelve minutes.
+
+```
+15 minutes = 0.25    30 minutes = 0.5     45 minutes = 0.75
+10 minutes = 0.167   20 minutes = 0.333   40 minutes = 0.667
+```
+
+Only the quarter hours land on tidy decimals. Everything else either recurs or has to be rounded, which is a large part of why timesheets round to quarter hours in the first place.
+
+The error is consistent in one direction — writing minutes after the decimal point always understates anything past thirty minutes and overstates anything before it, and since shifts cluster above thirty, it usually costs the worker. Twelve minutes a day across a working year is about six and a half days of unpaid time.
+
+The tool shows both figures side by side, deliberately. Use hours and minutes when telling a person, and the decimal when filling in a system.
+
+## Adding up a week
+
+The same problem, scaled. Adding hours and minutes across several days means carrying at sixty repeatedly, and it is where a week's timesheet goes wrong:
+
+```
+7h 45m + 6h 30m = 14h 15m     (not 13h 75m)
+```
+
+Convert each day to decimal first, then add:
+
+```
+7.75 + 6.5 = 14.25
+```
+
+That is a sum a spreadsheet, a calculator or your head handles without any special case. Convert back at the end if a human needs to read it: 0.25 of an hour is 15 minutes, so 14h 15m.
+
+If you are building a spreadsheet for this, store decimal hours in the cells and format for display. Storing text like "7:45" and trying to sum it works in some spreadsheet software and not others, and it fails silently when someone types "7.45" instead.
+
+## Shifts that cross midnight
+
+When the end time is earlier than the start — 22:00 to 06:00 — the subtraction gives a negative number. That is not a shift of minus sixteen hours; it is a shift that finished the next day.
+
+The fix is to add twenty-four hours to the end time before subtracting:
+
+```
+06:00 → 360 minutes, + 1440 = 1800
+22:00 → 1320 minutes
+1800 − 1320 = 480 minutes = 8 hours
+```
+
+This tool detects and applies that automatically, and says on screen when it has, because a silent adjustment is a bad idea on a figure someone is being paid against.
+
+One case it cannot resolve: a period longer than twenty-four hours. Clock times alone carry no date, so 09:00 to 10:00 could be one hour or twenty-five and nothing in the input distinguishes them. The tool assumes the shorter reading, which is right almost always. For a genuinely multi-day period, use the date difference calculator instead.
+
+## Breaks, and what counts as time worked
+
+The tool deducts an unpaid break because most shifts have one, but *which* breaks are unpaid is a question of law and contract rather than arithmetic.
+
+The general principle in US federal law is that short breaks — commonly under twenty minutes — count as hours worked and are paid, while genuine meal periods of thirty minutes or more, during which the employee is fully relieved of duty, need not be. "Fully relieved" is the part that gets litigated: eating at your desk while answering the phone is not a break, and time spent waiting when the employer requires you to be there generally is work.
+
+Rules vary substantially by country and by state, and by contract on top of that. Deduct what your actual arrangement says, not what seems reasonable.
+
+## Rounding, and where it stops being allowed
+
+Rounding a clock-in to the nearest quarter hour is common, and in the United States it is permitted — with a condition that matters.
+
+Federal regulations allow rounding to the nearest five minutes, tenth of an hour, or quarter hour, provided it does not systematically favour the employer. Over time, rounding is supposed to average out: some entries round up, some down. Rounding that only ever goes down, or that always rounds arrivals forward and departures back, has repeatedly been found unlawful, because it is a pay cut wearing a clerical disguise.
+
+The practical test is symmetry. Under a quarter-hour scheme, clocking in at 08:53 should round to 08:52.5-and-therefore-08:53's nearest quarter — 08:52 rounds to 08:45, 08:53 to 09:00 — and the same rule has to apply at the end of the shift.
+
+Other jurisdictions are stricter. Several require actual minutes worked with no rounding at all. Check your own rather than assuming the US position travels.
+
+## Daylight saving
+
+This tool takes clock times and no timezone, so it never adjusts for daylight saving. For a timesheet that is the correct behaviour: you record the times as the clock showed them, and the clock is the thing everyone agrees on.
+
+It is wrong twice a year. On the night the clocks go forward, a shift from 22:00 to 06:00 is seven hours of real time even though the clocks say eight. On the night they go back it is nine. The tool will say eight both times.
+
+Which figure you should actually pay is a matter of policy and, in some places, law — some employers pay clock hours, some pay elapsed hours. Whichever applies, those two nights need adjusting by hand.
+
+## Midnight and noon are where the 12-hour clock breaks
+
+If you are entering times from a paper timesheet, this is the ambiguity most likely to have corrupted them before they reached you.
+
+**Is 12:00 AM midnight or noon?** By convention it is midnight, and noon is 12:00 PM. The convention is genuinely unintuitive, because AM means *ante meridiem* — before midday — and 12:00 AM is the one moment that is not before anything much. It is the instant midday is twelve hours away in both directions.
+
+The result is that people get it wrong constantly, in both directions, and neither the writer nor the reader necessarily notices. A shift recorded as ending at 12:00 AM might mean the end of the working day or the end of a night shift, twelve hours apart, and the paper does not say which.
+
+Formal style guides sidestep it rather than solve it. Several — including NIST's own guidance on time notation — recommend avoiding 12:00 AM and 12:00 PM entirely and writing "midnight" and "noon", or using the 24-hour clock. There is a further wrinkle: midnight belongs to two dates, and "midnight on Tuesday" can mean the start of Tuesday or the end of it depending on who wrote it.
+
+The 24-hour clock has none of these problems. 00:00 is unambiguous, 12:00 is unambiguous, and 23:59 needs no suffix. This tool uses it for that reason, and if you have any say over how times are recorded upstream, that is the change worth making.
+
+One consequence for shift work specifically: a shift that ends at exactly 24:00 or 00:00 is the end of the day, and the tool reads an end of 00:00 as the following midnight — eight hours from a 16:00 start, not minus sixteen.
+
+## The ISO 8601 duration format
+
+Alongside the readable figures, the tool shows the duration in ISO 8601 form: `PT8H30M`.
+
+`P` opens a period, `T` marks the start of the time part, and the numbers carry their units. It looks unfriendly and it is genuinely useful, because it is unambiguous and machine-readable in a way that "8:30" is not — that string could be a duration or a clock time, and nothing in it says which.
+
+You will meet it in API responses, in database duration columns, in `datetime` attributes in HTML, and in schema.org markup for things like recipe cooking times and video lengths. If you are filling in a field that wants a duration and rejects what you type, this is usually the format it is asking for.

@@ -21,11 +21,13 @@ import timeConverter from '@/content/tools/conversion/time-converter/meta';
 import volumeConverter from '@/content/tools/conversion/volume-converter/meta';
 import weightConverter from '@/content/tools/conversion/weight-converter/meta';
 import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
+import dateCalculator from '@/content/tools/date-time/date-calculator/meta';
 import businessDaysCalculator from '@/content/tools/date-time/business-days-calculator/meta';
 import dateDifferenceCalculator from '@/content/tools/date-time/date-difference-calculator/meta';
 import timeZoneConverter from '@/content/tools/date-time/time-zone-converter/meta';
 import workHoursCalculator from '@/content/tools/date-time/work-hours-calculator/meta';
 import base64Encoder from '@/content/tools/developer/base64-encoder/meta';
+import numberBaseConverter from '@/content/tools/developer/number-base-converter/meta';
 import caseConverter from '@/content/tools/developer/case-converter/meta';
 import cronExpressionTranslator from '@/content/tools/developer/cron-expression-translator/meta';
 import colorConverter from '@/content/tools/developer/color-converter/meta';
@@ -50,13 +52,16 @@ import idealWeightCalculator from '@/content/tools/health/ideal-weight-calculato
 import tdeeCalculator from '@/content/tools/health/tdee-calculator/meta';
 import waistToHeightRatioCalculator from '@/content/tools/health/waist-to-height-ratio-calculator/meta';
 import waterIntakeCalculator from '@/content/tools/health/water-intake-calculator/meta';
+import aspectRatioCalculator from '@/content/tools/math/aspect-ratio-calculator/meta';
 import averageCalculator from '@/content/tools/math/average-calculator/meta';
+import lcmGcdCalculator from '@/content/tools/math/lcm-gcd-calculator/meta';
 import fractionCalculator from '@/content/tools/math/fraction-calculator/meta';
 import percentageCalculator from '@/content/tools/math/percentage-calculator/meta';
 import ratioCalculator from '@/content/tools/math/ratio-calculator/meta';
 import significantFiguresCalculator from '@/content/tools/math/significant-figures-calculator/meta';
 import standardDeviationCalculator from '@/content/tools/math/standard-deviation-calculator/meta';
 import discountCalculator from '@/content/tools/lifestyle/discount-calculator/meta';
+import paintCalculator from '@/content/tools/lifestyle/paint-calculator/meta';
 import electricityCostCalculator from '@/content/tools/lifestyle/electricity-cost-calculator/meta';
 import fuelCostCalculator from '@/content/tools/lifestyle/fuel-cost-calculator/meta';
 import tipCalculator from '@/content/tools/lifestyle/tip-calculator/meta';
@@ -84,7 +89,9 @@ const toolMetas: ToolMeta[] = [
   tdeeCalculator,
   waistToHeightRatioCalculator,
   waterIntakeCalculator,
+  aspectRatioCalculator,
   averageCalculator,
+  lcmGcdCalculator,
   fractionCalculator,
   percentageCalculator,
   ratioCalculator,
@@ -100,11 +107,13 @@ const toolMetas: ToolMeta[] = [
   volumeConverter,
   weightConverter,
   ageCalculator,
+  dateCalculator,
   businessDaysCalculator,
   dateDifferenceCalculator,
   timeZoneConverter,
   workHoursCalculator,
   base64Encoder,
+  numberBaseConverter,
   caseConverter,
   colorConverter,
   cronExpressionTranslator,
@@ -114,6 +123,7 @@ const toolMetas: ToolMeta[] = [
   unixTimestampConverter,
   uuidGenerator,
   discountCalculator,
+  paintCalculator,
   electricityCostCalculator,
   fuelCostCalculator,
   tipCalculator,

@@ -22,6 +22,8 @@ import AgeCalculator from './date-time/age-calculator/Calculator';
 import AgeCalculatorContent from './date-time/age-calculator/content.mdx';
 import BusinessDaysCalculator from './date-time/business-days-calculator/Calculator';
 import BusinessDaysContent from './date-time/business-days-calculator/content.mdx';
+import DateCalculator from './date-time/date-calculator/Calculator';
+import DateCalculatorContent from './date-time/date-calculator/content.mdx';
 import DateDifferenceCalculator from './date-time/date-difference-calculator/Calculator';
 import DateDifferenceContent from './date-time/date-difference-calculator/content.mdx';
 import TimeZoneConverter from './date-time/time-zone-converter/Calculator';
@@ -38,6 +40,8 @@ import CronExpressionTranslator from './developer/cron-expression-translator/Cal
 import CronExpressionContent from './developer/cron-expression-translator/content.mdx';
 import HashGenerator from './developer/hash-generator/Calculator';
 import HashGeneratorContent from './developer/hash-generator/content.mdx';
+import NumberBaseConverter from './developer/number-base-converter/Calculator';
+import NumberBaseContent from './developer/number-base-converter/content.mdx';
 import JsonFormatter from './developer/json-formatter/Calculator';
 import JsonFormatterContent from './developer/json-formatter/content.mdx';
 import PasswordGenerator from './developer/password-generator/Calculator';
@@ -78,10 +82,14 @@ import WaistToHeightRatioCalculator from './health/waist-to-height-ratio-calcula
 import WaistToHeightRatioContent from './health/waist-to-height-ratio-calculator/content.mdx';
 import WaterIntakeCalculator from './health/water-intake-calculator/Calculator';
 import WaterIntakeContent from './health/water-intake-calculator/content.mdx';
+import AspectRatioCalculator from './math/aspect-ratio-calculator/Calculator';
+import AspectRatioContent from './math/aspect-ratio-calculator/content.mdx';
 import AverageCalculator from './math/average-calculator/Calculator';
 import AverageContent from './math/average-calculator/content.mdx';
 import FractionCalculator from './math/fraction-calculator/Calculator';
 import FractionContent from './math/fraction-calculator/content.mdx';
+import LcmGcdCalculator from './math/lcm-gcd-calculator/Calculator';
+import LcmGcdContent from './math/lcm-gcd-calculator/content.mdx';
 import PercentageCalculator from './math/percentage-calculator/Calculator';
 import PercentageContent from './math/percentage-calculator/content.mdx';
 import RatioCalculator from './math/ratio-calculator/Calculator';
@@ -96,6 +104,8 @@ import ElectricityCostCalculator from './lifestyle/electricity-cost-calculator/C
 import ElectricityCostContent from './lifestyle/electricity-cost-calculator/content.mdx';
 import FuelCostCalculator from './lifestyle/fuel-cost-calculator/Calculator';
 import FuelCostContent from './lifestyle/fuel-cost-calculator/content.mdx';
+import PaintCalculator from './lifestyle/paint-calculator/Calculator';
+import PaintCalculatorContent from './lifestyle/paint-calculator/content.mdx';
 import TipCalculator from './lifestyle/tip-calculator/Calculator';
 import TipCalculatorContent from './lifestyle/tip-calculator/content.mdx';
 import CharacterCounter from './seo/character-counter/Calculator';
@@ -160,7 +170,9 @@ export const toolModules: Record<string, ToolModule> = {
     Content: PercentageContent,
   },
   'math/ratio-calculator': { Calculator: RatioCalculator, Content: RatioContent },
+  'math/aspect-ratio-calculator': { Calculator: AspectRatioCalculator, Content: AspectRatioContent },
   'math/fraction-calculator': { Calculator: FractionCalculator, Content: FractionContent },
+  'math/lcm-gcd-calculator': { Calculator: LcmGcdCalculator, Content: LcmGcdContent },
   'math/standard-deviation-calculator': {
     Calculator: StandardDeviationCalculator,
     Content: StandardDeviationContent,
@@ -219,6 +231,7 @@ export const toolModules: Record<string, ToolModule> = {
     Content: ElectricityCostContent,
   },
   'date-time/age-calculator': { Calculator: AgeCalculator, Content: AgeCalculatorContent },
+  'date-time/date-calculator': { Calculator: DateCalculator, Content: DateCalculatorContent },
   'date-time/date-difference-calculator': {
     Calculator: DateDifferenceCalculator,
     Content: DateDifferenceContent,
@@ -236,6 +249,7 @@ export const toolModules: Record<string, ToolModule> = {
   'developer/color-converter': { Calculator: ColorConverter, Content: ColorConverterContent },
   'developer/hash-generator': { Calculator: HashGenerator, Content: HashGeneratorContent },
   'developer/json-formatter': { Calculator: JsonFormatter, Content: JsonFormatterContent },
+  'developer/number-base-converter': { Calculator: NumberBaseConverter, Content: NumberBaseContent },
   'developer/password-generator': {
     Calculator: PasswordGenerator,
     Content: PasswordGeneratorContent,
@@ -247,6 +261,7 @@ export const toolModules: Record<string, ToolModule> = {
   'developer/uuid-generator': { Calculator: UuidGenerator, Content: UuidGeneratorContent },
   'lifestyle/discount-calculator': { Calculator: DiscountCalculator, Content: DiscountContent },
   'lifestyle/fuel-cost-calculator': { Calculator: FuelCostCalculator, Content: FuelCostContent },
+  'lifestyle/paint-calculator': { Calculator: PaintCalculator, Content: PaintCalculatorContent },
   'lifestyle/tip-calculator': { Calculator: TipCalculator, Content: TipCalculatorContent },
   'seo/character-counter': {
     Calculator: CharacterCounter,

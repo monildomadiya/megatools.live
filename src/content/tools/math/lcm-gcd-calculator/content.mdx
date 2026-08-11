@@ -1,0 +1,101 @@
+## Two quantities, and the link between them
+
+The **greatest common divisor** of a set of numbers is the largest whole number that divides every one of them exactly. For 12 and 18 it is 6: both divide by 6, and nothing larger divides both.
+
+The **lowest common multiple** is the smallest whole number that every one of them divides into. For 12 and 18 it is 36: both go into 36, and nothing smaller works.
+
+They look like opposite questions and they are tied together. For any two positive integers:
+
+```
+gcd(a, b) × lcm(a, b) = a × b
+```
+
+Check it on 12 and 18: 6 × 36 = 216, and 12 × 18 = 216. So finding either one immediately gives you the other, which is exactly how this tool computes the LCM — it finds the GCD by a fast method and divides.
+
+One caution that catches people, and which the FAQ above repeats because it matters: **this identity holds for two numbers only.** For 4, 6 and 10 the GCD is 2 and the LCM is 60, giving 120, while the product is 240. The identity is not a general law about sets, and the LCM of three or more numbers has to be built up in pairs.
+
+## Three names for the same thing
+
+If you learned this at school outside mathematics or computing, you may know the GCD by a different name:
+
+- **Greatest common divisor (GCD)** — standard in mathematics and computer science.
+- **Greatest common factor (GCF)** — standard in American schooling.
+- **Highest common factor (HCF)** — standard in British, Indian and Commonwealth schooling.
+
+They are the same quantity computed the same way. There is no distinction to learn, only a vocabulary difference, and a question asking for the HCF wants exactly what this page labels the GCD.
+
+The LCM is more consistently named, though you will occasionally see "least common multiple" — again, the same thing.
+
+## The Euclidean algorithm
+
+The method this tool uses to find the GCD appears in Euclid's *Elements*, written around 300 BC. It is one of the oldest algorithms still in everyday use, and no better general method for the problem has been found in the two and a half thousand years since.
+
+It works like this. Divide the larger number by the smaller and keep the remainder. Then divide the previous divisor by that remainder. Repeat until the remainder is zero. The last non-zero remainder is the GCD.
+
+Taking 48 and 18:
+
+```
+48 = 18 × 2 + 12
+18 = 12 × 1 + 6
+12 =  6 × 2 + 0
+```
+
+The remainder has reached zero, and the last non-zero remainder was 6. So gcd(48, 18) = 6.
+
+The reason it works is worth a sentence, because it makes the whole thing obvious rather than magical. Any number that divides both *a* and *b* must also divide what is left over when you take as many *b*s out of *a* as will fit. So the pair (*a*, *b*) and the pair (*b*, remainder) have exactly the same set of common divisors — including the greatest one. Each step replaces the problem with a strictly smaller problem that has the same answer, and since the remainders shrink every time, it has to finish.
+
+How fast it finishes is remarkable. The worst case is consecutive Fibonacci numbers, and even then the number of steps grows only in proportion to the number of digits. Two thirty-digit numbers resolve in under a hundred and fifty divisions. This is why every cryptographic library in existence uses it.
+
+## The prime factorisation method
+
+The other method is the one taught in school, and this page shows it alongside the algorithm because it explains *why* the answers are what they are.
+
+Break each number into its prime factors:
+
+- 12 = 2² × 3
+- 18 = 2 × 3²
+
+Then:
+
+- The **GCD** takes the **lowest** power of each prime that appears in *every* number: 2¹ × 3¹ = 6.
+- The **LCM** takes the **highest** power of each prime appearing in *any* of them: 2² × 3² = 36.
+
+That is the whole rule, and once you have seen it the two quantities stop feeling like separate topics. The GCD is what all the numbers share; the LCM is everything any of them needs.
+
+So why not use it for computation? Because factorising is hard. Finding the prime factors of a large number is, as far as anyone knows, genuinely difficult — difficult enough that RSA encryption rests on it being difficult. Euclid's algorithm finds a GCD of two enormous numbers in moments without ever discovering a single prime factor of either. Use factorisation to understand; use Euclid to compute.
+
+## Coprime numbers
+
+When the GCD of two numbers is 1, they are **coprime** — they share no prime factor at all.
+
+Neither number has to be prime. 8 and 15 are coprime: 8 is 2³, 15 is 3 × 5, and they have nothing in common. Two primes are always coprime, but so are plenty of composite pairs.
+
+Two consequences follow directly:
+
+**Their LCM is their product.** With no shared factors to cancel, lcm(8, 15) = 120. This is the case where multiplying the denominators to add fractions happens to give the right answer with nothing to cancel afterwards.
+
+**A fraction with coprime numerator and denominator is already in lowest terms.** Reducing a fraction *is* dividing both parts by their GCD, so a GCD of 1 means there is nothing left to do.
+
+Coprimality is also why gear designers avoid tooth counts sharing a factor. If a 20-tooth gear meshes with a 30-tooth one, gcd is 10 and only a tenth of the possible tooth pairings ever meet — the same teeth wear against each other repeatedly. Make it 20 and 31 and every tooth eventually meets every other, spreading wear evenly. The same reasoning shapes the spacing of cicada broods and the design of hashing schemes.
+
+## Where you actually use these
+
+**Adding fractions.** The LCM of the denominators is the lowest common denominator. For 1/6 + 1/8 the LCM of 6 and 8 is 24, so the sum is 4/24 + 3/24 = 7/24 — already in lowest terms. Multiplying the denominators instead gives 48 and an answer of 14/48 that then needs cancelling.
+
+**Simplifying fractions.** Divide numerator and denominator by their GCD. 84/126 has a GCD of 42, giving 2/3 in one step rather than by repeated halving and thirding.
+
+**Simplifying ratios.** Identical operation. 24 : 36 : 60 has a GCD of 12, so it reduces to 2 : 3 : 5.
+
+**Scheduling and cycles.** If one event repeats every 12 days and another every 18, they coincide every lcm(12, 18) = 36 days. This is the shape of every "when do the buses arrive together" problem, and of shift rotas, maintenance intervals and traffic light timings.
+
+**Tiling and cutting.** The largest square tile that fits a 132 by 96 centimetre area with no cutting has a side of gcd(132, 96) = 12 centimetres. The smallest square you can build from 132 by 96 rectangles has a side of their LCM.
+
+## The edge cases
+
+**Zero.** Every number divides zero, so gcd(*a*, 0) = *a*. That is a real definition, not a fudge, and it is what makes the algorithm terminate — the final step always reaches a remainder of zero, and the divisor at that moment is the answer. gcd(0, 0) is taken as 0. The LCM of anything with zero is zero, which is why this tool asks for positive numbers: an LCM of zero is correct and useless.
+
+**One.** gcd(*a*, 1) = 1 and lcm(*a*, 1) = *a*. Including 1 in a list therefore forces the GCD to 1 and leaves the LCM unchanged.
+
+**Negative numbers.** Both quantities are conventionally defined as positive, so implementations take absolute values first. This tool asks for positive input rather than silently discarding a minus sign you may have meant.
+
+**Very large numbers.** The arithmetic here uses standard double-precision numbers, which represent integers exactly up to about 9 quadrillion. Beyond that, results become unreliable. The LCM is computed by dividing before multiplying — `a / gcd × b` rather than `a × b / gcd` — specifically so that a large LCM does not overflow through an intermediate product larger than the answer itself.

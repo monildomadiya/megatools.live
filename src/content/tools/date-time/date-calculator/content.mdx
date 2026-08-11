@@ -1,0 +1,77 @@
+## Days are simple; months are not
+
+Adding days to a date has exactly one answer. Count forward on the calendar, cross into the next month when you run out of days, and you arrive where you arrive. Nobody disagrees about what 10 March plus 45 days means.
+
+Adding months is a different problem, and it is where date arithmetic quietly goes wrong.
+
+31 January plus one month should be 31 February. There is no such date. Something has to give, and the choice of what gives is a convention rather than a fact. The convention almost universally used — by calendars, by spreadsheet software, by contract law, and by this tool — is to clamp to the last day of the target month. So 31 January plus one month is 28 February, or 29 February in a leap year.
+
+The consequence catches people out: the operation is not reversible. 31 January plus one month is 28 February, but 28 February minus one month is 28 January, not the 31st you started from. If you are chaining several month additions together, add them all at once from the original date rather than one at a time, or the clamping compounds and you drift.
+
+This tool tells you on screen whenever a clamp has happened, because a result that has silently moved is worse than one that has visibly moved.
+
+## A month is not thirty days
+
+This is the most common date error in ordinary use, and it is worth stating plainly: months are between 28 and 31 days long, so "one month" and "30 days" are different instructions that usually produce different answers.
+
+One month from 1 January is 1 February — 31 days later. Thirty days from 1 January is 31 January. Over a full year the two approaches drift apart by five or six days, and over several years the gap grows steadily.
+
+It matters because the two get used interchangeably in writing when only one of them is meant. A notice period of "one month" in an employment contract or a tenancy is a calendar month, and it ends on the corresponding date of the following month. A payment term of "30 days" is exactly thirty days. A subscription billed monthly renews on the same date each month, which is why a subscription started on the 31st bills on the 28th in February and returns to the 31st in March.
+
+If a document says months, use months. If it says days, use days. Do not convert one into the other on the assumption that it is close enough.
+
+## Leap years, and the rule that is not simply "every four years"
+
+The Gregorian calendar's leap rule has three parts, and most people only know the first:
+
+- A year divisible by 4 is a leap year.
+- Except that a year divisible by 100 is not.
+- Except that a year divisible by 400 is.
+
+So 2024 is a leap year, 1900 was not, and 2000 was. The exceptions exist because the Earth's orbital period is not 365.25 days but about 365.2422. Adding a day every four years overcorrects by a little over eleven minutes a year, and the century rules claw that back — leaving an error of roughly one day in three thousand years, which is precise enough for civil purposes.
+
+The practical consequence for date arithmetic is that the number of days in a year is 365 or 366 depending on which year you are crossing, and any calculation that assumes 365 will drift. Adding one year to 29 February in a leap year gives 28 February in the following one — the same month-end clamp described above, applying to the one date that only exists three years in four.
+
+## Does the start date count?
+
+This tool does not count the start date. Adding one day to 10 March gives 11 March.
+
+That is the standard convention for date arithmetic and it is almost certainly what you want. But it is not universal in the places where dates carry consequences, and the difference is exactly one day, which is exactly the size of gap that causes a missed deadline.
+
+Legal and contractual counting rules vary. Some specify that a period begins on the day after the triggering event, which matches this tool. Others count the day of the event itself as day one, which shifts every subsequent date back by one. Rules about deadlines falling on weekends and public holidays vary further still — many roll forward to the next working day, some roll backward.
+
+The reliable approach is to read what the document says about how time is counted rather than to assume. Where the wording is genuinely ambiguous and money or rights depend on it, that ambiguity is a question for a solicitor, not for a calculator.
+
+## Why the weekday is shown
+
+Every result on this page comes with its day of the week, and it is not decoration.
+
+A deadline that lands on a Saturday is frequently not the real deadline. Courts, banks, payment systems, government offices and most commercial contracts have a rule for what happens when a due date falls on a non-working day, and the overwhelmingly common one is to move to the next working day. Knowing the weekday of your result is what tells you whether that rule is about to be triggered.
+
+It also catches a second class of error. If you calculated ninety days for a working-day process and the answer lands mid-weekend, that is a signal you may have wanted working days rather than calendar days — which is a different calculation, and one the business days calculator on this site handles.
+
+## Where the arithmetic happens
+
+Everything here runs on a UTC midnight timestamp rather than on a local date carrying a time of day. That is a deliberate implementation choice with a visible consequence: results never shift because of daylight saving.
+
+The failure it avoids is real and common in software. If a date is represented as local midnight, and you add twenty-four hours' worth of milliseconds across the night the clocks go forward, you land at 1am on the following day — or, going the other way across an autumn transition, at 11pm on the same day you started. Calendar arithmetic has no business consulting a clock, so the clock is removed before any of it begins.
+
+The same reasoning is why the tool works in whole days and not in hours. "Three days from now" is a statement about the calendar, not about seventy-two hours elapsing.
+
+## Dates before the Gregorian calendar
+
+The tool will calculate a date in 1500 and it will give you an answer. Whether that answer means anything depends on what you are doing.
+
+The Gregorian calendar was introduced by papal bull in October 1582, and adoption was neither immediate nor uniform. Catholic states switched at once, dropping ten days. Britain and its colonies held out until September 1752, by which point the correction had grown to eleven days — the reason 2 September 1752 was followed directly by 14 September. Russia did not switch until 1918, Greece not until 1923.
+
+Dates before a given place adopted the calendar are described as *proleptic* Gregorian: the modern rules projected backwards over a period that did not use them. That is what this tool computes, and it is a consistent, well-defined thing to compute. It is simply not the same as the date a contemporary would have written.
+
+For anything historical, record which calendar a source is using before doing arithmetic on it. Historians conventionally write dates from this period with both, in the form 11/21 February, precisely because the ambiguity is otherwise unrecoverable.
+
+## The format the result is given in
+
+Alongside the written date, every result is shown in ISO 8601 form — `2026-11-09`, year then month then day, always four and two and two digits.
+
+It is worth using deliberately, because the alternatives are ambiguous in a way that causes real errors. `09/11/2026` is 9 November to most of the world and 11 September in the United States, and nothing in the string itself tells you which. Any date written numerically with the day and month in either of the first two positions is a guess unless you know the writer's convention.
+
+ISO 8601 removes the guess. It is unambiguous by construction, it sorts correctly as plain text, and it is the format almost every system will accept without complaint. When you are writing a date into a spreadsheet, a filename, a database or an email to someone in another country, it is the format to reach for.

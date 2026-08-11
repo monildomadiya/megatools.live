@@ -1,0 +1,92 @@
+## The calculation is one division
+
+An aspect ratio is width divided by height. That is the whole definition, and everything else on this page follows from it.
+
+1920 ÷ 1080 = 1.777…, which is 16 ÷ 9. So a 1920 by 1080 frame is 16:9, and so is 1280 by 720, 3840 by 2160 and 640 by 360 — all of them produce the same quotient, which is exactly what makes them interchangeable shapes at different sizes.
+
+To resize without distortion, hold that quotient constant:
+
+```
+new height = new width ÷ (original width ÷ original height)
+new width  = new height × (original width ÷ original height)
+```
+
+For a 1920 by 1080 source at 800 wide: 800 ÷ 1.777 = **450**. Any height other than 450 stretches or squashes the picture, and the further from 450 you go the more obvious it becomes.
+
+## Why 1920 by 1080 is called 16:9
+
+Reducing a ratio to lowest terms is the same operation as simplifying a fraction: divide both numbers by their greatest common divisor.
+
+For 1920 and 1080 the greatest common divisor is 120. Divide both and you get 16 and 9. There is no smaller pair of whole numbers with the same quotient, so 16:9 is the ratio in its simplest form.
+
+That is why the same three or four ratios keep appearing across formats that have nothing else in common. 16:9 is not a property of high definition specifically; it is the shape, and 720p, 1080p, 1440p and 2160p are sizes of that shape. Scaling between any two of them is lossless in terms of proportion — only resolution changes.
+
+The corollary is useful when you meet an unfamiliar size: reduce it and see what you have. 2560 by 1080 reduces to 64:27, which is 16:9 stretched — an ultrawide monitor. 1080 by 1350 reduces to 4:5, which is the portrait shape social platforms favour.
+
+## Two notations for the same thing
+
+You will meet aspect ratios written two ways, and they are not different systems.
+
+**Two whole numbers** — 16:9, 4:3, 1:1. This is the broadcast and computing convention, and it is what ITU-R BT.709 and BT.601 use.
+
+**A decimal against one** — 1.78:1, 1.85:1, 2.39:1. This is the cinema convention, which quotes the quotient directly with the height normalised to one.
+
+16:9 and 1.78:1 are the same ratio. So are 4:3 and 1.33:1. The film world's numbers look unfamiliar mostly because its ratios are not neat fractions: 1.85:1 is the standard widescreen projection ratio and 2.39:1 is anamorphic scope, and neither reduces to small whole numbers, which is precisely why they are written as decimals.
+
+The tool shows both forms for whatever you enter, so you can move between a video editor that wants one and a specification that quotes the other.
+
+## Black bars are the correct answer
+
+When a 4:3 photograph appears on a 16:9 display with black bars down the sides, nothing has gone wrong. The source and the display disagree about shape, and there are only three things a system can do about it:
+
+**Letterbox or pillarbox.** Fit the whole image and pad the leftover with black. Nothing is lost and nothing is distorted. The bars are the cost of showing you exactly what was captured.
+
+**Stretch to fill.** Change the ratio so the image fills the frame. Everything is subtly wrong — faces widen, circles become ellipses — and most people notice something is off without being able to say what.
+
+**Crop to fill.** Scale until the frame is covered and discard what hangs over the edges. Proportions stay correct but content is gone, usually from the top and bottom.
+
+Bars are the only option of the three that preserves both the proportions and the content, which is why it is the default in any system that cares about the image. Crop-to-fill is the right choice when the frame matters more than completeness — a background image, a thumbnail — and stretching is essentially never right.
+
+This is also why platforms that crop your uploads crop from the centre, and why you should keep anything important away from the edges of an image you do not control the display of.
+
+## Rounding, and why chained resizes drift
+
+Pixels are whole numbers. Ratios frequently are not. The two meet at the point where the tool tells you the exact height is 450.7 and your software has to pick 450 or 451.
+
+That rounding changes the ratio by a fraction of a per cent — far too little to see. The problem is that it accumulates. Resize from the original to 800 wide, then from that result to 500 wide, then to 320, and each step rounds again, in an unpredictable direction. After several generations the shape has visibly moved, and each resample has also softened the image.
+
+The fix is a habit rather than a calculation: **always resize from the original**, never from the last output. Keep the master file, generate each size from it directly, and the rounding error stays at one step instead of compounding.
+
+If you need exact whole numbers at every size, choose dimensions that divide cleanly. For 16:9, any multiple of 16 by the matching multiple of 9 works — 320×180, 640×360, 1280×720, 1920×1080 — and none of them ever needs rounding.
+
+## When a size does not reduce to anything nice
+
+Not every set of dimensions is a standard shape, and the reduced form is sometimes useless. 1000 by 618 reduces to 500:309, which is correct and tells you nothing.
+
+In that situation the decimal form is the more informative reading. 1000 ÷ 618 = 1.618, which is the golden ratio — a fact the 500:309 form completely hides.
+
+This is why the tool reports three things rather than one: the reduced whole-number pair, the decimal quotient, and the closest standard ratio. An odd-looking size is usually either a deliberate choice, a crop someone made by eye, or a near-miss of a standard ratio that should probably be corrected. The three readings together tell you which.
+
+A near-miss is worth taking seriously. If a source comes in at 1918 by 1080 rather than 1920, that is almost certainly a two-pixel crop somewhere in the pipeline rather than an intentional 959:540 frame, and it will cause a thin black line or a soft edge downstream.
+
+## Square pixels, and when they are not
+
+Everything above assumes a pixel is square, which on any current display it is. For historical formats it was not, and the assumption breaks in a way that is confusing if you have not met it.
+
+Standard-definition digital video stored 720 by 576 for PAL, which reduces to 5:4 — but it was displayed as 4:3. The stored dimensions and the display shape disagreed because each stored pixel was wider than it was tall. The full description needed two numbers: the pixel dimensions and a separate pixel aspect ratio.
+
+If you are working with archive video, DVD sources or older camera formats, check for a pixel aspect ratio before trusting the stored size. Modern formats use square pixels throughout, so for anything shot in the last fifteen years the stored dimensions are the shape.
+
+## Choosing a ratio
+
+Briefly, since this changes and a calculator is the wrong place to date itself:
+
+**16:9** is the safe default for anything that will be watched on a screen — video, presentations, most web imagery.
+
+**1:1 and 4:5** are the social feed shapes, with 4:5 taking more vertical space and therefore more attention in a scrolling feed.
+
+**9:16** is full-screen vertical video, and it is genuinely a different composition problem rather than 16:9 turned sideways.
+
+**3:2** is the shape of a 35mm negative and of most interchangeable-lens cameras, which is why photographs so often need cropping to fit a 16:9 slot.
+
+Whatever you pick, check the current specification from the platform itself rather than a summary. These change, and a platform that does not get the ratio it wants will crop to get it.

@@ -1,0 +1,122 @@
+## What a base actually is
+
+A number base is one decision: how many distinct digits the notation uses before it has to start a second column.
+
+Decimal uses ten, so after 9 there is nowhere left to go and 10 means one group of ten plus none. Binary uses two, so it runs out after 1 and 10 means one group of two. Hexadecimal uses sixteen, so it borrows the letters A to F to keep going past 9, and 10 means one group of sixteen.
+
+Every positional system works the same way underneath. Each column is worth the base raised to the column's position, counting from zero on the right:
+
+```
+Decimal 255 = 2×10² + 5×10¹ + 5×10⁰ = 200 + 50 + 5
+Binary  11111111 = 128+64+32+16+8+4+2+1
+Hex     FF = 15×16¹ + 15×16⁰ = 240 + 15
+```
+
+All three lines describe the same quantity. **The number does not change when you convert it.** Only the way it is written down changes — which sounds obvious and is the thing people lose track of when a hex value in a debugger stops feeling like an ordinary number.
+
+## Why hexadecimal, and not something else
+
+Hex is not used because programmers enjoy letters in their numbers. It is used because sixteen is two to the fourth power, and that single fact makes it the most convenient shorthand for binary that exists.
+
+Four binary digits hold exactly sixteen values, which is exactly one hex digit. So the conversion is a substitution table, not arithmetic:
+
+```
+1111 → F      1010 → A      0111 → 7
+```
+
+Position never matters. `1010` is `A` whether it sits at the start of a value or the end, which is what makes hex readable at a glance once you know the sixteen patterns.
+
+The practical results follow immediately. A byte is always exactly two hex characters. A 16-bit value is four, a 32-bit value eight, a 128-bit UUID thirty-two. A colour like `#FF8800` is three bytes, one per channel, and you can read the red channel straight off without doing anything.
+
+Decimal has no such relationship with binary. Ten factors into two and five, and the five never lines up with anything. Knowing a byte is 173 in decimal tells you nothing about which bits are set; knowing it is `AD` tells you `1010 1101` immediately.
+
+## Octal, and why it survives
+
+Octal is base eight, three bits per digit, and it is mostly a relic — with one place it still fits the problem better than anything else.
+
+Unix file permissions come in three groups of three bits: read, write and execute, for the owner, the group and everyone else. Three bits is exactly one octal digit, so the whole permission set is three characters.
+
+```
+chmod 755
+7 = 111 = read, write, execute
+5 = 101 = read, execute
+```
+
+That is why `chmod 644` and `chmod 755` are written as numbers rather than words, and why they are so easy to remember once you see the bits behind them. It is not arbitrary tradition; it is the notation matching the structure of the data.
+
+Outside file permissions and some older architectures, hexadecimal has replaced octal entirely, for the reason above: four bits maps to a byte cleanly and three bits does not.
+
+## The prefixes
+
+`0b`, `0o` and `0x` are notation, not value. They exist because the string `11` is ambiguous on its own — three in binary, nine in octal, eleven in decimal, seventeen in hexadecimal — and something has to say which was meant.
+
+```
+0b11111111   binary
+0o377        octal
+255          decimal
+0xFF         hexadecimal
+```
+
+All four are the same number. The tool above accepts prefixed input and strips it, because someone pasting `0xFF` means 255 and not a hex string that begins with a zero and an x.
+
+One thing to watch in older code: a leading zero alone used to mean octal in C and in early JavaScript, so `0755` was 493, not seven hundred and fifty-five. Modern JavaScript rejects that in strict mode and requires `0o`, but the convention still lurks in configuration files and in some languages. If you see a number with a pointless leading zero, check what the language does with it before assuming.
+
+## Precision, and where most converters break
+
+This is the part worth knowing if you ever convert a large value.
+
+Ordinary JavaScript numbers are double-precision floats. They represent integers exactly up to 2⁵³ — about nine quadrillion — and above that they start rounding to the nearest representable value. A base converter built on `parseInt` inherits that limit:
+
+```
+parseInt('12345678901234567890', 10)
+→ 12345678901234567000
+```
+
+The last three digits are gone. No error, no warning, just a wrong answer that looks entirely plausible. Many converters online do exactly this, and you would only notice by checking a value you already knew.
+
+This one uses arbitrary-precision integers instead, accumulating digit by digit with no ceiling, so a sixty-digit input converts exactly. The panel tells you when your value has passed the point where an ordinary number would have stopped being exact, because that boundary is invisible otherwise.
+
+Where it matters: cryptographic keys, database identifiers from systems that use 64-bit integers, hashes, and anything to do with nanosecond timestamps. All of them routinely exceed 2⁵³.
+
+## Fractions do not always survive a base change
+
+Whole numbers convert between bases exactly, always. Fractions do not, and the reason explains one of the most reported bugs in programming.
+
+A fraction terminates in a given base only if its denominator divides some power of that base. In decimal, one fifth is 0.2 exactly, because five divides ten. One third is 0.333… forever, because three does not divide any power of ten.
+
+Binary has only the factor two. So a half, a quarter and an eighth are exact, and **anything with a factor of five in the denominator is not**. One tenth — the ordinary, unremarkable 0.1 — becomes an infinitely repeating binary fraction, and a computer storing it has to stop somewhere and round.
+
+That is why:
+
+```
+0.1 + 0.2 = 0.30000000000000004
+```
+
+in almost every language, and it is not a bug in any of them. Neither 0.1 nor 0.2 was ever exactly in memory. This is also why financial code stores amounts as integer cents, or in a decimal type, and never as a float.
+
+This tool handles whole numbers only, which sidesteps the problem rather than pretending to solve it.
+
+## Negative numbers are not stored with a minus sign
+
+The tool shows a minus sign for negative values because that is the mathematical notation and it is what you want to read. Computers do not store them that way.
+
+Hardware uses **two's complement**: the leading bit carries a negative weight equal to its column value. In eight bits:
+
+```
+00000001  =  1
+01111111  =  127
+10000000  = −128
+11111111  = −1
+```
+
+It looks strange until you see what it buys. With two's complement, subtraction is just addition — the same adder circuit handles both, with no special case and no separate representation of negative zero. That is why every mainstream processor uses it.
+
+The consequence for reading raw data: a byte showing `FF` is 255 if the value is unsigned and −1 if it is signed, and nothing in the byte itself tells you which. You have to know the type. This is the source of a whole family of bugs where a value read as unsigned wraps around to a huge number instead of going negative.
+
+## Base 36, and where the digits stop
+
+Thirty-six is the highest base this tool offers, and the reason is simply that the characters run out: ten numerals plus twenty-six letters is thirty-six symbols, and there is no thirty-seventh that everyone agrees on.
+
+Base 36 has a genuine use in compact identifiers. A number that needs eleven decimal digits fits in seven base-36 characters, which matters for URL shorteners, order references and anything meant to be typed by a human.
+
+This is also where a common confusion sits: **Base64 is not base 64 in this sense.** Base64 is a specification for encoding arbitrary bytes as text using a defined 64-character alphabet, so that binary data survives a channel that only handles text. It is not positional notation and it is not converting a number. If what you have is bytes rather than a number, Base64 is the tool for it; if what you have is a number, this page is.

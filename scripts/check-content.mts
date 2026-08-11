@@ -104,6 +104,46 @@ for (const file of contentFiles) {
   }
 }
 
+// --- 2b. Section anchors are unique ----------------------------------------
+// Every h2 and h3 in an article body gets an id derived from its text, and the
+// contents rail links to those ids. Two headings that slugify the same produce
+// two elements with one id: the rail's second link jumps to the first section,
+// and the document is invalid besides. Nothing about writing a heading makes
+// that visible, so it is checked rather than remembered.
+
+const { slugify, markdownHeadingText } = await import('../src/lib/tools/headings');
+
+for (const file of contentFiles) {
+  const rel = relative(ROOT, file);
+  const seen = new Map<string, string>();
+  let inFence = false;
+
+  for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+
+    const match = /^(##|###)\s+(.+?)\s*$/.exec(line);
+    if (!match) continue;
+
+    const text = markdownHeadingText(match[2]!);
+    const slug = slugify(text);
+
+    if (!slug) {
+      fail(`${rel} — heading "${text}" has no linkable characters in it`);
+      continue;
+    }
+    const previous = seen.get(slug);
+    if (previous !== undefined) {
+      fail(`${rel} — headings "${previous}" and "${text}" both slugify to #${slug}`);
+      continue;
+    }
+    seen.set(slug, text);
+  }
+}
+
 // Metadata is validated by reading the compiled registry through tsx, which
 // means the same objects the site renders are the ones being checked.
 const { allTools } = await import('../src/lib/tools/registry');

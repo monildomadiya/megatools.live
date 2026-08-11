@@ -10,12 +10,12 @@ export function SourcesList({ sources }: { sources: Source[] }) {
   if (sources.length === 0) return null;
 
   return (
-    <section aria-labelledby="sources-heading" className="mt-16">
+    <section aria-labelledby="sources-heading" className="mt-14 border-t border-line pt-12">
       <p className="eyebrow">References</p>
       <h2 id="sources-heading" className="mt-3 text-display-sm">
         Sources
       </h2>
-      <p className="mt-3 text-ink-600">
+      <p className="mt-3 max-w-2xl text-ink-600">
         The formulas and reference ranges on this page come from the following
         publications. Where a source has been revised, we cite the current edition.
       </p>

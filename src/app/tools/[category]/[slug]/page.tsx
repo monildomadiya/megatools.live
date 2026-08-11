@@ -4,6 +4,7 @@ import { ToolShell } from '@/components/tool/ToolShell';
 import { getToolModule } from '@/content/tools/modules';
 import { buildMetadata, withBrand } from '@/lib/seo/metadata';
 import { allTools, getTool, toolHref } from '@/lib/tools/registry';
+import { tocForTool } from '@/lib/tools/toc';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -46,8 +47,13 @@ export default async function ToolPage({ params }: PageProps) {
 
   const { Calculator, Content } = module;
 
+  // Read from the MDX source, which happens at build time only: every tool page
+  // is prerendered and `dynamicParams` is false, so no request ever touches the
+  // filesystem for this.
+  const toc = tocForTool(category, slug);
+
   return (
-    <ToolShell tool={tool} calculator={<Calculator />}>
+    <ToolShell tool={tool} calculator={<Calculator />} toc={toc}>
       <Content />
     </ToolShell>
   );

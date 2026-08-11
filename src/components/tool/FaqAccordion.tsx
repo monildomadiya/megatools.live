@@ -14,7 +14,11 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   if (faqs.length === 0) return null;
 
   return (
-    <section aria-labelledby="faq-heading" className="mt-16">
+    // The rule is what turns the bottom of a tool page from a run of stacked
+    // cards into named sections. Below the article the page changes register
+    // three times — questions, then citations, then somewhere to go next — and
+    // a heading alone was not marking those changes.
+    <section aria-labelledby="faq-heading" className="mt-14 border-t border-line pt-12">
       <p className="eyebrow">Common questions</p>
       <h2 id="faq-heading" className="mt-3 text-display-sm">
         Frequently asked questions
@@ -45,7 +49,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
                 </svg>
               </span>
             </summary>
-            <p className="mt-3 pr-10 leading-relaxed text-ink-600">{faq.answer}</p>
+            <p className="mt-3 max-w-3xl pr-10 leading-relaxed text-ink-600">{faq.answer}</p>
           </details>
         ))}
       </div>

@@ -784,6 +784,43 @@
     color: var(--color-brand-800);
   }
 
+  /* Section self-links.
+
+     Two-class specificity, which is what lets it beat the `.prose-content a`
+     rule above without `!important` — otherwise every heading would carry a
+     blue underlined octothorpe. Hidden until the heading is hovered, because a
+     column of permanently visible marks down the left of an article is noise,
+     but it appears on focus so a keyboard user can still reach it. */
+  .prose-content .heading-anchor {
+    margin-left: 0.35em;
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--color-ink-300);
+    text-decoration: none;
+    opacity: 0;
+    transition:
+      opacity 0.15s var(--ease-out-soft),
+      color 0.15s var(--ease-out-soft);
+  }
+
+  .prose-content h2:hover .heading-anchor,
+  .prose-content h3:hover .heading-anchor,
+  .prose-content .heading-anchor:focus-visible {
+    opacity: 1;
+  }
+
+  .prose-content .heading-anchor:hover {
+    color: var(--color-brand-600);
+  }
+
+  /* Touch has no hover, so the mark would be permanently unreachable. Showing
+     it faintly is better than a control that only exists for mouse users. */
+  @media (hover: none) {
+    .prose-content .heading-anchor {
+      opacity: 0.45;
+    }
+  }
+
   .prose-content strong {
     font-weight: 650;
     color: var(--color-ink-900);

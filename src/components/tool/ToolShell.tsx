@@ -5,6 +5,10 @@ import { Breadcrumbs } from '@/components/tool/Breadcrumbs';
 import { FaqAccordion } from '@/components/tool/FaqAccordion';
 import { RelatedTools } from '@/components/tool/RelatedTools';
 import { SourcesList } from '@/components/tool/SourcesList';
+import {
+  TableOfContents,
+  TableOfContentsDisclosure,
+} from '@/components/tool/TableOfContents';
 import { CategoryIcon, categoryAccent } from '@/components/ui/CategoryIcon';
 import {
   breadcrumbSchema,
@@ -16,7 +20,7 @@ import {
 import { author } from '@/lib/site';
 import { getCategory } from '@/lib/tools/categories';
 import { getRelatedTools, toolHref } from '@/lib/tools/registry';
-import type { ToolMeta } from '@/lib/tools/types';
+import type { ToolMeta, TocEntry } from '@/lib/tools/types';
 
 function formatDate(iso: string): string {
   return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
@@ -31,6 +35,12 @@ interface ToolShellProps {
   tool: ToolMeta;
   /** The interactive calculator — a client island. */
   calculator: React.ReactNode;
+  /**
+   * The article's `##` sections, read from the MDX at build time by the page.
+   * Passed in rather than derived here because deriving it needs `node:fs`, and
+   * every client calculator imports `CalculatorPanel` out of this module.
+   */
+  toc: TocEntry[];
   /** The long-form MDX body. */
   children: React.ReactNode;
 }
@@ -45,7 +55,7 @@ interface ToolShellProps {
  * together; pulling the panel up into the band makes the calculator look like
  * the subject of the heading rather than the first item after it.
  */
-export function ToolShell({ tool, calculator, children }: ToolShellProps) {
+export function ToolShell({ tool, calculator, toc, children }: ToolShellProps) {
   const category = getCategory(tool.category);
   const href = toolHref(tool);
   const related = getRelatedTools(tool);
@@ -68,11 +78,25 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
         ])}
       />
 
-      <section className="px-4 pb-24 pt-6 sm:px-6 sm:pb-28 sm:pt-8">
+      {/* The masthead carries the section's accent, the same way its hub page
+          does. Fifty-two tool pages share one template, so the tint and the
+          ruled ground are what stop a health page and a finance page from being
+          the same page with different words in it. */}
+      <section
+        className="cat-hero px-4 pb-24 pt-6 sm:px-6 sm:pb-28 sm:pt-8"
+        style={{ '--cat': accent } as React.CSSProperties}
+      >
         <div className="relative z-10 mx-auto max-w-6xl">
           <Breadcrumbs crumbs={crumbs} />
 
-          <header className="mt-6">
+          {/*
+            Held to 48rem rather than the page's 72rem. The heading and the lead
+            answer are prose, and prose set to the full width of a six-column
+            page runs past 120 characters a line — long enough that the eye
+            starts losing its place on the return sweep. The calculator below is
+            a different kind of object and still takes the whole width.
+          */}
+          <header className="mt-6 max-w-3xl">
             {category && (
               <span className="inline-flex items-center gap-2.5">
                 <span
@@ -112,47 +136,85 @@ export function ToolShell({ tool, calculator, children }: ToolShellProps) {
                 page's JSON-LD names an author; a reader should be able to see
                 the same claim without opening the source, and on finance and
                 health pages the name is part of the argument for trusting the
-                number. */}
-            <div className="mt-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-line bg-panel px-4 py-2 text-xs text-ink-500 shadow-panel">
-              <span className="text-ink-800">
+                number.
+
+                Set as a ruled masthead line rather than the rounded pill it
+                used to be. A pill reads as a badge — something applied to the
+                page — where the same three facts above a rule read as the
+                page's own imprint, which is what they are. */}
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-5 text-sm text-ink-500">
+              <span>
                 By{' '}
                 <Link
                   href={author.path}
                   rel="author"
-                  className="font-medium text-brand-700 hover:underline"
+                  className="font-semibold text-ink-800 hover:text-brand-700"
                 >
                   {author.name}
                 </Link>
               </span>
-              <span aria-hidden className="text-ink-300">
-                •
+
+              <span>
+                Updated{' '}
+                <time dateTime={tool.updatedAt} className="font-semibold text-ink-800">
+                  {formatDate(tool.updatedAt)}
+                </time>
               </span>
-              <span className="font-medium text-ink-800">
-                Updated <time dateTime={tool.updatedAt}>{formatDate(tool.updatedAt)}</time>
+
+              <span className="inline-flex items-center gap-1.5">
+                <svg
+                  aria-hidden
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-ink-400"
+                >
+                  <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                  <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                </svg>
+                Runs in your browser — nothing is uploaded
               </span>
-              <span aria-hidden className="text-ink-300">
-                •
-              </span>
-              <span>Runs in your browser — nothing is uploaded</span>
             </div>
           </header>
         </div>
       </section>
 
-      {/* One width for the whole page — the site's max-w-6xl, calculator and
-          article alike.
+      {/* The calculator keeps the full six-column width — it is a control
+          panel, and its fields and result tables use every inch of it. The
+          article does not.
 
-          The body copy is set on a white card rather than straight onto the
-          page. At this measure that is doing real work: a card gives the text
-          an edge to start and stop against, which is most of what stops a wide
-          column from feeling unmoored. */}
+          Splitting the body into a column plus a contents rail fixes the one
+          thing most visibly wrong with these pages: at 72rem the article ran to
+          about 115 characters a line, roughly half again the measure prose is
+          readable at. The rail is not filler in the space that frees up — on an
+          eight-section, three-thousand-word page it is the only way to reach a
+          section without scrolling past everything before it. */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="relative z-20 -mt-16 sm:-mt-20">{calculator}</div>
 
         <AdSlot slotId="tool-below-calculator" format="in-article" />
 
-        <div className="card prose-content mt-14 px-5 py-8 sm:px-10 sm:py-12">
-          {children}
+        <div className="mt-14 grid gap-x-12 lg:grid-cols-[minmax(0,1fr)_14rem]">
+          <div className="min-w-0">
+            <TableOfContentsDisclosure entries={toc} />
+
+            {/* The body copy is set on a white card rather than straight onto
+                the page: a card gives the text an edge to start and stop
+                against, which is most of what stops a long column from feeling
+                unmoored. */}
+            <article className="card prose-content px-5 py-8 sm:px-10 sm:py-12">
+              {children}
+            </article>
+          </div>
+
+          <aside className="hidden lg:block">
+            <TableOfContents entries={toc} />
+          </aside>
         </div>
 
         <FaqAccordion faqs={tool.faqs} />

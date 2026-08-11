@@ -21,6 +21,15 @@ export interface Category {
   order: number;
 }
 
+/**
+ * One `##` section of an article body, for the on-page contents rail. `id` is
+ * the anchor the MDX heading override puts on the heading itself.
+ */
+export interface TocEntry {
+  id: string;
+  text: string;
+}
+
 export interface Faq {
   question: string;
   /** Plain text. Feeds both the rendered accordion and FAQPage JSON-LD. */

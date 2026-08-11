@@ -161,6 +161,9 @@ export function ToolShell({ tool, calculator, toc, children }: ToolShellProps) {
                 </time>
               </span>
 
+              {/* A padlock next to a claim the page does not keep would be
+                  worse than no icon at all, so the tool that reaches the
+                  network gets a globe and says what leaves. */}
               <span className="inline-flex items-center gap-1.5">
                 <svg
                   aria-hidden
@@ -174,10 +177,19 @@ export function ToolShell({ tool, calculator, toc, children }: ToolShellProps) {
                   strokeLinejoin="round"
                   className="text-ink-400"
                 >
-                  <rect x="3" y="7" width="10" height="7" rx="1.5" />
-                  <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                  {tool.privacyNote ? (
+                    <>
+                      <circle cx="8" cy="8" r="5.5" />
+                      <path d="M2.5 8h11M8 2.5a9 9 0 0 1 0 11a9 9 0 0 1 0-11" />
+                    </>
+                  ) : (
+                    <>
+                      <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                    </>
+                  )}
                 </svg>
-                Runs in your browser — nothing is uploaded
+                {tool.privacyNote ?? 'Runs in your browser — nothing is uploaded'}
               </span>
             </div>
           </header>

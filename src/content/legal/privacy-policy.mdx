@@ -2,7 +2,9 @@ This policy explains what MegaTools collects, what it does not, and what control
 
 ## The short version
 
-The numbers you type into a calculator never leave your device. Every tool on this site runs in your browser, so there is no server that receives your weight, your salary, or your loan balance — there is nothing to receive it.
+The numbers you type into a calculator never leave your device. Every calculation on this site runs in your browser, so there is no server that receives your weight, your salary, or your loan balance — there is nothing to receive it.
+
+One tool is not a calculation and does not work this way. The domain age checker looks a domain up in the public registry, which means the domain name you type is sent to a third-party registry service. It is the only tool that reaches the network, it says so on its own page, and it is described in full below.
 
 What we do collect is ordinary website analytics, and advertising on the site is served by Google, which sets its own cookies. Both are described in detail below, and both are things you can turn off.
 
@@ -16,7 +18,17 @@ You can reach us at darshanbgondaliya@gmail.com. MegaTools is operated by Darsha
 
 We want to be specific, because "we value your privacy" boilerplate tells you nothing.
 
-**Calculator inputs.** Height, weight, income, loan amounts, waist measurements, text you paste into a counter — all of it is processed by JavaScript running on your own device. None of it is transmitted to us, logged, or stored. You can verify this by opening your browser's developer tools, switching to the Network tab, and using any calculator on the site: no request is made.
+**Calculator inputs.** Height, weight, income, loan amounts, waist measurements, text you paste into a counter — all of it is processed by JavaScript running on your own device. None of it is transmitted to us, logged, or stored. You can verify this by opening your browser's developer tools, switching to the Network tab, and using any calculator on the site: no request is made. The domain age checker is the single exception and is covered in its own section below.
+
+## The one tool that makes a request
+
+The domain age checker cannot work the way the calculators do. A domain's registration date is held by the registry that issued it, not by anything on your device, so looking it up means asking the registry.
+
+When you press the lookup button on that page, your browser sends the domain name you entered directly to `rdap.org`, a public bootstrap service for the Registration Data Access Protocol, which forwards the query to the registry responsible for that top-level domain. The request goes from your browser to that service. It does not pass through us, we do not see it, and we do not log or store it — but it does leave your device, and calling that private would be wrong.
+
+Two things follow. Those third parties will see the domain you asked about and your IP address, and their own privacy terms apply to that, not ours. And nothing is sent until you press the button: typing in the field makes no request, so a domain you type and then think better of is never transmitted.
+
+Every other tool on the site behaves exactly as described in the section above.
 
 **Accounts.** There are none. We do not ask for an email address to use a tool, and there is no login.
 

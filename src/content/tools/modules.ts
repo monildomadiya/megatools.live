@@ -100,6 +100,8 @@ import TipCalculator from './lifestyle/tip-calculator/Calculator';
 import TipCalculatorContent from './lifestyle/tip-calculator/content.mdx';
 import CharacterCounter from './seo/character-counter/Calculator';
 import CharacterCounterContent from './seo/character-counter/content.mdx';
+import DomainAgeChecker from './seo/domain-age-checker/Calculator';
+import DomainAgeCheckerContent from './seo/domain-age-checker/content.mdx';
 import KeywordDensityCalculator from './seo/keyword-density-calculator/Calculator';
 import KeywordDensityContent from './seo/keyword-density-calculator/content.mdx';
 import ReadabilityCalculator from './seo/readability-calculator/Calculator';
@@ -249,6 +251,10 @@ export const toolModules: Record<string, ToolModule> = {
   'seo/character-counter': {
     Calculator: CharacterCounter,
     Content: CharacterCounterContent,
+  },
+  'seo/domain-age-checker': {
+    Calculator: DomainAgeChecker,
+    Content: DomainAgeCheckerContent,
   },
   'seo/keyword-density-calculator': {
     Calculator: KeywordDensityCalculator,

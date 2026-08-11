@@ -77,7 +77,7 @@ export const categories: Category[] = [
     h1: 'Writing & SEO Tools',
     metaTitle: 'Free Writing & SEO Tools — Word Count, Readability',
     metaDescription:
-      'Free tools for writers and SEOs: word counter, character counter, readability scoring, and slug generation. Runs locally in your browser.',
+      'Free tools for writers and SEOs: word counter, character counter, readability scoring, slug generation, and domain age lookup. No sign-up, no limits.',
     intro:
       'Word counts, character limits, and readability scores all have specific definitions that differ between tools — which is why the same paragraph can score differently in two places. Each page here states the exact counting rule or formula it applies.',
     order: 7,

@@ -61,6 +61,7 @@ import electricityCostCalculator from '@/content/tools/lifestyle/electricity-cos
 import fuelCostCalculator from '@/content/tools/lifestyle/fuel-cost-calculator/meta';
 import tipCalculator from '@/content/tools/lifestyle/tip-calculator/meta';
 import characterCounter from '@/content/tools/seo/character-counter/meta';
+import domainAgeChecker from '@/content/tools/seo/domain-age-checker/meta';
 import keywordDensityCalculator from '@/content/tools/seo/keyword-density-calculator/meta';
 import readabilityCalculator from '@/content/tools/seo/readability-calculator/meta';
 import slugGenerator from '@/content/tools/seo/slug-generator/meta';
@@ -117,6 +118,7 @@ const toolMetas: ToolMeta[] = [
   fuelCostCalculator,
   tipCalculator,
   characterCounter,
+  domainAgeChecker,
   keywordDensityCalculator,
   readabilityCalculator,
   slugGenerator,

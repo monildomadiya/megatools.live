@@ -58,9 +58,8 @@ export function Footer() {
             </Link>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-600">
-              {site.tagline}. Every calculation runs in your browser — nothing you type is
-              sent to a server, there is no account, and every formula on the site is
-              traced to the body that published it.
+              {site.tagline}. Every calculation runs in your browser, there is no account,
+              and every formula on the site is traced to the body that published it.
             </p>
           </div>
 

@@ -87,6 +87,16 @@ export interface ToolMeta {
   updatedAt: string;
   /** Surfaces the tool on the homepage. */
   featured?: boolean;
+  /**
+   * Replaces the masthead's "Runs in your browser — nothing is uploaded" line.
+   *
+   * Every calculator on the site earns that default, and the claim is repeated
+   * in the privacy policy — so the one tool that does reach the network cannot
+   * be allowed to carry it. Set this to say what actually leaves the browser,
+   * in the reader's terms, on the page where it happens rather than only in the
+   * policy they will not open.
+   */
+  privacyNote?: string;
 }
 
 export interface ToolWithHref extends ToolMeta {

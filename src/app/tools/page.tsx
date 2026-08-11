@@ -92,7 +92,7 @@ export default function ToolsIndexPage() {
             <p className="mt-4 max-w-3xl text-lg leading-relaxed text-ink-600">
               {allTools.length} {allTools.length === 1 ? 'tool' : 'tools'}, each with the
               formula it uses, a worked example, and the sources the numbers came from.
-              Everything runs locally in your browser.
+              Every calculation runs locally in your browser.
             </p>
 
             <dl className="mt-8 flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-line pt-5 sm:gap-x-12">

@@ -1,0 +1,85 @@
+## Where a domain's age actually comes from
+
+Every domain has a creation date, and exactly one place holds it: the registry that operates its top-level domain. Verisign holds it for `.com` and `.net`, Public Interest Registry for `.org`, and so on down a list of well over a thousand.
+
+That date is not visible from the website. It is not in the DNS, not in the page source, and not in the HTTP headers. A site can be five minutes old on a domain registered in 1998, or fifteen years of content sitting on a name bought last month. Anything claiming to read a domain's age from the site itself is guessing.
+
+So a lookup is the only honest way to answer the question, and that is what this page does. Pressing the button sends the domain to a public registry query service, which forwards it to the registry that issued the name and returns what that registry publishes. It is the only tool on this site that reaches the network, and the panel says so above the field rather than in a footnote.
+
+## RDAP, and what replaced WHOIS
+
+For thirty years the answer to "who registered this" was WHOIS, a protocol from 1982 that returns a block of plain text in whatever layout each registry felt like using. It worked, in the sense that a human could read it. It was miserable to consume with software, because every registry's output had to be parsed differently, there was no reliable way to express non-Latin scripts, and the protocol had no encryption at all.
+
+RDAP — the Registration Data Access Protocol — is its designed replacement. It runs over HTTPS, returns structured JSON with field names defined in a specification, handles internationalised text properly, and supports proper HTTP status codes so a client can tell "no such domain" from "server unavailable". ICANN required generic top-level domain registries and registrars to run RDAP services from 2019, and has since set out the path to retiring WHOIS entirely.
+
+This page reads RDAP directly. The creation date it shows is the `registration` event in the registry's own response — not a cached copy, not a third party's database, and not a figure derived from anything else.
+
+One consequence worth knowing: RDAP servers are told by specification to send permissive cross-origin headers, which is what allows a page like this one to read a registry response from your browser without a server of its own in the middle. Where a registry ignores that recommendation, the lookup fails at the browser rather than returning something wrong.
+
+## Why some domains return nothing
+
+RDAP coverage is not universal, and the gaps are policy rather than technical.
+
+ICANN can require RDAP of the registries it contracts with, which covers the generic top-level domains: `.com`, `.net`, `.org`, `.info`, `.biz`, and the many hundreds of newer ones like `.dev`, `.app` and `.io`. For those, expect a clean answer.
+
+Country-code domains are different. Each is run under the authority of its own country, and ICANN cannot compel them. Some run excellent RDAP services. Others run none, or run one that deliberately withholds dates. Germany's `.de`, India's `.in` and the United Kingdom's `.uk` are among the registries that publish little or nothing this way.
+
+When this tool reports that no date is available, that is what has happened. It is not a failure of the lookup and it is not something a different tool can route around — a date the registry does not publish is not obtainable by anyone querying it. Any site showing you a creation date for such a domain is showing you a cached figure from an older, more permissive era, and you have no way to tell how old that cache is.
+
+## What the GDPR changed
+
+If you remember WHOIS returning a registrant's name, address and telephone number, that ended in May 2018.
+
+When the General Data Protection Regulation came into force, publishing the personal contact details of European registrants by default became untenable, and registries and registrars responded by redacting those fields across the board rather than trying to distinguish jurisdictions on the fly. What comes back now for most domains is a privacy service in place of a person.
+
+Dates were never personal data in the same sense, so they largely survived the change. Creation, expiry and last-changed dates are still published for gTLDs, which is why this tool reports those and does not pretend it can tell you who owns something.
+
+## Does domain age help you rank?
+
+This is the reason most people look a domain age up, so it deserves a direct answer: on its own, no.
+
+Google has stated repeatedly that the age of a domain is not a ranking factor, and it does not appear in any published description of how Google's ranking systems work. There is no bonus for a domain simply having existed.
+
+What confuses the picture is that age correlates with several things that *do* matter. A domain that has been in use for eight years has usually accumulated links, has had its content revised in response to what readers actually wanted, has a crawl history, and has had time to be cited elsewhere. Those are real signals. Age is the thing that happened to be measurable alongside them.
+
+The test that separates the two is the unused domain. A name registered in 2011 and parked ever since has all of the age and none of the rest, and it ranks like what it is: a new site. This is why buying an aged domain so often disappoints — the buyer paid for the correlate and not the cause.
+
+Where the registration date genuinely is useful:
+
+**Assessing an expired domain before buying it.** The creation date tells you how much history *could* exist. Whether any of it does is a separate question for the Internet Archive and a backlink tool.
+
+**Spotting a domain registered days ago.** A brand new registration behind a site claiming a long track record is a straightforward contradiction, and it is one of the more reliable signals in fraud checking.
+
+**Diligence on a supplier or a counterparty.** A company that has traded for twenty years and whose domain is three weeks old is worth a second question.
+
+## The website is older than the domain, or younger
+
+Two things are being confused whenever someone says "this site is ten years old".
+
+The domain's age is the time since the current registration. The site's age is how long something has actually been published at that address. Neither implies the other.
+
+A domain can sit registered and empty for years before anyone builds on it. A publication can move from one domain to another and take fifteen years of archives with it, arriving on a name registered last Tuesday. And a domain that lapsed and was re-registered starts its recorded age again from zero — the registry keeps the current registration's creation date, and the earlier one is simply not in the record any more.
+
+If the question you actually have is "how long has this site been publishing", the registration date is the wrong instrument. The Internet Archive's first capture is a much better one.
+
+## Reading the rest of the response
+
+The lookup returns more than a date, and the other fields are worth knowing how to read.
+
+**Expiry date.** When the current registration term ends. It is not a deadline for the site disappearing — most registrars auto-renew, and there is a grace period after expiry during which the original holder can still recover the name. A date in the near past usually means a renewal has happened and the registry record has not been re-read, rather than that a domain has been abandoned.
+
+**Last changed.** When the registry record was last modified. A renewal, a nameserver change or a transfer all update it. It says nothing about the website changing.
+
+**Registrar.** The company through which the domain was registered. A transfer between registrars does not reset the creation date.
+
+**Status codes.** These come from a defined vocabulary, and RDAP writes them as separate lowercase words where WHOIS and EPP run them together — `client transfer prohibited` here is the `clientTransferProhibited` you may be used to seeing. That one is routine: it means a transfer lock is on, which is a sensible default rather than a warning sign. `pending delete` and `redemption period` mean the domain is on its way out and may become available. `server hold` means the registry has stopped it resolving, which is unusual and worth investigating.
+
+## Why the dates might not match another tool
+
+Three ordinary reasons, none of which mean either tool is broken.
+
+**Registry against registrar.** Both hold a record, and they can disagree by a day around the moment of registration. This page reads the registry's, which is the authoritative one.
+
+**Timezones.** RDAP publishes dates in UTC. A tool that renders them in the reader's local timezone will show the previous or the next day for anyone far enough east or west, on a domain registered near midnight.
+
+**Re-registration.** If a domain lapsed and someone registered it again, the record holds the new date. A tool showing an older one is reading a cache from before the lapse, and it is describing a registration that no longer exists.

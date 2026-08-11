@@ -16,6 +16,7 @@ export function organizationSchema(): Json {
     '@type': 'Organization',
     '@id': ORG_ID,
     name: site.name,
+    alternateName: [...site.alternateNames],
     legalName: site.legalName,
     url: site.url,
     description: site.description,
@@ -60,6 +61,12 @@ export function websiteSchema(): Json {
     '@id': SITE_ID,
     url: site.url,
     name: site.name,
+    // The brand is written three ways in the wild — as one word, as two, and
+    // with the TLD attached, which is how people who have seen the address
+    // rather than the logo tend to search for it. Naming the variants is the
+    // one part of entity resolution that is ours to state; the rest is whether
+    // anyone searches for it at all.
+    alternateName: [...site.alternateNames],
     description: site.description,
     publisher: { '@id': ORG_ID },
     inLanguage: site.language,

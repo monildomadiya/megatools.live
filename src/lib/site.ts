@@ -6,6 +6,15 @@
 
 export const site = {
   name: 'MegaTools',
+  /**
+   * How the brand gets typed when somebody is searching for it by memory.
+   *
+   * Emitted as schema.org `alternateName` on both the Organization and the
+   * WebSite node. It is a small signal and worth being honest about its size:
+   * it helps a search engine tie three spellings to one entity, and it does
+   * nothing at all until people are searching for the name in the first place.
+   */
+  alternateNames: ['MegaTools.live', 'Mega Tools', 'megatools'],
   legalName: 'MegaTools',
   url: 'https://megatools.live',
   locale: 'en_US',

@@ -98,13 +98,17 @@ export default function DateCalculator() {
 
   const startDate = parseIso(start);
   const parsedAmount = Number(amount);
-  const valid = startDate !== null && Number.isFinite(parsedAmount) && amount.trim() !== '';
 
+  // The empty-amount case is rejected here rather than in a separate boolean.
+  // A `const valid = startDate !== null && …` flag reads as a guard but is only
+  // a boolean, and TypeScript will not narrow `startDate` from it — which is
+  // exactly the mistake that broke the build. Returning null from here means
+  // the one check in the JSX narrows both values at once.
   const outcome = useMemo(() => {
-    if (!startDate || !Number.isFinite(parsedAmount)) return null;
+    if (!startDate || amount.trim() === '' || !Number.isFinite(parsedAmount)) return null;
     const signed = direction === 'subtract' ? -parsedAmount : parsedAmount;
     return shift(startDate, Math.trunc(signed), unit);
-  }, [direction, parsedAmount, startDate, unit]);
+  }, [amount, direction, parsedAmount, startDate, unit]);
 
   function reset() {
     setStart(todayIso());
@@ -148,7 +152,7 @@ export default function DateCalculator() {
         <SelectField label="Unit" value={unit} onChange={setUnit} options={UNITS} />
       </div>
 
-      {valid && outcome && (
+      {startDate && outcome && (
         <div className="mt-7">
           <ResultCard
             label={`${direction === 'add' ? 'Add' : 'Subtract'} ${Math.abs(Math.trunc(parsedAmount))} ${unit}`}

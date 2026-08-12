@@ -1,0 +1,92 @@
+## Truncation is measured in pixels, not characters
+
+The advice everyone repeats is that a title should be under about 60 characters and a description under about 155. Both figures are averages that have been mistaken for rules.
+
+What actually happens is that a search result has a column of a certain width, the text is drawn into it in a proportional font, and whatever does not fit is cut. Characters are not the unit of that decision — width is. In a proportional face the widest characters are several times the width of the narrowest:
+
+```
+lowercase l, i, j, t   very narrow
+lowercase m, w         wide
+capitals               wide, and there are no narrow ones
+```
+
+So two titles of exactly 58 characters can behave completely differently. `Little Tips for Filling in Tiny Lists` has a lot of narrow letters and plenty of room to spare. `WHOLESALE MACHINERY WARRANTY MANAGEMENT` in capitals is cut long before the character count suggests. Any checker that counts characters is measuring a proxy, and the proxy fails exactly where the writing is unusual — which is where you most wanted the check.
+
+The preview above measures the text by drawing it, so what it reports is the thing that decides the outcome.
+
+## What Google actually says about length
+
+It is worth being precise here, because the conventional numbers get quoted with more authority than their source supports.
+
+Google's own documentation states there is **no character limit** on a title element, and that the title link shown in results is truncated to fit the device. The same is true of the description: the snippet is assembled to fit the space available, and the space differs between phones, tablets and desktops, between result types, and sometimes between queries on the same page.
+
+The 60 and 155 figures came from measuring where truncation typically fell on a desktop layout at a particular time. They are useful shorthand and they are not a specification. Nothing bad happens at character 61.
+
+What genuinely matters is simpler:
+
+**Put the identifying words first.** Truncation always takes from the end. A title that begins with the subject of the page survives every layout; one that begins with a site name and a separator loses its meaning first.
+
+**Make the title unique to the page.** Templates that produce twenty near-identical titles across a site give a searcher nothing to choose between.
+
+**Do not pad.** Repeating a phrase in slightly different forms is the specific pattern the documentation names as a reason a title may be replaced.
+
+## Your title may not be the title that gets shown
+
+This is the part that undermines any attempt to optimise a title to the pixel.
+
+Google reserves the right to generate the title link from other content on the page when it judges the title element to be a poor fit — main headings, prominent on-page text, or the anchor text of links pointing at the page. It says so in the documentation, plainly.
+
+Independent studies of large result sets have repeatedly found rewriting on a substantial minority of results. The exact share depends on the sample and on when it was measured, and the pattern behind it is more useful than the number. Titles get replaced when they are:
+
+- Very long, or padded with repeated keywords
+- Boilerplate repeated across many pages
+- Missing, or made up entirely of a site name
+- A poor match for what the searcher typed
+
+The response is not to write for the rewriter. It is to write a title that is descriptive, specific to the page and honest about its content, which is also the title most likely to be kept.
+
+Meta descriptions get overwritten far more often than titles, because Google composes a snippet from whichever part of the page best matches the query. That is often better for the searcher than a static description could be. A good description is a strong opening bid, not a fixed banner.
+
+## Why write a description at all
+
+Given how often it is replaced, the question is fair. Two reasons hold.
+
+The description is not a ranking factor — Google has confirmed this directly, and repeatedly. It is a **click** factor. When it is used, it is the only piece of copy in the result you fully control, and it sits directly beneath the title in a list of near-identical alternatives.
+
+It is also what gets used when the page is shared. Most social platforms and chat applications fall back to the meta description when no Open Graph description is present, and there is no query-matching logic there to improve on it. A page with no description shared into a group chat shows a bare link or a fragment of navigation.
+
+Write it as ad copy for a specific reader with a specific problem: what the page contains, what makes it different from the four results around it, and why it is worth the click. Front-load it for the same reason as the title.
+
+## Desktop and mobile are not the same result
+
+The preview offers both because they behave differently in more than width.
+
+**Desktop** shows a wider column with a larger title, and typically two lines of description. It is the tighter constraint on the title, which is why it is the conventional check.
+
+**Mobile** is narrower but wraps to more lines, so a longer title can survive in full where the desktop version would be cut. The description often gets a third line. Layout, spacing and the presence of site names and favicons have all changed more than once, and will again.
+
+Neither is authoritative. Search results are assembled per query and per device, and the same page can appear with a different amount of text on two consecutive searches. A pixel figure is a planning aid; treating it as a specification to hit exactly is effort spent on a moving target.
+
+## How the measurement here works, and where it is wrong
+
+The tool draws your text into an off-screen canvas using Arial at the sizes Google's desktop and mobile layouts use, then reads the width back. That is the same operation the browser performs when laying out the real result, which is why it beats counting characters.
+
+It is still an approximation, in three specific ways:
+
+**The font is a substitute.** Google renders results in its own font family. Arial's metrics are close for Latin text, and a few pixels either way is well inside the noise of a layout that changes with the device anyway.
+
+**Non-Latin text is less reliable.** Scripts your device renders with a fallback font may measure quite differently from how a search page renders them.
+
+**Extra elements are not modelled.** Dates, site names, favicons, sitelinks, ratings and other result features consume space and shift the layout, and which of them appear is not something a preview can know.
+
+Use it to answer the question it answers well: does this title fit, and if not, what is the first thing lost. That is a real question with a real answer, and it is not the same question as "how many characters am I allowed".
+
+## A short checklist
+
+Before publishing a title and description, three checks are worth the minute they take.
+
+**Read the truncated version above.** If what remains after the cut still tells a searcher what the page is, the ordering is right. If the surviving fragment is a site name and a preposition, it is not.
+
+**Check that it is distinguishable.** Search for the phrase you are targeting, look at what the competing results say, and make sure the snippet does not read like the fourth copy of the same sentence.
+
+**Make it match the page.** A snippet that promises something the page does not deliver buys a click and loses the reader, and Google has been explicit that misleading descriptions are a reason to replace them.

@@ -1,0 +1,89 @@
+## The rule in one sentence
+
+ISO 8601 defines a week that runs **Monday to Sunday**, and numbers the weeks of a year so that:
+
+```
+Week 01 is the week containing the first Thursday of January.
+```
+
+Three other statements pick out exactly the same seven days, and it is worth knowing all of them because different sources quote different ones:
+
+- Week 01 is the week containing 4 January.
+- Week 01 is the first week with at least four of its days in the new year.
+- Week 01 is the week containing the first working day of January, on a Monday-to-Friday week.
+
+The Thursday version is the one to apply by hand. Find the first Thursday in January, take the Monday before it, and that Monday is the start of week 01. Everything else follows by adding sevens.
+
+## Why a week cannot start on 1 January
+
+The awkward part of ISO weeks is not the numbering, it is the consequence of the numbering: **a week belongs to one year and one year only.** It is never split.
+
+So when 1 January falls on a Friday, Saturday or Sunday, the majority of that week sits in the departing year, and the whole week is counted there. The new year does not begin at week 01 until the following Monday. Running the other way, 29, 30 and 31 December can already belong to week 01 of the year that has not started yet.
+
+That is the correct answer rather than a defect. The alternative is a numbering in which some weeks are three days long, and a system built for scheduling work cannot have short weeks in it.
+
+The practical rule: between roughly 29 December and 4 January, the week number and the calendar year are unlikely to agree, and any label built from both has to be built carefully.
+
+## The week-based year, and the bug it causes
+
+Every ISO week number carries a year that belongs to the week rather than to the date. It is called the **week-based year**, and it is the single most common place this standard gets implemented wrongly.
+
+1 January 2027 is a Friday. It falls in week 53 of 2026. Written properly:
+
+```
+2026-W53-5      correct
+2027-W53        a week that does not exist
+```
+
+The failure mode in software is always the same. A developer formats a date with a pattern that mixes the calendar year and the week number, and for fifty-odd weeks a year the two agree, so nothing looks wrong. Then the last days of December arrive and the output names a week in the wrong year — or a week 53 in a year that has only 52.
+
+Date libraries provide two separate fields for exactly this reason, and the difference between them is a single letter in most pattern languages. Anything that reports a week and a year together should be reading the week-based year, and the fastest way to test it is to render 31 December and 1 January for a few consecutive years and look at what comes out.
+
+The tool above shows the week-based year on every result, and says so plainly when it differs from the calendar year of the date entered.
+
+## The years that have 53 weeks
+
+A calendar year holds 52 weeks and one spare day, or two in a leap year. Those spare days accumulate, and periodically the year has room for a 53rd week.
+
+```
+53 weeks when 1 January is a Thursday,
+or when 1 January is a Wednesday in a leap year.
+```
+
+Everything else has 52. Over the 400-year Gregorian cycle, 71 years are long and 329 are short — about one year in six. They cluster in a pattern of five or six years apart rather than arriving regularly.
+
+This is not trivia for anyone paying people weekly. A 53-week year contains an extra pay period, and if annual salaries are divided into 52 payments the arithmetic no longer covers the year. Payroll teams meet this every few years and it is still, reliably, a surprise. The same effect hits weekly reporting: a year-on-year comparison of week counts is comparing 53 weeks against 52 unless someone adjusts for it, which quietly inflates every annual total in a long year.
+
+Retail and finance answer this with a 52/53-week fiscal calendar, sometimes called 4-4-5 accounting, so that each quarter contains whole weeks and comparable numbers of trading weekends. The long year is written into the design rather than patched around later.
+
+## Where week numbers are actually used
+
+If week numbers feel like an obscure format, that is regional. Across northern Europe they are ordinary vocabulary, printed on wall calendars and used in conversation.
+
+**Manufacturing and logistics.** Lead times and delivery dates are quoted as a week, not a date — "week 34" is a commitment with a five-day tolerance built into it, which is what a supply chain can honestly promise.
+
+**Project planning.** Gantt charts, sprint calendars and construction programmes are usually numbered by week, because a week is the unit at which a plan actually moves.
+
+**Retail and manufacturing calendars.** Sales are compared week on week against the same week number last year, which is more meaningful than comparing calendar dates that fall on different weekdays.
+
+**Tyres.** The DOT code moulded into a sidewall ends in four digits: the week and year of manufacture. `3624` means the 36th week of 2024. It is the standard way to establish the age of a tyre, which matters because rubber degrades whether or not the tyre has been used.
+
+**Academic timetables.** Teaching weeks in much of Europe are numbered, so a room booking or a lecture slot is stated as a week rather than a date range.
+
+## The other numbering, and why the two disagree
+
+North American practice usually differs on both points of the definition: weeks start on **Sunday**, and week 1 is simply the week containing 1 January, however few of its days fall in the new year.
+
+The result is a numbering that runs ahead of the ISO one for most of the year, because a partial week at the start of January consumes a number that ISO gives to the previous year. Two people quoting "week 32" from the two conventions can be talking about different seven-day spans, and neither will think to say which system they used.
+
+The Unicode CLDR records this per territory — both the first day of the week and the minimum number of days needed for a week to count as the first of the year — which is how software renders locale-appropriate calendars. It is also why the same date can show one week number in a spreadsheet set to one locale and another in a spreadsheet set to a different one, using functions that both claim to give the week number.
+
+Both figures appear in the results above. If a week number is being sent to anyone outside your own team, name the convention with it, or use the unambiguous ISO week date form: year, `W`, week, and optionally the weekday as a digit from 1 for Monday to 7 for Sunday.
+
+## What this calculator assumes
+
+Everything here is proleptic Gregorian — the Gregorian calendar extended backwards through dates that were historically Julian. For anything before the 1582 reform, and considerably later in countries that adopted it late, the week number returned is arithmetically consistent but does not describe what a calendar of the day would have shown.
+
+All arithmetic runs in UTC. Week numbering has no time-of-day component, and doing it in local time introduces the two days a year that are 23 or 25 hours long for no benefit. A date entered here is treated as a calendar date, not as a moment.
+
+Weeks are numbered without a zero: the year runs from W01 to W52 or W53. A leading zero is part of the standard format, so `2026-W07` is correct and `2026-W7` is not, which matters when the string is going to be sorted or parsed by something strict.

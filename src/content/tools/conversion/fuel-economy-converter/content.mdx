@@ -1,0 +1,85 @@
+## Two measures pointing in opposite directions
+
+Fuel economy is quoted in two incompatible styles, and the difference is not cosmetic.
+
+**Distance per unit of fuel** — miles per gallon, kilometres per litre. Bigger is better. Used in the United States, the United Kingdom, India, Japan and much of Latin America.
+
+**Fuel per unit of distance** — litres per 100 kilometres, gallons per 100 miles. Smaller is better. Standard across continental Europe, Canada, Australia and China.
+
+They describe the same physical fact and they are reciprocals of one another, which is why converting between them is a division rather than a multiplication by some factor:
+
+```
+L/100 km = 235.214583 ÷ (US mpg)
+L/100 km = 282.480936 ÷ (UK mpg)
+L/100 km = 100 ÷ (km/L)
+```
+
+Neither constant is arbitrary. Each is built from exact definitions — the US liquid gallon is 231 cubic inches, or 3.785411784 litres exactly; the imperial gallon is 4.54609 litres exactly; the international mile is 1609.344 metres exactly. This converter derives its constants from those definitions rather than storing the rounded figures, which is why a value converted out and back returns what you started with.
+
+## The gallon that is not the same gallon
+
+The most frequent error on this subject has nothing to do with metric conversion at all. It is that **there are two gallons in common use and they differ by about 20%.**
+
+```
+1 US liquid gallon = 3.785411784 L
+1 imperial gallon  = 4.54609 L      (about 20.1% larger)
+```
+
+So one car has two mpg figures. Something achieving 40 mpg on a US measure achieves 48 mpg on the imperial one, and nothing about the vehicle has changed — only the size of the container in the denominator.
+
+This bites in a specific place: comparing an American road test against a British review, or a car brochure against a figure someone quoted online. The imperial number is always higher, and taken at face value the British car looks about a fifth more efficient than it is. Any figure below roughly 15 mpg or above 60 mpg is worth checking for which gallon it means before it is used for anything.
+
+The imperial gallon persists in the UK for exactly one purpose — describing fuel economy — while fuel itself has been sold in litres there since 1995. The unit survives in the sentence and nowhere else in the transaction.
+
+## Why litres per 100 km is the more useful figure
+
+The reciprocal relationship has a consequence people consistently misread. Equal steps in mpg are not equal amounts of fuel.
+
+Take a fixed 10,000 miles a year, and improve each of two cars by 5 US mpg:
+
+```
+15 mpg → 20 mpg   saves 167 gallons
+40 mpg → 45 mpg   saves  28 gallons
+```
+
+The same 5 mpg gain, and one is worth six times the other. The reason is that mpg has the fuel in the denominator, so the change in fuel used goes as the difference of two reciprocals rather than as the difference of the numbers themselves.
+
+Litres per 100 km does not have this problem. It is linear in the quantity you actually buy, so consumption figures can be subtracted, averaged and totalled without any trap. Two litres per 100 km saved is the same amount of fuel wherever on the scale it happens.
+
+## The MPG illusion, and the label that resulted
+
+That misreading is a documented cognitive error rather than a matter of opinion. Larrick and Soll published it in *Science* in 2008 under the name the MPG illusion, showing that people ranking efficiency improvements by their benefit systematically preferred the large-sounding gains at the top of the mpg range over the far more valuable gains at the bottom.
+
+The practical version: replacing an old 15 mpg vehicle with a 20 mpg one removes more fuel from the road than replacing a 40 mpg car with a 60 mpg hybrid, over the same distance. Presented as mpg, the second sounds enormously better. Presented as gallons per 100 miles, the comparison inverts and becomes obvious.
+
+The US Environmental Protection Agency changed its window sticker in response. American fuel economy labels have carried a gallons-per-100-miles figure alongside the mpg figure since the 2013 model year, specifically so buyers can compare two vehicles on a scale that behaves linearly. It is the rare case of a psychology paper visibly changing a regulated document.
+
+This converter shows the litres consumed over a fixed distance for the same reason. The gap between two mpg numbers is not informative on its own; the gap in fuel is.
+
+## Where the official figures come from, and why yours differ
+
+Every published economy figure is the output of a standardised test, not of anyone's driving. That is a deliberate design choice — a repeatable laboratory cycle is the only way to compare two vehicles fairly — but it means the number is a benchmark rather than a forecast.
+
+Europe moved from the NEDC test to WLTP for exactly this reason: NEDC had been designed in the 1980s, its acceleration rates and speeds no longer resembled real traffic, and the gap between the certified figure and real consumption had widened to around 40% on average by the mid-2010s. WLTP is longer, faster and more dynamic, and its figures are correspondingly less flattering. A WLTP number and an NEDC number for the same car are not comparable, which matters when reading listings for used vehicles registered either side of the changeover.
+
+The EPA applies adjustment factors to its own dynamometer results before printing them, which is part of why US mpg figures track real driving more closely than European ones historically did.
+
+What moves your own consumption, in rough order of size:
+
+**Short trips from cold.** An engine below operating temperature runs rich and its after-treatment does not work properly. A cold two-mile trip can use double the fuel per mile that the same distance uses on a warm engine.
+
+**Speed.** Aerodynamic drag rises with the square of speed and the power needed to overcome it with the cube. The difference between 110 km/h and 130 km/h is far larger than the 18% speed difference suggests.
+
+**Load and roof racks.** A roof box is a permanent aerodynamic penalty of 10-25% at motorway speed, whether or not there is anything in it.
+
+**Tyre pressure and condition.** Under-inflation raises rolling resistance measurably. It is the cheapest correction available and the one most often left undone.
+
+**Climate control and ancillaries.** Air conditioning draws real engine power; in a small car it is a few percent, in stop-start traffic more.
+
+## Electric and hybrid vehicles
+
+An electric car has no fuel volume to divide by, so none of these units apply to it directly. The equivalent pair is kilowatt-hours per 100 km, which is the consumption-style measure, and miles per kilowatt-hour, its reciprocal. The same reasoning holds: the per-distance form is the one to compare on.
+
+The US MPGe figure exists to bridge the gap. It converts electricity into the energy content of a gallon of petrol — 33.7 kWh is treated as equivalent — so an electric car can be placed on the same axis as a petrol one. It is an honest energy comparison and a poor cost comparison, because a kilowatt-hour and a gallon are not priced by their energy content. For running costs, work in the actual price of the actual input.
+
+Plug-in hybrids are worse to reason about, because their published figure depends entirely on an assumed share of electric driving. A plug-in that is never plugged in gets nowhere near its label, and the label is not wrong — the assumption behind it simply did not hold.

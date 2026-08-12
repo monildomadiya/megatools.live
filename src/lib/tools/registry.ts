@@ -13,6 +13,7 @@ import type { CategorySlug, ToolMeta, ToolWithHref } from './types';
 
 import areaConverter from '@/content/tools/conversion/area-converter/meta';
 import dataStorageConverter from '@/content/tools/conversion/data-storage-converter/meta';
+import fuelEconomyConverter from '@/content/tools/conversion/fuel-economy-converter/meta';
 import lengthConverter from '@/content/tools/conversion/length-converter/meta';
 import pressureConverter from '@/content/tools/conversion/pressure-converter/meta';
 import speedConverter from '@/content/tools/conversion/speed-converter/meta';
@@ -26,6 +27,7 @@ import businessDaysCalculator from '@/content/tools/date-time/business-days-calc
 import dateDifferenceCalculator from '@/content/tools/date-time/date-difference-calculator/meta';
 import timeDurationCalculator from '@/content/tools/date-time/time-duration-calculator/meta';
 import timeZoneConverter from '@/content/tools/date-time/time-zone-converter/meta';
+import weekNumberCalculator from '@/content/tools/date-time/week-number-calculator/meta';
 import workHoursCalculator from '@/content/tools/date-time/work-hours-calculator/meta';
 import base64Encoder from '@/content/tools/developer/base64-encoder/meta';
 import numberBaseConverter from '@/content/tools/developer/number-base-converter/meta';
@@ -60,9 +62,11 @@ import averageCalculator from '@/content/tools/math/average-calculator/meta';
 import lcmGcdCalculator from '@/content/tools/math/lcm-gcd-calculator/meta';
 import fractionCalculator from '@/content/tools/math/fraction-calculator/meta';
 import percentageCalculator from '@/content/tools/math/percentage-calculator/meta';
+import quadraticEquationSolver from '@/content/tools/math/quadratic-equation-solver/meta';
 import ratioCalculator from '@/content/tools/math/ratio-calculator/meta';
 import significantFiguresCalculator from '@/content/tools/math/significant-figures-calculator/meta';
 import standardDeviationCalculator from '@/content/tools/math/standard-deviation-calculator/meta';
+import cookingMeasurementConverter from '@/content/tools/lifestyle/cooking-measurement-converter/meta';
 import discountCalculator from '@/content/tools/lifestyle/discount-calculator/meta';
 import paintCalculator from '@/content/tools/lifestyle/paint-calculator/meta';
 import electricityCostCalculator from '@/content/tools/lifestyle/electricity-cost-calculator/meta';
@@ -74,6 +78,7 @@ import domainAgeChecker from '@/content/tools/seo/domain-age-checker/meta';
 import keywordDensityCalculator from '@/content/tools/seo/keyword-density-calculator/meta';
 import readabilityCalculator from '@/content/tools/seo/readability-calculator/meta';
 import readingTimeCalculator from '@/content/tools/seo/reading-time-calculator/meta';
+import serpSnippetPreview from '@/content/tools/seo/serp-snippet-preview/meta';
 import slugGenerator from '@/content/tools/seo/slug-generator/meta';
 import wordCounter from '@/content/tools/seo/word-counter/meta';
 
@@ -101,11 +106,13 @@ const toolMetas: ToolMeta[] = [
   lcmGcdCalculator,
   fractionCalculator,
   percentageCalculator,
+  quadraticEquationSolver,
   ratioCalculator,
   significantFiguresCalculator,
   standardDeviationCalculator,
   areaConverter,
   dataStorageConverter,
+  fuelEconomyConverter,
   lengthConverter,
   pressureConverter,
   speedConverter,
@@ -119,6 +126,7 @@ const toolMetas: ToolMeta[] = [
   dateDifferenceCalculator,
   timeDurationCalculator,
   timeZoneConverter,
+  weekNumberCalculator,
   workHoursCalculator,
   base64Encoder,
   numberBaseConverter,
@@ -130,6 +138,7 @@ const toolMetas: ToolMeta[] = [
   passwordGenerator,
   unixTimestampConverter,
   uuidGenerator,
+  cookingMeasurementConverter,
   discountCalculator,
   paintCalculator,
   electricityCostCalculator,
@@ -141,6 +150,7 @@ const toolMetas: ToolMeta[] = [
   keywordDensityCalculator,
   readabilityCalculator,
   readingTimeCalculator,
+  serpSnippetPreview,
   slugGenerator,
   wordCounter,
 ];

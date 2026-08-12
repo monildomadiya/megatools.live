@@ -1,0 +1,116 @@
+## The equation, and what solving it means
+
+A quadratic is any equation that can be arranged into this shape:
+
+```
+ax² + bx + c = 0        (a ≠ 0)
+```
+
+Graphed, the left-hand side is a parabola. Solving the equation means finding where that parabola crosses the horizontal axis — the values of x that make the expression equal zero. There are always exactly two of them once complex numbers are allowed, though the two can coincide, and they can sit off the real line entirely.
+
+The standard solution is the formula almost everyone meets at school:
+
+```
+x = ( −b ± √(b² − 4ac) ) / 2a
+```
+
+It is correct, it is complete, and there is one common situation in which computing it exactly as written throws away most of your answer's accuracy. That case is covered further down, because it is the single most useful thing on this page and nowhere near the best known.
+
+## What the discriminant decides
+
+The quantity under the square root has a name and a job of its own:
+
+```
+D = b² − 4ac
+```
+
+Its sign settles the character of the solution before any roots are computed:
+
+**D greater than zero.** Two distinct real roots. The parabola crosses the axis twice.
+
+**D equal to zero.** One repeated root, at `x = −b/2a`. The parabola touches the axis and turns away without crossing. Algebraically the two roots are still both there — they have simply landed on the same value, which is why it is called a double root rather than a single one.
+
+**D less than zero.** No real roots. The parabola sits entirely above the axis, or entirely below it. The two solutions exist as a conjugate pair of complex numbers.
+
+For a physical problem the sign is often the whole answer. Asked whether a projectile reaches a given height, whether a break-even point exists, or whether a damped system oscillates, you need the sign of D and not the roots themselves.
+
+## Why the textbook formula loses digits
+
+Here is the case worth knowing about. Take:
+
+```
+x² + 200x + 0.000015 = 0
+```
+
+Both roots are real. One is close to −200; the other is tiny, near −7.5 × 10⁻⁸. Now watch what the formula does to the small one. The discriminant is 40000 − 0.00006, so its square root is 199.99999985 — very nearly equal to b itself. The small root is computed as:
+
+```
+( −200 + 199.99999985 ) / 2
+```
+
+Two numbers agreeing to nine significant figures are being subtracted, and the leading digits annihilate each other. Whatever rounding error was present in the square root, which was invisible when the number was 199.99999985, is now sitting in the first significant digit of the answer. This is **catastrophic cancellation**, and floating-point arithmetic offers no protection against it: every individual operation is correctly rounded, and the result is still wrong in most of the digits you were relying on.
+
+The fix is standard and has been for decades. Compute the root where the two terms *add* rather than subtract, then get the other from the fact that the roots multiply to c/a:
+
+```
+q  = −½ ( b + sign(b)·√D )
+x₁ = q / a
+x₂ = c / q
+```
+
+Choosing the sign to match b guarantees the addition is between same-signed numbers, so nothing cancels. The second root then comes out of a division, which is well behaved. The two forms are identical in exact arithmetic; only one of them survives in a machine with a finite number of digits.
+
+This solver uses the stable pairing. When the difference between the two methods is large enough to change a printed digit, the panel shows both, so the effect is visible rather than merely claimed.
+
+## Roots that are not real
+
+A negative discriminant is not a failure. It means the parabola never reaches the axis, and the solutions live in the complex plane:
+
+```
+x = −b/2a  ±  ( √(4ac − b²) / 2a ) i
+```
+
+The two roots are conjugates — the same real part, imaginary parts equal in size and opposite in sign. That symmetry is forced whenever a, b and c are real, which is why complex roots always arrive in pairs.
+
+The real part, `−b/2a`, is the axis of symmetry: the same value that locates the vertex. In an engineering context it usually carries the meaning of a decay rate, while the imaginary part carries an oscillation frequency. A negative discriminant in a system's characteristic equation is what tells you the response rings rather than settling smoothly.
+
+## The vertex and the axis of symmetry
+
+Every parabola turns exactly once, at:
+
+```
+x = −b/2a        y = c − b²/4a
+```
+
+If a is positive the curve opens upwards and the vertex is the minimum. If a is negative it opens downwards and the vertex is the maximum. Questions phrased as "what is the largest possible area" or "at what price is profit highest" are asking for the vertex, and answering them with the roots is a common misreading — the roots are where the quantity is zero, not where it is best.
+
+The same point falls out of completing the square, which is where the quadratic formula itself comes from:
+
+```
+ax² + bx + c = a( x + b/2a )² + ( c − b²/4a )
+```
+
+Read that right-hand side and both facts are visible at once. The squared bracket is zero at `x = −b/2a`, and what remains at that point is the vertex height. Isolating the bracket and taking the root gives the formula in three more lines. Worth deriving once: it turns the formula from something memorised into something you could reconstruct if you forgot it.
+
+## Checking an answer without redoing it
+
+Vieta's formulas relate the roots to the coefficients directly:
+
+```
+x₁ + x₂ = −b/a
+x₁ · x₂ =  c/a
+```
+
+Both are shown with every result here. They cost one addition and one multiplication to verify and they catch sign errors, transcription errors and dropped factors immediately. If a proposed pair of roots fails either identity, the pair is wrong — no further checking required.
+
+They are also useful in reverse. To construct a quadratic with roots 3 and −7, the sum is −4 and the product is −21, so `x² + 4x − 21 = 0` does it. Setting exam questions, or test cases, is much faster from this direction.
+
+## The cases at the edges
+
+**a equal to zero.** The equation is linear, not quadratic, with the single root `−c/b`. The formula divides by 2a and cannot be used. This is handled here as a linear equation rather than as an error, because it is a real case: a coefficient that depends on some other parameter can pass through zero, and the answer at that point is a perfectly ordinary number.
+
+**a and b both zero.** Nothing left but `c = 0`, which is either an identity satisfied by every x, when c is itself zero, or an outright contradiction with no solutions.
+
+**Very large or very small coefficients.** Double precision holds roughly sixteen significant digits, and `b²` uses up twice the exponent range of b. Coefficients around 10¹⁶⁰ will overflow when squared even though the roots themselves are unremarkable. Scaling the whole equation — dividing all three coefficients by a — costs nothing and moves the arithmetic back to a comfortable range.
+
+**Roots that look untidy.** Textbook quadratics are built backwards from whole-number answers, so their discriminants are perfect squares. A quadratic taken from measurement has no such courtesy, and an irrational root printed to eight figures is the normal outcome rather than a sign of a mistake. How many of those figures deserve to be quoted is a separate question, and it depends on the precision of the coefficients that went in.

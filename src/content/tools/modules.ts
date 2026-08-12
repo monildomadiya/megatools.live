@@ -4,6 +4,8 @@ import AreaConverter from './conversion/area-converter/Calculator';
 import AreaConverterContent from './conversion/area-converter/content.mdx';
 import DataStorageConverter from './conversion/data-storage-converter/Calculator';
 import DataStorageConverterContent from './conversion/data-storage-converter/content.mdx';
+import FuelEconomyConverter from './conversion/fuel-economy-converter/Calculator';
+import FuelEconomyConverterContent from './conversion/fuel-economy-converter/content.mdx';
 import LengthConverter from './conversion/length-converter/Calculator';
 import LengthConverterContent from './conversion/length-converter/content.mdx';
 import PressureConverter from './conversion/pressure-converter/Calculator';
@@ -30,6 +32,8 @@ import TimeDurationCalculator from './date-time/time-duration-calculator/Calcula
 import TimeDurationContent from './date-time/time-duration-calculator/content.mdx';
 import TimeZoneConverter from './date-time/time-zone-converter/Calculator';
 import TimeZoneConverterContent from './date-time/time-zone-converter/content.mdx';
+import WeekNumberCalculator from './date-time/week-number-calculator/Calculator';
+import WeekNumberContent from './date-time/week-number-calculator/content.mdx';
 import WorkHoursCalculator from './date-time/work-hours-calculator/Calculator';
 import WorkHoursContent from './date-time/work-hours-calculator/content.mdx';
 import Base64Encoder from './developer/base64-encoder/Calculator';
@@ -98,12 +102,16 @@ import LcmGcdCalculator from './math/lcm-gcd-calculator/Calculator';
 import LcmGcdContent from './math/lcm-gcd-calculator/content.mdx';
 import PercentageCalculator from './math/percentage-calculator/Calculator';
 import PercentageContent from './math/percentage-calculator/content.mdx';
+import QuadraticEquationSolver from './math/quadratic-equation-solver/Calculator';
+import QuadraticEquationContent from './math/quadratic-equation-solver/content.mdx';
 import RatioCalculator from './math/ratio-calculator/Calculator';
 import RatioContent from './math/ratio-calculator/content.mdx';
 import SignificantFiguresCalculator from './math/significant-figures-calculator/Calculator';
 import SignificantFiguresContent from './math/significant-figures-calculator/content.mdx';
 import StandardDeviationCalculator from './math/standard-deviation-calculator/Calculator';
 import StandardDeviationContent from './math/standard-deviation-calculator/content.mdx';
+import CookingMeasurementConverter from './lifestyle/cooking-measurement-converter/Calculator';
+import CookingMeasurementContent from './lifestyle/cooking-measurement-converter/content.mdx';
 import DiscountCalculator from './lifestyle/discount-calculator/Calculator';
 import DiscountContent from './lifestyle/discount-calculator/content.mdx';
 import ElectricityCostCalculator from './lifestyle/electricity-cost-calculator/Calculator';
@@ -126,6 +134,8 @@ import ReadabilityCalculator from './seo/readability-calculator/Calculator';
 import ReadabilityContent from './seo/readability-calculator/content.mdx';
 import ReadingTimeCalculator from './seo/reading-time-calculator/Calculator';
 import ReadingTimeContent from './seo/reading-time-calculator/content.mdx';
+import SerpSnippetPreview from './seo/serp-snippet-preview/Calculator';
+import SerpSnippetPreviewContent from './seo/serp-snippet-preview/content.mdx';
 import SlugGenerator from './seo/slug-generator/Calculator';
 import SlugGeneratorContent from './seo/slug-generator/content.mdx';
 import WordCounter from './seo/word-counter/Calculator';
@@ -228,6 +238,18 @@ export const toolModules: Record<string, ToolModule> = {
     Calculator: PressureConverter,
     Content: PressureConverterContent,
   },
+  'math/quadratic-equation-solver': {
+    Calculator: QuadraticEquationSolver,
+    Content: QuadraticEquationContent,
+  },
+  'conversion/fuel-economy-converter': {
+    Calculator: FuelEconomyConverter,
+    Content: FuelEconomyConverterContent,
+  },
+  'date-time/week-number-calculator': {
+    Calculator: WeekNumberCalculator,
+    Content: WeekNumberContent,
+  },
   'math/significant-figures-calculator': {
     Calculator: SignificantFiguresCalculator,
     Content: SignificantFiguresContent,
@@ -278,6 +300,10 @@ export const toolModules: Record<string, ToolModule> = {
     Content: UnixTimestampContent,
   },
   'developer/uuid-generator': { Calculator: UuidGenerator, Content: UuidGeneratorContent },
+  'lifestyle/cooking-measurement-converter': {
+    Calculator: CookingMeasurementConverter,
+    Content: CookingMeasurementContent,
+  },
   'lifestyle/discount-calculator': { Calculator: DiscountCalculator, Content: DiscountContent },
   'lifestyle/fuel-cost-calculator': { Calculator: FuelCostCalculator, Content: FuelCostContent },
   'lifestyle/paint-calculator': { Calculator: PaintCalculator, Content: PaintCalculatorContent },
@@ -300,6 +326,10 @@ export const toolModules: Record<string, ToolModule> = {
     Content: ReadabilityContent,
   },
   'seo/reading-time-calculator': { Calculator: ReadingTimeCalculator, Content: ReadingTimeContent },
+  'seo/serp-snippet-preview': {
+    Calculator: SerpSnippetPreview,
+    Content: SerpSnippetPreviewContent,
+  },
   'seo/slug-generator': { Calculator: SlugGenerator, Content: SlugGeneratorContent },
   'seo/word-counter': { Calculator: WordCounter, Content: WordCounterContent },
 };

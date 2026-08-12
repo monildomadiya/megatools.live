@@ -28,6 +28,8 @@ import DateCalculator from './date-time/date-calculator/Calculator';
 import DateCalculatorContent from './date-time/date-calculator/content.mdx';
 import DateDifferenceCalculator from './date-time/date-difference-calculator/Calculator';
 import DateDifferenceContent from './date-time/date-difference-calculator/content.mdx';
+import LeapYearCalculator from './date-time/leap-year-calculator/Calculator';
+import LeapYearContent from './date-time/leap-year-calculator/content.mdx';
 import TimeDurationCalculator from './date-time/time-duration-calculator/Calculator';
 import TimeDurationContent from './date-time/time-duration-calculator/content.mdx';
 import TimeZoneConverter from './date-time/time-zone-converter/Calculator';
@@ -56,6 +58,8 @@ import UnixTimestampConverter from './developer/unix-timestamp-converter/Calcula
 import UnixTimestampContent from './developer/unix-timestamp-converter/content.mdx';
 import UuidGenerator from './developer/uuid-generator/Calculator';
 import UuidGeneratorContent from './developer/uuid-generator/content.mdx';
+import AprToApyCalculator from './finance/apr-to-apy-calculator/Calculator';
+import AprToApyContent from './finance/apr-to-apy-calculator/content.mdx';
 import CompoundInterestCalculator from './finance/compound-interest-calculator/Calculator';
 import CompoundInterestContent from './finance/compound-interest-calculator/content.mdx';
 import CreditCardPayoffCalculator from './finance/credit-card-payoff-calculator/Calculator';
@@ -82,6 +86,8 @@ import BodyFatCalculator from './health/body-fat-calculator/Calculator';
 import BodyFatContent from './health/body-fat-calculator/content.mdx';
 import CalorieCalculator from './health/calorie-calculator/Calculator';
 import CalorieContent from './health/calorie-calculator/content.mdx';
+import HeartRateZoneCalculator from './health/heart-rate-zone-calculator/Calculator';
+import HeartRateZoneContent from './health/heart-rate-zone-calculator/content.mdx';
 import IdealWeightCalculator from './health/ideal-weight-calculator/Calculator';
 import IdealWeightContent from './health/ideal-weight-calculator/content.mdx';
 import PregnancyDueDateCalculator from './health/pregnancy-due-date-calculator/Calculator';
@@ -110,6 +116,8 @@ import SignificantFiguresCalculator from './math/significant-figures-calculator/
 import SignificantFiguresContent from './math/significant-figures-calculator/content.mdx';
 import StandardDeviationCalculator from './math/standard-deviation-calculator/Calculator';
 import StandardDeviationContent from './math/standard-deviation-calculator/content.mdx';
+import CarRunningCostCalculator from './lifestyle/car-running-cost-calculator/Calculator';
+import CarRunningCostContent from './lifestyle/car-running-cost-calculator/content.mdx';
 import CookingMeasurementConverter from './lifestyle/cooking-measurement-converter/Calculator';
 import CookingMeasurementContent from './lifestyle/cooking-measurement-converter/content.mdx';
 import DiscountCalculator from './lifestyle/discount-calculator/Calculator';
@@ -134,6 +142,8 @@ import ReadabilityCalculator from './seo/readability-calculator/Calculator';
 import ReadabilityContent from './seo/readability-calculator/content.mdx';
 import ReadingTimeCalculator from './seo/reading-time-calculator/Calculator';
 import ReadingTimeContent from './seo/reading-time-calculator/content.mdx';
+import RobotsTxtTester from './seo/robots-txt-tester/Calculator';
+import RobotsTxtTesterContent from './seo/robots-txt-tester/content.mdx';
 import SerpSnippetPreview from './seo/serp-snippet-preview/Calculator';
 import SerpSnippetPreviewContent from './seo/serp-snippet-preview/content.mdx';
 import SlugGenerator from './seo/slug-generator/Calculator';
@@ -157,6 +167,20 @@ interface ToolModule {
  * tool route and nowhere else.
  */
 export const toolModules: Record<string, ToolModule> = {
+  'finance/apr-to-apy-calculator': { Calculator: AprToApyCalculator, Content: AprToApyContent },
+  'health/heart-rate-zone-calculator': {
+    Calculator: HeartRateZoneCalculator,
+    Content: HeartRateZoneContent,
+  },
+  'date-time/leap-year-calculator': {
+    Calculator: LeapYearCalculator,
+    Content: LeapYearContent,
+  },
+  'seo/robots-txt-tester': { Calculator: RobotsTxtTester, Content: RobotsTxtTesterContent },
+  'lifestyle/car-running-cost-calculator': {
+    Calculator: CarRunningCostCalculator,
+    Content: CarRunningCostContent,
+  },
   'finance/compound-interest-calculator': {
     Calculator: CompoundInterestCalculator,
     Content: CompoundInterestContent,

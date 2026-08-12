@@ -1,0 +1,117 @@
+## One account, two honest numbers
+
+A savings account paying 1% a month can be described two ways, and both are true:
+
+```
+nominal annual rate  = 12%      (1% × 12 months)
+effective annual rate = 12.68%   (1.01^12 − 1)
+```
+
+The first ignores that January's interest is in the balance earning interest by February. The second counts it. Neither is a marketing trick; they are answers to different questions, and the reason both exist is that one is easy to state and the other is what happens.
+
+The conversion in each direction:
+
+```
+effective = (1 + nominal/n)^n − 1
+nominal   = n × ( (1 + effective)^(1/n) − 1 )
+```
+
+where n is the number of compounding periods in a year. When n is 1 the two are the same number, which is why an account compounding annually never has anything interesting to say about this.
+
+## Why the letters matter: APR against APY
+
+In American consumer finance the two words are not loose synonyms — they are defined in different regulations, for different products, and each includes something the other does not.
+
+**APY** comes from Truth in Savings, Regulation DD. It applies to deposit accounts, and the regulation specifies the formula itself so that two accounts can be compared without knowing how either compounds. If a bank advertises a yield on a savings account, that figure is an effective annual rate by law.
+
+**APR** comes from Truth in Lending, Regulation Z. It applies to credit, and it is a *nominal* rate — but a nominal rate that must include prescribed finance charges beyond interest. That is why a mortgage quoted at a 6.25% interest rate carries an APR of 6.41%: the second figure has the origination fee and the other included charges spread across the term.
+
+So the comparison people make casually — "my savings pay 4.5% and my loan charges 6.5%" — is comparing an effective rate against a nominal one that contains fees. They are not on the same footing in either direction.
+
+Europe uses a third term, the APRC, defined in the consumer credit directive. It is closer to the US APR in spirit: the total cost of credit expressed as an annual percentage, with the charges the borrower has to pay folded in.
+
+The tool above converts between nominal and effective. What it cannot do is add or remove the fee component, because that depends on the contract rather than on arithmetic.
+
+## How much compounding frequency is worth
+
+The honest answer is that it depends on the rate, and the dependence is stronger than most people assume.
+
+```
+ 5% nominal, annual → monthly:  5.000% → 5.116%   (+0.12 pp)
+12% nominal, annual → monthly: 12.000% → 12.683%  (+0.68 pp)
+24% nominal, annual → monthly: 24.000% → 26.824%  (+2.82 pp)
+```
+
+The gap grows roughly with the square of the rate. On a savings account at current rates, the difference between daily and monthly compounding is a rounding error and not worth switching banks for. On a credit card at 24%, the same structural fact is worth nearly three percentage points a year.
+
+There is also a ceiling. However often interest compounds, the effective rate cannot exceed the continuous case:
+
+```
+continuous = e^nominal − 1
+```
+
+At 12% that is 12.75%, against 12.68% for monthly and 12.747% for daily. Daily compounding is already within a hundredth of a percentage point of the theoretical maximum, which settles the question of whether hourly compounding would be better: it would not, measurably.
+
+## The credit card case
+
+This is where the distinction stops being academic.
+
+Card issuers generally work in daily periodic rates. The purchase APR is divided by 365, and that fraction is applied to the balance every day, with each day's interest joining the balance. A 22.9% APR is therefore a daily rate of about 0.0627%, and carrying a balance for a full year costs:
+
+```
+(1 + 0.229/365)^365 − 1 = 25.73%
+```
+
+Nearly three points above the number on the statement, and the effective figure is nowhere in the documentation. Nothing improper is happening — Regulation Z requires the nominal APR to be disclosed, and that is what is disclosed — but it means a card balance costs more than the headline says, in a way a savings account never does in your favour by as much.
+
+Two consequences worth carrying:
+
+**A grace period is worth more than a good rate.** Interest that never starts cannot compound. Paying the statement balance in full makes the effective rate zero regardless of the APR, which is a larger effect than any rate difference between cards.
+
+**Cash advances usually have no grace period.** Interest begins on the transaction date and compounds daily from there, often at a higher APR than purchases, which is why the effective cost of a cash advance is far worse than the two APRs side by side suggest.
+
+## The 360-day year
+
+One convention deserves naming because it is invisible and it is not in the borrower's favour.
+
+Some commercial lending, and historically much US mortgage and business lending, calculates a daily rate as the annual rate divided by **360**, then charges it on all 365 days of the year. The stated rate is not what the loan costs:
+
+```
+365 ÷ 360 = 1.0139
+```
+
+A 6% rate on that basis costs about 6.08% before any compounding is counted, and the difference is entirely in the day count. It is a legacy of pre-computer arithmetic, where 360 divided neatly into twelve 30-day months, and it survives because contracts are copied forward.
+
+It is not hidden — the day count basis is written in the loan agreement, usually as "actual/360". It simply is not something most borrowers know to look for.
+
+## Rates that are not annual at all
+
+One more conversion is worth having, because it appears constantly outside the two regulated terms: a rate quoted for a period shorter than a year.
+
+Merchant finance, payday lending, invoice factoring and much informal credit are stated per month, per week, or per invoice. Turning those into something comparable is the same arithmetic run once:
+
+```
+effective annual = (1 + periodic rate)^periods − 1
+```
+
+A "3% a month" facility is not 36% a year. It is:
+
+```
+1.03^12 − 1 = 42.6%
+```
+
+A 2% fee for settling an invoice thirty days early looks trivial and is an annual rate above 27%, because the fee buys only a month of money. The general test for any short-period charge is to ask how many times a year that period repeats, then compound rather than multiply. The shorter the period, the wider the gap between the two answers, and the more likely the multiplication is the one being quoted to you.
+
+Consumer credit regulations exist to force this conversion into the open, which is why regulated lending in most countries has to state an annual figure whatever the billing period. Unregulated arrangements do not, and the same arithmetic is the reader's own job.
+
+## Reading a savings rate properly
+
+Three questions settle almost every comparison between deposit accounts:
+
+**Is the advertised figure an effective rate?** In the US, an advertised APY is effective by law. Elsewhere the answer varies, and a rate quoted "per annum" on an account paying monthly interest is usually nominal.
+
+**Is it the rate on the whole balance?** Tiered accounts pay different rates on different bands, and a headline rate that applies only above a threshold is a different product from one that applies from the first unit of currency.
+
+**How long does it last?** A bonus rate for twelve months followed by a much lower standard rate has an effective rate over any longer horizon that is nothing like the advertised one. This is the largest effect on the list, and it has nothing to do with compounding at all.
+
+Compounding frequency is the smallest of the three considerations at ordinary savings rates. It is worth understanding precisely so that it can be given the weight it deserves, which is not much — and so that the same understanding can be applied to a credit card, where it is worth a great deal.

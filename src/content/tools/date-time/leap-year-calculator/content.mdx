@@ -1,0 +1,87 @@
+## The rule has three clauses, not one
+
+Most people know the first clause and stop there. The full rule:
+
+```
+divisible by 4          → leap year
+  unless divisible by 100  → not a leap year
+    unless divisible by 400  → leap year after all
+```
+
+So 2024 is a leap year on the first clause. 1900 was not, caught by the second. 2000 was, rescued by the third — which is why almost nobody alive has seen the exception actually fire. The next time it does is **2100**, and it will surprise a great deal of software.
+
+The arithmetic behind the clauses is a matter of averaging. Over 400 years the rule produces 97 leap years rather than 100, giving a mean calendar year of:
+
+```
+(400 × 365 + 97) ÷ 400 = 365.2425 days
+```
+
+against a mean tropical year of about 365.2422 days. The residual error is roughly 0.0003 days a year — one day in something over 3,000 years. Nobody has legislated a correction for it, and there is no need to yet.
+
+## Why the correction exists
+
+The Earth's orbit does not divide into whole days. A year of exactly 365 days runs fast against the seasons by almost a quarter of a day annually, which is a month of drift per century and a season of drift over four. A calendar that does that stops being able to say when to plant.
+
+The Julian calendar, from 46 BC, fixed the obvious part: one extra day every fourth year, with no exceptions, for an average year of 365.25 days. That is much better and still not right. It over-corrects by about 11 minutes a year.
+
+Eleven minutes is nothing. Over sixteen centuries it is ten days, and by the 1500s that is exactly what had accumulated: the spring equinox had slid from 21 March to 11 March, dragging the calculation of Easter with it. Since Easter is fixed relative to the equinox, the church had a liturgical problem that was also an astronomical one.
+
+The Gregorian reform of 1582 did two things. It deleted the accumulated ten days in one step, so that 4 October was followed by 15 October. And it added the century clauses, which remove three leap days every four hundred years and bring the average year close enough to the real one that the problem does not recur on any human timescale.
+
+## The changeover was not simultaneous
+
+The reform was promulgated by a papal bull, which meant Catholic Europe adopted it immediately and everyone else took their time — in some cases centuries.
+
+**1582** — Spain, Portugal, Poland, Italy, and the Catholic states.
+
+**1752** — Britain and its colonies, including what became the United States. The day after Wednesday 2 September was Thursday 14 September, eleven days having accumulated by then. The Act also moved the start of the legal year from 25 March to 1 January.
+
+**1918** — Russia, shortly after the revolution, which is why the October Revolution took place in November by the calendar used elsewhere.
+
+**1923** — Greece, the last European country to switch.
+
+The practical consequence for anyone reading old records is that a date in the gap is ambiguous unless the source says which system it used. Historians mark them Old Style and New Style for exactly this reason, and a birth date recorded in England in 1700 is not the same day as the same date recorded in France.
+
+The tool above applies the modern rule to any year, including those before 1582. That is a proleptic Gregorian calendar: arithmetically consistent, and not a description of what a calendar of the day would have shown. It flags the case rather than leaving it implicit.
+
+## Leap seconds are a different problem
+
+The two get conflated constantly and share nothing but the word.
+
+A leap year corrects the **calendar** against the Earth's orbit. It follows a fixed rule, it is known thousands of years ahead, and any program can compute it.
+
+A leap second corrects **clocks** against the Earth's rotation, which is irregular. Tidal friction slows it gradually; redistribution of mass in the core and oceans nudges it both ways unpredictably. Because the drift cannot be predicted, leap seconds are not on a schedule: the IERS announces one a few months in advance when the accumulated difference between atomic time and rotational time approaches a threshold.
+
+That unpredictability is why leap seconds break software in ways leap years do not — a system cannot precompute them — and it is a large part of why a decision has been taken internationally to stop inserting them by 2035.
+
+## Where leap years break software
+
+Every few years, on 29 February, a wave of outages arrives. The causes repeat.
+
+**Adding a year by incrementing the year field.** Take 29 February 2024, add one to the year, and you have 29 February 2025, which does not exist. Depending on the language it becomes 1 March, throws, or silently produces a corrupt value. Date libraries clamp to 28 February; naive arithmetic does not.
+
+**Day-of-year offsets.** Code that treats day 60 as 1 March is right for three years in four.
+
+**The century rule.** Systems written with `year % 4` alone were correct throughout 1901-2099, a window that covers the entire working life of most software ever written. They will be wrong in 2100, and the flaw is invisible until then.
+
+**Excel's deliberate 1900 bug.** Excel's serial dates include a 29 February 1900 that never existed, inherited for compatibility with Lotus 1-2-3 and documented by Microsoft as intentional. Date differences spanning 1 March 1900 are off by one day, and files exchanged between Excel and systems without the quirk disagree about anything that old.
+
+The general lesson is the same one that applies to time zones: do not implement calendar arithmetic. Use the platform's date library, which already knows about all of this and has been corrected by people who found the edge cases the hard way.
+
+## Other calendars solve it differently
+
+The Gregorian answer — one extra day, occasionally withheld — is not the only one, and the alternatives are a useful reminder that a leap rule is a design decision rather than a fact of nature.
+
+**Lunisolar calendars insert a whole month.** The Hebrew calendar keeps its months tied to the moon and its year tied to the seasons by adding a thirteenth month, Adar I, in seven years out of every nineteen. Chinese and several other traditional calendars use the same idea with different arithmetic. The correction is much larger and much less frequent than a leap day.
+
+**Purely lunar calendars do not correct at all.** The Islamic calendar runs twelve lunar months and lets the year drift against the seasons by about eleven days annually, which is why Ramadan moves steadily through the solar year over a 33-year cycle. That is deliberate, not an oversight.
+
+**Some institutions kept the Julian rule.** Several Orthodox churches still calculate their liturgical calendar the Julian way, which is why Orthodox Christmas falls on 7 January in Gregorian terms — the accumulated difference now stands at thirteen days, and it will grow to fourteen in 2100 when the Gregorian calendar skips a leap year and the Julian one does not.
+
+## Living with 29 February
+
+**Birthdays.** Roughly one person in 1,461 is born on 29 February. In non-leap years the anniversary is observed on 28 February or 1 March, and which one is legally correct depends on the jurisdiction: several common-law systems treat a person as attaining an age at the start of the anniversary day, which lands on 1 March, while particular statutes name 28 February instead. Most people simply choose.
+
+**Contracts and subscriptions.** An annual term starting 29 February has no obvious anniversary. Well-drafted agreements say what happens; systems that do not, quietly pick one, and the choice usually surfaces as a billing dispute four years later.
+
+**Pay and interest.** A leap year has 366 days, so anything calculated per day earns or costs one extra day of it. On a 365-day convention that day is simply not counted, which is one of several places where the day count basis in a contract matters more than it looks.

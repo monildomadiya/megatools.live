@@ -25,6 +25,7 @@ import ageCalculator from '@/content/tools/date-time/age-calculator/meta';
 import dateCalculator from '@/content/tools/date-time/date-calculator/meta';
 import businessDaysCalculator from '@/content/tools/date-time/business-days-calculator/meta';
 import dateDifferenceCalculator from '@/content/tools/date-time/date-difference-calculator/meta';
+import leapYearCalculator from '@/content/tools/date-time/leap-year-calculator/meta';
 import timeDurationCalculator from '@/content/tools/date-time/time-duration-calculator/meta';
 import timeZoneConverter from '@/content/tools/date-time/time-zone-converter/meta';
 import weekNumberCalculator from '@/content/tools/date-time/week-number-calculator/meta';
@@ -39,6 +40,7 @@ import jsonFormatter from '@/content/tools/developer/json-formatter/meta';
 import passwordGenerator from '@/content/tools/developer/password-generator/meta';
 import unixTimestampConverter from '@/content/tools/developer/unix-timestamp-converter/meta';
 import uuidGenerator from '@/content/tools/developer/uuid-generator/meta';
+import aprToApyCalculator from '@/content/tools/finance/apr-to-apy-calculator/meta';
 import compoundInterestCalculator from '@/content/tools/finance/compound-interest-calculator/meta';
 import creditCardPayoffCalculator from '@/content/tools/finance/credit-card-payoff-calculator/meta';
 import loanEmiCalculator from '@/content/tools/finance/loan-emi-calculator/meta';
@@ -52,6 +54,7 @@ import bmiCalculator from '@/content/tools/health/bmi-calculator/meta';
 import bmrCalculator from '@/content/tools/health/bmr-calculator/meta';
 import bodyFatCalculator from '@/content/tools/health/body-fat-calculator/meta';
 import calorieCalculator from '@/content/tools/health/calorie-calculator/meta';
+import heartRateZoneCalculator from '@/content/tools/health/heart-rate-zone-calculator/meta';
 import idealWeightCalculator from '@/content/tools/health/ideal-weight-calculator/meta';
 import pregnancyDueDateCalculator from '@/content/tools/health/pregnancy-due-date-calculator/meta';
 import tdeeCalculator from '@/content/tools/health/tdee-calculator/meta';
@@ -66,6 +69,7 @@ import quadraticEquationSolver from '@/content/tools/math/quadratic-equation-sol
 import ratioCalculator from '@/content/tools/math/ratio-calculator/meta';
 import significantFiguresCalculator from '@/content/tools/math/significant-figures-calculator/meta';
 import standardDeviationCalculator from '@/content/tools/math/standard-deviation-calculator/meta';
+import carRunningCostCalculator from '@/content/tools/lifestyle/car-running-cost-calculator/meta';
 import cookingMeasurementConverter from '@/content/tools/lifestyle/cooking-measurement-converter/meta';
 import discountCalculator from '@/content/tools/lifestyle/discount-calculator/meta';
 import paintCalculator from '@/content/tools/lifestyle/paint-calculator/meta';
@@ -78,11 +82,13 @@ import domainAgeChecker from '@/content/tools/seo/domain-age-checker/meta';
 import keywordDensityCalculator from '@/content/tools/seo/keyword-density-calculator/meta';
 import readabilityCalculator from '@/content/tools/seo/readability-calculator/meta';
 import readingTimeCalculator from '@/content/tools/seo/reading-time-calculator/meta';
+import robotsTxtTester from '@/content/tools/seo/robots-txt-tester/meta';
 import serpSnippetPreview from '@/content/tools/seo/serp-snippet-preview/meta';
 import slugGenerator from '@/content/tools/seo/slug-generator/meta';
 import wordCounter from '@/content/tools/seo/word-counter/meta';
 
 const toolMetas: ToolMeta[] = [
+  aprToApyCalculator,
   compoundInterestCalculator,
   creditCardPayoffCalculator,
   loanEmiCalculator,
@@ -96,6 +102,7 @@ const toolMetas: ToolMeta[] = [
   bmrCalculator,
   bodyFatCalculator,
   calorieCalculator,
+  heartRateZoneCalculator,
   idealWeightCalculator,
   pregnancyDueDateCalculator,
   tdeeCalculator,
@@ -124,6 +131,7 @@ const toolMetas: ToolMeta[] = [
   dateCalculator,
   businessDaysCalculator,
   dateDifferenceCalculator,
+  leapYearCalculator,
   timeDurationCalculator,
   timeZoneConverter,
   weekNumberCalculator,
@@ -138,6 +146,7 @@ const toolMetas: ToolMeta[] = [
   passwordGenerator,
   unixTimestampConverter,
   uuidGenerator,
+  carRunningCostCalculator,
   cookingMeasurementConverter,
   discountCalculator,
   paintCalculator,
@@ -150,6 +159,7 @@ const toolMetas: ToolMeta[] = [
   keywordDensityCalculator,
   readabilityCalculator,
   readingTimeCalculator,
+  robotsTxtTester,
   serpSnippetPreview,
   slugGenerator,
   wordCounter,

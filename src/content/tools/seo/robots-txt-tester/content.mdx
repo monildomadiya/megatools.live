@@ -1,0 +1,115 @@
+## What the file does, and what it does not
+
+A robots.txt is a plain text file at the root of an origin that tells automated clients which paths they may request:
+
+```
+User-agent: *
+Disallow: /admin/
+Allow: /admin/public/
+Sitemap: https://example.com/sitemap.xml
+```
+
+It is advisory, it is public, and it governs **crawling only**. Those three properties account for nearly every mistake made with it.
+
+The protocol was informal for twenty-five years — a de facto standard from 1994 that every crawler implemented slightly differently — until it was written up as RFC 9309 in 2022. The tester above follows that specification, and the behaviour Google documents, which agree in every case that matters.
+
+## Longest match wins, not first match
+
+This is the rule people get wrong, and getting it wrong is what makes a file behave in a way its author cannot explain.
+
+Rules are not evaluated in order. Every rule in the applicable group is tested against the path, and **the one with the longest path pattern decides the outcome**. If an allow and a disallow tie on length, the allow wins.
+
+```
+Disallow: /admin/
+Allow: /admin/public/
+```
+
+For `/admin/public/report.html`, both match. The allow pattern is longer, so the file is crawlable — regardless of which line came first. Reversing the two lines changes nothing, which is exactly what surprises people who assume a first-match or last-match reading.
+
+Two consequences worth internalising:
+
+**A narrow allow can open a hole in a broad disallow.** That is usually the intent, and occasionally it is an accident inherited from a template.
+
+**Ordering is documentation, not logic.** Grouping related rules together helps a human read the file; it has no effect on any crawler.
+
+## A crawler obeys exactly one group
+
+The second common surprise. A robots.txt may contain several groups, each introduced by one or more user-agent lines. A crawler picks the **single** group whose user-agent token most specifically matches its own name, and ignores every other group in the file, including the wildcard one.
+
+```
+User-agent: *
+Disallow: /private/
+
+User-agent: Googlebot
+Disallow: /no-google/
+```
+
+Googlebot here is *not* blocked from `/private/`. It matched its own group, so the wildcard group does not apply to it at all. The groups are not merged, and nothing in the file signals that this is happening.
+
+If a rule should apply to everything including named crawlers, it has to be repeated in each of their groups. This single behaviour is responsible for a large share of files that appear to be blocking something and are not.
+
+Consecutive user-agent lines share the group that follows them:
+
+```
+User-agent: Googlebot
+User-agent: Bingbot
+Disallow: /beta/
+```
+
+That is one group covering two crawlers, not two groups.
+
+## Wildcards, anchors and query strings
+
+Only two metacharacters exist in path patterns, and both are supported by the major crawlers and included in the standard:
+
+**`*`** matches any sequence of characters.
+
+**`$`** anchors the pattern to the end of the URL.
+
+Everything else is literal. Patterns are matched from the start of the path, so `/admin` blocks `/administrator` as well as `/admin/`, which is either what you meant or a good reason to write the trailing slash.
+
+The anchor matters more than it looks:
+
+```
+Disallow: /*.pdf      blocks /file.pdf and /file.pdf?download=1
+Disallow: /*.pdf$     blocks only the first
+```
+
+Without the dollar, anything after the extension is still inside the match. With it, a tracked or parameterised URL slips through. Which you want depends on what the parameters do, and the point is to choose rather than to inherit.
+
+Query strings are part of the path for matching purposes, which is how faceted navigation gets controlled:
+
+```
+Disallow: /*?sort=
+Disallow: /*?*&filter=
+```
+
+Rules are case-sensitive on the path and case-insensitive on the user-agent token. A rule for `/Admin/` does not block `/admin/`.
+
+## Blocking is not removing
+
+The most expensive misunderstanding on this page.
+
+Disallow prevents a crawler from **fetching** a URL. It does not prevent the URL from being **indexed**. If Google learns about a blocked page from links elsewhere, it can list it in results — typically with no description, because it was never allowed to look at the page to write one.
+
+The remedy is a `noindex` robots meta tag or an `X-Robots-Tag` header. And here is the trap: **a crawler has to fetch the page to see that tag.** Blocking the URL in robots.txt guarantees the noindex is never read, so the page stays in the index indefinitely. The two controls work against one another, and the correct sequence is to allow crawling, let the noindex be seen and the page drop out, and only then consider blocking.
+
+There was, for years, an undocumented `noindex:` directive supported inside robots.txt itself. Google stopped honouring it on 1 September 2019. It was never part of the standard, and a file relying on one today is doing nothing at all.
+
+## Nothing here is a security control
+
+A robots.txt is fetched over the open internet from a predictable address by anyone who wants it. Compliance is voluntary and entirely on the honour of the client.
+
+So a disallow rule naming a sensitive path does the opposite of protecting it: it publishes the existence of that path, in a file that scrapers read first precisely because it is a curated list of the things a site would rather not have looked at. Real controls are authentication, network restrictions, or not publishing the content — and if a path is genuinely sensitive, appearing in robots.txt at all is a finding.
+
+The same reasoning applies to staging sites. Blocking a staging domain in robots.txt is worth doing, and it is not a substitute for a password.
+
+## The rest of the file, and where it lives
+
+**Sitemap** lines may appear anywhere and are independent of any group. They take an absolute URL, and several are permitted.
+
+**Crawl-delay** is not part of the standard. Bing and Yandex have honoured it historically; Google ignores it entirely and sets its rate from how the origin responds. A server being overwhelmed by crawling needs rate limiting or a faster response, not a directive most of the traffic will not read.
+
+**Unrecognised lines are ignored**, silently. A misspelled `Dissalow` does not error and does not block anything — which is why testing a real path against the real file, rather than reading it, is the only way to know what it does.
+
+**Location is fixed.** The file must be at `/robots.txt` on the origin it governs, and every scheme, host and port is a separate origin with its own file. `https://example.com/robots.txt` says nothing about `http://example.com`, about `shop.example.com`, or about a service on another port. A 404 for the file is treated as permission to crawl everything; a 5xx is treated by Google as a temporary instruction to crawl nothing, which makes a robots.txt returning server errors a quiet way to lose a site's crawling for as long as it lasts.

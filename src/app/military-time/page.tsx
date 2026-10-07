@@ -1,0 +1,10 @@
+import Link from 'next/link';
+import { MilitaryTimeConverter } from '@/components/tools/MilitaryTimeConverter';
+import { ToolPage } from '@/components/layout/ToolPage';
+import { DataTable } from '@/components/tables/DataTable';
+import { parseTime, hourlyTimes } from '@/lib/calc/military-time';
+import { buildMetadata } from '@/lib/seo/metadata';
+const meta={retrievedAt:'2026-10-07T10:00:00Z',sourceUrls:['https://www.time.gov/']};
+export function generateMetadata(){return buildMetadata({title:'Military Time Converter and Chart',description:'Convert 1330, 13:30, or 1:30 pm. Browse a 24-hour chart and convert a dated Zulu/UTC time to local time.',path:'/military-time'});}
+export default function Page(){const rows=Array.from({length:48},(_,i)=>parseTime(String(Math.floor(i/2)).padStart(2,'0')+(i%2?'30':'00')));return <ToolPage title="Military Time Converter" path="/military-time" summary="Convert between 12-hour and 24-hour time. For example, 1500 is 3:00 PM; Zulu time is UTC." meta={meta} how={<p>For afternoon hours, subtract 12 to get the 12-hour clock. 15 − 12 = 3, so 1500 is 3:00 PM. Midnight is 0000 and noon is 1200. A dated Zulu conversion uses the selected time zone’s daylight-saving rules.</p>} faq={[{question:'What does 2400 mean?',answer:'The end of a specified day. It coincides with 0000 at the start of the next day.'},{question:'Is military time always Zulu?',answer:'No. A 24-hour clock format does not define a time zone; Zulu specifically means UTC.'},{question:'How is 1500 pronounced?',answer:'Fifteen hundred hours.'}]}><MilitaryTimeConverter/><DataTable caption="24-hour chart · every 30 minutes" rows={rows} rowKey={r=>r.military} columns={[{key:'military',label:'Military',render:r=>r.minute===0?<Link className="text-link" href={'/military-time/'+r.military}>{r.military}</Link>:r.military},{key:'civilian',label:'12-hour',render:r=>r.twelve},{key:'pronunciation',label:'Pronunciation',render:r=>r.pronunciation}]}/><p className="text-sm text-muted">Browse hourly pages: {hourlyTimes.length} conversions.</p></ToolPage>;}
+

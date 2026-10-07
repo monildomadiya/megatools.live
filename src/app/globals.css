@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@theme inline {
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+  --color-primary: #142d4e;
+  --color-accent: #b45309;
+  --color-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-focus: #1d4ed8;
+}
+body { margin: 0; background: #f8fafc; color: #0f172a; font-family: var(--font-inter), Arial, Helvetica, sans-serif; }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+#main-content:focus { outline: none; }
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 50; transform: translateY(-180%); border-radius: 8px; background: white; color: #142d4e; padding: 12px 20px; font-weight: 600; }
+.skip-link:focus { transform: translateY(0); }
+@layer components {
+  .section-title { @apply mb-5 text-2xl font-bold tracking-tight text-primary; }
+  .text-link { @apply font-medium text-primary underline decoration-slate-400 underline-offset-4 hover:decoration-primary; }
+  .field-label { @apply mb-2 block text-sm font-semibold text-primary; }
+  .field-input { @apply min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 py-2 text-base text-slate-900 disabled:bg-slate-100; }
+  .prose-content { @apply max-w-3xl space-y-6 text-base leading-7 text-muted; }
+  .prose-content h2 { @apply mt-8 text-xl font-bold text-primary; }
+  .prose-content a { @apply font-medium text-primary underline underline-offset-4; }
+  .prose-content ul { @apply list-disc space-y-2 pl-6; }
+}

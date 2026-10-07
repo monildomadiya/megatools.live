@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "dataset": "gi-bill",
+    "period": "2026-2027",
+    "effectiveFrom": "2026-08-01",
+    "effectiveTo": "2027-07-31",
+    "sourceUrls": [
+      "https://www.va.gov/education/benefit-rates/post-9-11-gi-bill-rates/"
+    ],
+    "retrievedAt": "2026-10-07T09:58:08.955Z"
+  },
+  "privateTuitionCap": 3090834,
+  "onlineHousing": 126100,
+  "foreignHousing": 252200,
+  "booksMaximum": 100000,
+  "booksPerCredit": 4167,
+  "bahYearUsed": 2026,
+  "benefitLevels": [
+    50,
+    60,
+    70,
+    80,
+    90,
+    100
+  ]
+}

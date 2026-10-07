@@ -1,0 +1,10 @@
+import { formatUSD } from '@/lib/format';
+import { getMieBreakdown, getPerDiem } from '@/lib/data/per-diem';
+import { Suspense } from 'react';
+import { PrefilledPerDiemCalculator } from '@/components/tools/PrefilledPerDiemCalculator';
+import { ToolPage } from '@/components/layout/ToolPage';
+import { buildMetadata } from '@/lib/seo/metadata';
+export function generateMetadata(){return buildMetadata({title:'Trip Per Diem Calculator',description:'Calculate a CONUS trip using official FY2026 and FY2027 lodging caps, meals, seasonal rates, and first and last travel days.',path:'/per-diem/calculator'});}
+export default function Page(){const data=getPerDiem();const firstLast=getMieBreakdown('FY2027',data.standard.mie).firstLast;return <ToolPage title="Trip Per Diem Calculator (FY2026–2027)" path="/per-diem/calculator" summary="Estimate lodging and meals night by night. Rates change automatically at seasonal and fiscal-year boundaries." meta={data.meta} how={<><p>Each night uses the published GSA cap for that date. Checkout has no lodging allowance. Both departure and return days use the published first/last-day M&amp;IE amount, with full deductions for government-provided meals.</p><p>Example: a one-night standard trip in FY2027 allows {formatUSD(data.standard.lodging*100)} lodging plus {formatUSD(firstLast*100)} M&amp;IE on each travel day: {formatUSD((data.standard.lodging+firstLast*2)*100)} before meal deductions or actual-cost adjustments.</p></>} faq={[{question:'What dates are supported?',answer:'October 1, 2025 through September 30, 2027. A trip cannot use rates from an unpublished period.'},{question:'Can I deduct provided meals?',answer:'Yes. After your first calculation, select government-provided meals for each date and calculate again.'},{question:'Is this an approved reimbursement?',answer:'No. Your agency determines eligibility, actual allowable expenses, and any exceptions.'}]}><Suspense fallback={<p>Loading trip calculator…</p>}><PrefilledPerDiemCalculator locations={data.locations.map(l=>({key:l.stateSlug+'/'+l.slug,name:l.name,state:l.state}))}/></Suspense></ToolPage>;}
+
+

@@ -1,0 +1,11 @@
+import Link from 'next/link';
+import { Container, PageHeader } from './Container';
+import { Breadcrumbs } from './Breadcrumbs';
+import { AllowanceCalculator } from '@/components/tools/AllowanceCalculators';
+import { Callout, DisclaimerNote, FAQ } from '@/components/ui';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { webApplication } from '@/lib/seo/jsonld';
+export function ManualAllowancePage({kind,title,path,summary,source,explanation}:{kind:'bah'|'pay'|'pcs'|'ppm';title:string;path:string;summary:string;source:string;explanation:string}){
+ return <Container className="py-8 sm:py-12"><Breadcrumbs items={[{label:'Home',href:'/'},{label:title,href:path}]}/><JsonLd data={webApplication({name:title,path,description:summary,category:'FinanceApplication'})}/><PageHeader title={title} summary={summary}/><div className="space-y-10"><Callout title="Use verified amounts">Official rate downloads are currently unavailable to our importer. This calculator works with amounts you enter. <a className="text-link" href={source}>Open the official source</a> to verify the period and entitlement.</Callout><AllowanceCalculator kind={kind}/><section className="prose-content"><h2>How it works</h2><p>{explanation}</p><p>Use amounts for the same period and enter zero for items that do not apply. Negative results represent a shortfall. Your inputs remain in your browser and are cleared when the page is reloaded.</p></section><FAQ items={[{question:'Are rates looked up automatically?',answer:'This tool currently uses your verified inputs. Automated rate tables require the official source files; no replacement rates are invented.'},{question:'Is the result an official entitlement?',answer:'No. Your finance or transportation office determines entitlement and the actual amount paid.'},{question:'Are my inputs stored?',answer:'No. Calculations run in your browser without an account or database.'}]}/><p><a className="text-link break-all" href={source}>Official source and current rates</a></p><p>{kind==='pcs'&&<Link className="text-link mr-6" href="/pcs/ppm-estimator">Estimate PPM net proceeds →</Link>}{kind==='ppm'&&<Link className="text-link mr-6" href="/pcs/calculator">Build a PCS travel budget →</Link>}<Link className="text-link" href="/">Explore all calculators</Link></p><DisclaimerNote/></div></Container>;
+}
+

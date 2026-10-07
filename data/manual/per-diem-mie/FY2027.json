@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "dataset": "per-diem-mie",
+    "period": "FY2027",
+    "effectiveFrom": "2026-10-01",
+    "effectiveTo": "2027-09-30",
+    "sourceUrls": [
+      "https://www.gsa.gov/travel/plan-a-trip/per-diem-rates/mie-breakdowns"
+    ],
+    "retrievedAt": "2026-10-07T09:53:21.038Z"
+  },
+  "rates": [
+    {
+      "mie": 68,
+      "breakfast": 16,
+      "lunch": 19,
+      "dinner": 28,
+      "incidentals": 5,
+      "firstLast": 51
+    },
+    {
+      "mie": 74,
+      "breakfast": 18,
+      "lunch": 20,
+      "dinner": 31,
+      "incidentals": 5,
+      "firstLast": 55.5
+    },
+    {
+      "mie": 80,
+      "breakfast": 20,
+      "lunch": 22,
+      "dinner": 33,
+      "incidentals": 5,
+      "firstLast": 60
+    },
+    {
+      "mie": 86,
+      "breakfast": 22,
+      "lunch": 23,
+      "dinner": 36,
+      "incidentals": 5,
+      "firstLast": 64.5
+    },
+    {
+      "mie": 92,
+      "breakfast": 23,
+      "lunch": 26,
+      "dinner": 38,
+      "incidentals": 5,
+      "firstLast": 69
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+import Link from 'next/link';
+import { TrustPage } from '@/components/layout/TrustPage';
+import { buildMetadata } from '@/lib/seo/metadata';
+export function generateMetadata(){return buildMetadata({title:'BAS: Official Sources and Pay Planning',description:'Verify Basic Allowance for Subsistence with DFAS and include your confirmed monthly BAS in a military take-home pay estimate.',path:'/bas'});}
+export default function Page(){return <TrustPage title="Basic Allowance for Subsistence" path="/bas" summary="Verify your monthly BAS with the official publisher, then include it in your pay estimate."><p>The official BAS table download is unavailable in this environment. No unverified rate is shown here.</p><p><a href="https://www.dfas.mil/militarymembers/payentitlements/Pay-Tables/">Open DFAS allowance and pay tables</a></p><p>Use the BAS amount from your LES and account for any meal collections in your deductions.</p><p><Link href="/military-pay/calculator">Estimate take-home pay with your verified BAS →</Link></p></TrustPage>;}

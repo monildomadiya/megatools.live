@@ -1,0 +1,4 @@
+import { ManualAllowancePage } from '@/components/layout/ManualAllowancePage';
+import { buildMetadata } from '@/lib/seo/metadata';
+export function generateMetadata(){return buildMetadata({title:'BAH Housing Budget Calculator',description:'Compare your verified BAH amount with rent and utilities. Estimate monthly surplus or shortfall and annual housing allowance.',path:'/bah'});}
+export default function Page(){return <ManualAllowancePage kind="bah" title="BAH Housing Budget Calculator" path="/bah" summary="Compare your official housing allowance with your housing costs." source="https://militarypay.defense.gov/Pay/Basic-Allowance-for-Housing/BAH-Rate-Lookup" explanation="Monthly remaining allowance equals monthly BAH minus rent and utilities. Annual allowance is monthly BAH multiplied by 12. The official lookup determines your rate from duty station, grade, and dependency status; rate protection may apply."/>;}

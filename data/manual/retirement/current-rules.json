@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "dataset": "retirement",
+    "period": "current-rules",
+    "effectiveFrom": "2018-01-01",
+    "sourceUrls": [
+      "https://militarypay.defense.gov/Pay/Retirement/BlendedRetirement.aspx",
+      "https://militarypay.defense.gov/Portals/3/Documents/BlendedRetirementDocuments/Intro_BRS_Website_06262017.pdf?ver=2017-06-26-142742-403",
+      "https://militarypay.defense.gov/Portals/3/Documents/BlendedRetirementDocuments/BRS%20New%20Accessions%20Course/Uniformed%20Services%20Guide%20to%20BRS.pdf"
+    ],
+    "retrievedAt": "2026-10-07T10:00:00Z",
+    "notes": "Projection models new accessions and stops government deposits at 26 years. Actual start and stop dates follow pay-period boundaries; earlier opt-in members have different waiting periods."
+  },
+  "high3Multiplier": 0.025,
+  "brsMultiplier": 0.02,
+  "automaticContribution": 0.01,
+  "automaticStartsDay": 60,
+  "matchingStartsYear": 2,
+  "contributionsEndCompletedYear": 26
+}

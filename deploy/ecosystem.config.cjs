@@ -1,0 +1,1 @@
+module.exports = { apps: [{ name: 'megatools_live', cwd: '/var/www/megatools.live', script: 'node_modules/next/dist/bin/next', args: 'start -H 127.0.0.1 -p 3012', instances: 1, max_memory_restart: '600M', env: { NODE_ENV: 'production' } }] };

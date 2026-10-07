@@ -94,3 +94,15 @@ GitHub upload: user requested a direct push of the validated Analytics configura
 
 GitHub retry complete: Analytics commit 819b2e6 successfully pushed to origin/main and verified against the remote on October 7, 2026. Previous checks remain applicable; no code changed during the retry. Next: verify deployment and GA Realtime.
 
+
+## Deployment failure investigation — October 7, 2026
+
+Confirmed run 37644711520 failed in the appleboy/ssh-action step. Screenshot and public job page expose only exit code 1; GitHub CLI is unauthenticated, log download returns 403, and signed-out browser cannot expand logs. Root cause is not yet confirmed. Next: obtain the failed step's error text from the signed-in user; check DO_HOST, DO_USER, DO_SSH_KEY only if the log reports missing SSH configuration. No workflow or data changes made. Existing application checks remain applicable.
+
+
+## Analytics without Render environment setup — October 7, 2026
+
+Added G-LL4CZRXQJ7 as the root-layout default and retained the environment variable as an optional override. Updated privacy copy and deployment instructions. This follows the user's explicit request and overrides AGENTS.md's environment-only Analytics requirement. No official data sources changed. Live Render rollout and GA Realtime receipt remain to be verified.
+
+Validation: lint, typecheck, all 52 tests, and production build passed. Publishing directly to main follows the user's ongoing GitHub push request. Render must deploy this commit before the live site uses the code default.
+

@@ -106,3 +106,9 @@ Added G-LL4CZRXQJ7 as the root-layout default and retained the environment varia
 
 Validation: lint, typecheck, all 52 tests, and production build passed. Publishing directly to main follows the user's ongoing GitHub push request. Render must deploy this commit before the live site uses the code default.
 
+
+## Remove obsolete SSH deployment — October 7, 2026
+
+Done: removed .github/workflows/deploy.yml, which failed with missing server host because it targeted DigitalOcean while the owner hosts on Render. Retained CI and documented the existing Render GitHub integration. This follows the user's hosting correction over the original AGENTS.md DigitalOcean plan and the ongoing request to push fixes directly. No datasets or official sources changed. Next: observe the next Render deployment; its dashboard settings and deployment status were not changed or verified. Historical failed runs remain visible.
+
+Validation: lint, typecheck, all 52 tests, and production build passed. CI remains configured for main pushes and pull requests.

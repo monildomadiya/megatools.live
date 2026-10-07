@@ -1,24 +1,19 @@
 # Deployment
 
-Configuration files are prepared only. No server was contacted. The production domain is not deployed from this workspace.
+MegaTools is hosted on Render, connected to `monildomadiya/megatools.live` on `main`, as confirmed by the owner. This supersedes the original DigitalOcean hosting plan in AGENTS.md.
 
-1. Provision an Ubuntu DigitalOcean droplet, configure SSH access and firewall ports 22, 80, 443, and point DNS A records for `@` and `www` to its public address. Install Nginx and Certbot, Node 22 LTS, Corepack, and PM2. Confirm `node -v` is at least 20.9; Node 22 is the CI target. Run `corepack enable`.
-2. Configure a read-only repository deploy key on the server, verify the GitHub SSH host key, and clone the repository into `/var/www/megatools.live`. No repository remote has been configured in this workspace yet.
-3. Copy `.env.example` to `.env.production`, set `NEXT_PUBLIC_SITE_URL=https://megatools.live` and a real `CONTACT_EMAIL`. Keep ads disabled until approval. Optional analytics, Search Console, AdSense client, and manual slot IDs are build-time values; rebuild after changing them. Never commit this file.
-4. Check `ss -ltnp | grep 3012` and confirm the port is free. Run `pnpm install --frozen-lockfile`, `pnpm data:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `NODE_OPTIONS=--max-old-space-size=1536 pnpm build`.
-5. Run `pm2 start deploy/ecosystem.config.cjs --only megatools_live`, `pm2 save`, and follow the output from `pm2 startup`. Check `curl -I http://127.0.0.1:3012/`.
-6. Copy `deploy/nginx/megatools.live.conf` into `/etc/nginx/sites-available/`, enable its symlink in `sites-enabled`, and run `sudo nginx -t` before reload. Run `sudo certbot --nginx -d megatools.live -d www.megatools.live`. Confirm HTTP and www redirect to the HTTPS apex. Verify certificate renewal.
-7. Add GitHub repository secrets `DO_HOST`, `DO_USER`, and `DO_SSH_KEY`. Use a limited deployment account that owns the app checkout and PM2 process. The deployment workflow waits for successful main-branch CI and checks that its commit is still the main tip before pulling. Do not give untrusted pull requests access to deployment secrets.
+GitHub Actions runs application checks through `.github/workflows/ci.yml`. Render manages deployment through its existing GitHub integration. The obsolete SSH deployment workflow was removed because it attempted to connect to an unconfigured DigitalOcean host and failed with `missing server host`. No DigitalOcean SSH secrets are needed for Render.
 
-Verify every tool, unknown-route 404, ZIP API, all six section sitemaps in STATUS.md, canonical URLs, `robots.txt`, and `ads.txt`. Import blocked official datasets before claiming complete official coverage. Configure Google's CMP in AdSense Privacy & messaging before enabling ads.
+The existing Render service is `srv-db34rrss728c73bbpqk0`. Check deployment progress and the deployed commit in that service's dashboard. Auto-deploy settings were not changed or verified from this workspace. Removing the GitHub workflow does not itself confirm a successful Render deployment. Old failed GitHub runs remain in history and should not be rerun.
 
-Rollback: record the previous deployed SHA before updating. On failure, select that reviewed SHA, run `git checkout --detach <previous-sha>`, reinstall with the lockfile, rebuild, and reload PM2. Check the site before returning the checkout to main. Back up `.env.production` separately. `pm2 logs megatools_live` and Nginx error logs provide diagnostics.
+## Google Analytics
 
-On a low-memory droplet, build on a compatible Linux Node 22 runner and rsync the resulting `.next`, `public`, package files, and runtime dependencies instead. Preserve the server environment file; build with the intended public environment values. This alternative is not configured by the supplied workflow.
+The root layout includes Google Analytics once across all pages using `@next/third-parties/google`. The public measurement ID defaults to `G-LL4CZRXQJ7` in code; no Render environment variable is required. `NEXT_PUBLIC_GA_ID` remains an optional override. Deploy commit `06a883c` or a later commit to include this default. Confirm receipt in Google Analytics Realtime after deployment.
 
-Google Analytics stream: G-LL4CZRXQJ7 (megatools.live). The deployment workflow supplies this public measurement ID during the production build. Manual builds use the code default G-LL4CZRXQJ7; NEXT_PUBLIC_GA_ID can optionally override it. The root layout uses @next/third-parties/google once for all pages. Confirm page views in Analytics Realtime after deployment; calculator inputs are never sent through custom analytics events.
+## Release verification
 
+Run `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` before pushing. After Render deploys, verify the home page, calculators, ZIP lookup, unknown-route 404, and section sitemaps. Confirm the deployed commit in Render when investigating stale content.
 
-Render Analytics: the root layout defaults to public measurement ID G-LL4CZRXQJ7 in code. No Render environment variable is required. NEXT_PUBLIC_GA_ID is an optional override. Deploy the updated commit for the default to take effect.
+Keep real environment files and credentials out of Git. Configure the real contact email and any optional Search Console or advertising settings separately. Ads remain disabled until approved and configured. Data coverage gaps remain documented in STATUS.md and DATA-BLOCKERS.md.
 
-
+The PM2 and Nginx files under `deploy/` are legacy self-hosting examples and are not used by the current Render service.

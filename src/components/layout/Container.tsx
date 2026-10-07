@@ -6,5 +6,6 @@ export function Container({ className, ...props }: HTMLAttributes<HTMLDivElement
 }
 /** Single page H1 followed by the answer-first summary. */
 export function PageHeader({ title, summary, eyebrow }: { title: string; summary: ReactNode; eyebrow?: string }) {
-  return <header className="mb-10 max-w-3xl">{eyebrow && <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted">{eyebrow}</p>}<h1 className="text-3xl font-bold tracking-tight text-primary sm:text-5xl">{title}</h1><div className="mt-5 text-lg leading-relaxed text-muted">{summary}</div></header>;
+  return <header className="page-heading">{eyebrow && <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted">{eyebrow}</p>}<h1 className="text-3xl font-bold leading-tight tracking-tight text-primary sm:text-4xl">{title}</h1><div className="mt-4 text-base leading-relaxed sm:text-lg text-muted">{summary}</div></header>;
 }
+

@@ -112,3 +112,13 @@ Validation: lint, typecheck, all 52 tests, and production build passed. Publishi
 Done: removed .github/workflows/deploy.yml, which failed with missing server host because it targeted DigitalOcean while the owner hosts on Render. Retained CI and documented the existing Render GitHub integration. This follows the user's hosting correction over the original AGENTS.md DigitalOcean plan and the ongoing request to push fixes directly. No datasets or official sources changed. Next: observe the next Render deployment; its dashboard settings and deployment status were not changed or verified. Historical failed runs remain visible.
 
 Validation: lint, typecheck, all 52 tests, and production build passed. CI remains configured for main pushes and pull requests.
+
+## Professional UI refresh — October 7, 2026
+
+Done: rebuilt the homepage with a navy/teal visual system, clear tool directory, featured per diem entry point, source/privacy explanations, data updates, and independence section. Updated shared navigation (active desktop links), branding, footer, page headings, form fields, result panels, FAQ panels, related links, cards, and tables. Tool cards distinguish official rate tools from user-entered planning estimates. Preserved shipped routes, calculator logic, provenance, and the exact independence disclaimer.
+
+Advertising: existing disabled-by-default, lazy, labeled slots remain below tool content. Explicit block margins preserve 160px separation from preceding controls despite parent spacing utilities; reserved height remains at least 280px. No additional ad units were introduced. AdSense approval, actual ad rendering, and CMP setup are not verified by this visual refresh.
+
+Validation: lint, typecheck, all 52 tests, and production build passed. Desktop and 390px mobile browser checks found no horizontal document overflow on home, BAH, and per diem. Mobile menu focused its first link and restored focus on Escape. BAH inputs 2500/1800/200 produced a $500 monthly remainder; ZIP 10001 resolved to New York City. No console errors observed on the inspected data page. Reduced-motion CSS and visible keyboard focus included. No new dependencies or official data changes. This is not a full accessibility or production performance audit; prior data/performance gaps remain.
+
+Next: deploy the new commit through the existing Render integration. Publishing directly follows the ongoing user request to push site changes to GitHub. No new environment settings are required for this UI change.

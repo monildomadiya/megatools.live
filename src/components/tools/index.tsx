@@ -18,4 +18,5 @@ export function RadioGroup({ name, legend, options, value, onChange, disabled }:
 /** Checkbox-backed switch with native keyboard behavior. */
 export function Toggle({ label, id, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'id'> & { id: string; label: string }) { return <label htmlFor={id} className="flex min-h-11 items-center gap-3"><input {...props} id={id} type="checkbox" role="switch" className="h-5 w-5 accent-primary" /><span>{label}</span></label>; }
 /** Polite live region for calculator results. */
-export function ResultPanel({ title = 'Your estimate', children }: { title?: string; children: ReactNode }) { return <section aria-live="polite" aria-atomic="true" className="rounded-2xl border border-border bg-slate-50 p-6"><h2 className="mb-4 text-xl font-semibold text-primary">{title}</h2>{children}</section>; }
+export function ResultPanel({ title = 'Your estimate', children }: { title?: string; children: ReactNode }) { return <section aria-live="polite" aria-atomic="true" className="result-panel"><h2 className="mb-4 text-xl font-semibold text-primary">{title}</h2>{children}</section>; }
+

@@ -30,6 +30,6 @@ jobs:
             git pull --ff-only origin main
             corepack enable
             pnpm install --frozen-lockfile
-            NODE_OPTIONS=--max-old-space-size=1536 pnpm build
+            NEXT_PUBLIC_GA_ID=G-LL4CZRXQJ7 NODE_OPTIONS=--max-old-space-size=1536 pnpm build
             pm2 reload deploy/ecosystem.config.cjs --only megatools_live || pm2 start deploy/ecosystem.config.cjs --only megatools_live
             pm2 save

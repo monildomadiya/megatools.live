@@ -15,3 +15,6 @@ Verify every tool, unknown-route 404, ZIP API, all six section sitemaps in STATU
 Rollback: record the previous deployed SHA before updating. On failure, select that reviewed SHA, run `git checkout --detach <previous-sha>`, reinstall with the lockfile, rebuild, and reload PM2. Check the site before returning the checkout to main. Back up `.env.production` separately. `pm2 logs megatools_live` and Nginx error logs provide diagnostics.
 
 On a low-memory droplet, build on a compatible Linux Node 22 runner and rsync the resulting `.next`, `public`, package files, and runtime dependencies instead. Preserve the server environment file; build with the intended public environment values. This alternative is not configured by the supplied workflow.
+
+Google Analytics stream: G-LL4CZRXQJ7 (megatools.live). The deployment workflow supplies this public measurement ID during the production build. For a manual build, set NEXT_PUBLIC_GA_ID=G-LL4CZRXQJ7 in .env.production before building. The root layout uses @next/third-parties/google once for all pages. Confirm page views in Analytics Realtime after deployment; calculator inputs are never sent through custom analytics events.
+

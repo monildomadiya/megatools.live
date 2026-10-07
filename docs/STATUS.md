@@ -85,3 +85,10 @@ Done: confirmed the development server listens on port 3000 and http://localhost
 
 Prepared the initial project upload to https://github.com/monildomadiya/megatools.live on main. This direct initial push follows the user's explicit upload request instead of the usual PR workflow. No official datasets changed. Lint, typecheck, 52 tests, and production build passed earlier in this session. Build artifacts, dependencies, and real environment files are ignored. Next: configure production environment, deployment secrets, DNS, contact email, and AdSense; existing data gaps remain documented above.
 
+
+## Google Analytics configuration — October 7, 2026
+
+Done: configured the supplied public measurement ID G-LL4CZRXQJ7 in .env.example, ignored .env.local, and the deployment workflow's production build command. Existing root-layout @next/third-parties/google integration applies once across all pages. Updated deployment instructions. Lint, typecheck, all 52 tests, and production build pass; generated home HTML includes the ID. No dataset sources touched. Next/manual: deploy these changes and confirm page views in GA Realtime; live delivery to Google has not been verified. Real environment files remain uncommitted.
+
+GitHub upload: user requested a direct push of the validated Analytics configuration to main, overriding the usual PR workflow for this task. No data sources changed; production deployment and GA Realtime confirmation remain to be verified.
+
